@@ -37,7 +37,7 @@
             <StackPane fx:id="stackPane" prefHeight="559.0" prefWidth="516.0">
                <children>
                   <ImageView fx:id="imgview" fitHeight="553.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" />
-                  <GridPane fx:id="gridPane" gridLinesVisible="true">
+                  <GridPane fx:id="gridPane">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="496.0" minWidth="10.0" prefWidth="496.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="496.0" minWidth="10.0" prefWidth="496.0" />

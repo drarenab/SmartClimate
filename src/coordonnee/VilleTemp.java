@@ -3,15 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package meteo;
+package coordonnee;
 
 /**
  *
  * @author karim
  */
+
+/*
+Cette Classe fait le lien entre une ville et sa temperature
+*/
 public class VilleTemp {
-    Ville city;
-    float temperature;
+   public Ville city;
+    public float temperature;
 
     public VilleTemp(Ville city, float temperature) {
         this.city = city;

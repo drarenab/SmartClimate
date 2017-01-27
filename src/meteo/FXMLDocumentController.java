@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 package meteo;
-
+import coordonnee.*;
+import coordonnee.Coordonne;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -35,7 +37,7 @@ Text text,text2;
 VBox v;
 @FXML
 GridPane gridPane;
-
+Coordonne emplacement;
     @FXML
     private void handleButtonAction(ActionEvent event) {
         
@@ -44,16 +46,26 @@ GridPane gridPane;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
-        image = new Image(Meteo.class.getResourceAsStream("country-fra.png"));
-        /*on Crée une gridPAne de ROWS*COLS (a definir) puis on met dans la case 
-        correspendante la valeur de la temperature
+        /*recuperation de la l'image de la carte de france*/
+        image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
+        /*instanciation de la liste des villes*/
+        emplacement=new Coordonne();
+        /*appel de la methode qui recupére les donnée du fichier configuration.txt
+          et les mets dans la liste instancier précédement   
         */
+        emplacement.ConstructTabVille();
+        
         imgview.setImage(image);
-        text = new Text("20°");
-        text.setLayoutX(50);
-        text.setLayoutY(50);
-        gridPane.add(text, 5, 10);
+        /*Affichage des temperature une par une sur la carte */
+        for (int i = 0; i < emplacement.tabVille.size(); i++) {
+            float temp=new Float(emplacement.tabVille.get(i).temperature);
+            text=new Text(Float.toString(temp));
+            
+            gridPane.add(text, emplacement.tabVille.get(i).city.point.y, emplacement.tabVille.get(i).city.point.x);// colonne-ligne
+            
+        }
+                
+        
         
         
     }    

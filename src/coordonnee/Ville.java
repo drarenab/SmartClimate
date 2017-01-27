@@ -3,19 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package meteo;
+package coordonnee;
 
 /**
  *
  * @author karim
  */
+
+/*
+Cette classe represente une ville ayant un nom un id et une coordonnée 
+de type point sur la carte
+*/
 public class Ville {
-    String nom;
-    Point point;
+    public String nom;
+    public int id;
+    public Point point;
     
 
-    public Ville(String nom, Point point) {
+    public Ville(String nom,int id,Point point) {
         this.nom = nom;
+        this.id=id;
         this.point = point;
     }
     

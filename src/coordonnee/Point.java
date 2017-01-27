@@ -3,15 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package meteo;
+package coordonnee;
 
 /**
  *
  * @author karim
  */
+/*
+Cette Classe Crée un point de coordonnée X et Y 
+qui represente un point sur la carte de france de l'interface principal
+*/
 public class Point {
-    int x;
-    int y;
+    public int x;
+    public int y;
 
     public Point(int x, int y) {
         this.x = x;
