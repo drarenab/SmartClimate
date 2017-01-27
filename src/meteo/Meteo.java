@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 /**
  *
  * @author SEIF
+ * @author karim
  */
 public class Meteo extends Application {
     

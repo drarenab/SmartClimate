@@ -10,26 +10,47 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  *
- * @author SEIF
+ * @author karim
  */
 public class FXMLDocumentController implements Initializable {
-    
-    @FXML
-    private Label label;
-    
+ 
+Image image;
+@FXML
+ImageView imgview ;
+@FXML
+StackPane stackPane ;
+@FXML
+Text text,text2;
+@FXML
+VBox v;
+@FXML
+GridPane gridPane;
+
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        image = new Image(Meteo.class.getResourceAsStream("country-fra.png"));
+        /*on Crée une gridPAne de ROWS*COLS (a definir) puis on met dans la case 
+        correspendante la valeur de la temperature
+        */
+        imgview.setImage(image);
+        text = new Text("20°");
+        text.setLayoutX(50);
+        text.setLayoutY(50);
+        gridPane.add(text, 5, 10);
     }    
     
 }
