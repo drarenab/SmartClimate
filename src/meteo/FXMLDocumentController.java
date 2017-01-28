@@ -6,6 +6,8 @@
 package meteo;
 
 import java.io.IOException;
+
+import coordonnee.Coordonne;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -18,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -25,43 +28,55 @@ import javafx.scene.text.Text;
  * @author karim
  */
 public class FXMLDocumentController implements Initializable {
- 
-Image image;
-@FXML
-ImageView imgview ;
-@FXML
-StackPane stackPane ;
-@FXML
-Text text,text2;
-@FXML
-VBox v;
-@FXML
-GridPane gridPane;
+
+    Image image;
+    @FXML
+    ImageView imgview;
+    @FXML
+    StackPane stackPane;
+    @FXML
+    Text text, text2;
+    @FXML
+    VBox v;
+    @FXML
+    GridPane gridPane;
+    Coordonne emplacement;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        image = new Image(Meteo.class.getResourceAsStream("country-fra.png"));
-        /*on Crée une gridPAne de ROWS*COLS (a definir) puis on met dans la case 
-        correspendante la valeur de la temperature
-        */
+        /*recuperation de la l'image de la carte de france*/
+        image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
+        /*instanciation de la liste des villes*/
+        emplacement = new Coordonne();
+        /*appel de la methode qui recupére les donnée du fichier configuration.txt
+          et les mets dans la liste instancier précédement   
+         */
+        emplacement.ConstructTabVille();
+
         imgview.setImage(image);
-        text = new Text("20°");
-        text.setLayoutX(50);
-        text.setLayoutY(50);
-        gridPane.add(text, 5, 10);
-    
-    try {
-        Downloader.downLoadCsv();
+        /*Affichage des temperature une par une sur la carte */
+        for (int i = 0; i < emplacement.tabVille.size(); i++) {
+            double temp = new Double(emplacement.tabVille.get(i).temperature);
+            int t = (int) Math.ceil(temp);
+            text = new Text(Integer.toString(t) + "°");
+            text.setFill(Color.BROWN);
+            gridPane.add(text, emplacement.tabVille.get(i).city.point.y, emplacement.tabVille.get(i).city.point.x);// colonne-ligne
+
+        }
+        
+        try {
+            /* Essai telechargement et decompression */
+            Downloader.downLoadCsv();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Downloader.DecompresserGzip();
-    } catch (IOException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+
     }
-    }    
-    
-    
+
 }
