@@ -17,6 +17,7 @@ public class Configuration {
     public static String GZIP_TEMPORARY_FILE_SAVE_NAME ="temporary.csv.gz";
     //le nom du fichier telecharger apres la decompression
     public static String CSV_FILE_NAME = "output.csv";
+    public static String CITY_FILE_NAME= "Configuration.txt"; 
     
     public static String TEMPORARY_CSV_FILE_NAME = "temporary.csv";
     

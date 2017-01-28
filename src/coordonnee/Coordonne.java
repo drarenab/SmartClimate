@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import meteo.Configuration;
 
 /**
  *
@@ -60,8 +61,8 @@ public class Coordonne {
      */
     public void ConstructTabVille() {
       
-       readFile("Configuration.txt");
-       readFile("synop.201701.csv");
+       readFile(Configuration.CITY_FILE_NAME);
+       readFile(Configuration.CSV_FILE_NAME);
       
         
 
