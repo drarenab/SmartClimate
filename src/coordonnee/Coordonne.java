@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  *
@@ -19,68 +18,83 @@ import java.util.Scanner;
  */
 public class Coordonne {
     public ArrayList <VilleTemp>tabVille;
-
+    boolean b=false;
     public Coordonne() {
         tabVille=new ArrayList<>();
     }
-    public void addVille(String nom,int id,int x,int y,float temperature){
+    public void addVille(String nom,int id,int x,int y,double temperature){
         VilleTemp v=new VilleTemp(new Ville(nom, id, new Point(x, y)), temperature);
         tabVille.add(v);
     }
+    public void modifyVille(int id,double temperature){
+        for (int i = 0; i < tabVille.size(); i++) {
+            if(tabVille.get(i).city.id==id){
+                tabVille.get(i).modifierTemperature(temperature);
+            }
+        }
+        //tabVille.get(id);
+    }
     public void ConstructTabVille() {
       
-       
-       try
-    {
-    String fichConfig="Configuration.txt";
-     File file = new File (fichConfig);    
-     FileReader fr = new FileReader (file);
-    BufferedReader br = new BufferedReader (fr);
- 
-    try
-        {
-            String line = br.readLine();
-            
-            while (line != null)
-            {
-                //faire un split
-                String[] param = line.split(";");
-       //    public void addVille(String nom,int id,int x,int y,float temperature){
-                
-                addVille(param[1],Integer.parseInt(param[0]),Integer.parseInt(param[2]),Integer.parseInt(param[3]),0);
-                line = br.readLine();
-            }
-
-            br.close();
-            fr.close();
-        }
-        catch (IOException exception)
-        {
-            System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
-        }
-    }
-    catch (FileNotFoundException exception)
-        {
-            System.out.println ("Le fichier n'a pas été trouvé");
-        }
-       
+       readFile("Configuration.txt");
+       readFile("synop.201701.csv");
       
-        //File file = ;
-        /*if (file != null) {
-
-            Scanner s = new Scanner(file);
-            while (s.hasNext()) {
-
-                String S = new String();
-                S = s.next();
-                
-                
-
-            } //end while
-
-        }*/
+        
 
     }
-    
+    public void readFile(String fichier){
+        double d;
+        try
+        {
+        String fichConfig=fichier;
+                
+         File file = new File (fichConfig);    
+         FileReader fr = new FileReader (file);
+        BufferedReader br = new BufferedReader (fr);
+
+        try
+            {
+                String line = br.readLine();
+                line = br.readLine();
+                while (line != null)
+                {
+                    //faire un split
+                    String[] param = line.split(";");
+                    if(b==false){
+                        
+                     addVille(param[1],Integer.parseInt(param[0]),Integer.parseInt(param[2]),Integer.parseInt(param[3]),0);
+  
+                    }
+                    else{
+                        
+                        
+                        if(!param[7].equals("mq")){
+                            d=Double.parseDouble(param[7])-273.15;
+                            
+                            
+                        }
+                        else{
+                            d=100;
+                        }
+                        modifyVille(Integer.parseInt(param[0]),d);
+   
+                    }
+                    line = br.readLine();
+                }
+
+                br.close();
+                fr.close();
+            }
+            catch (IOException exception)
+            {
+                System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
+            }
+        }
+        catch (FileNotFoundException exception)
+            {
+                System.out.println ("Le fichier n'a pas été trouvé");
+            }
+        b=true;
+}
     
 }

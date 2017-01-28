@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -58,9 +59,10 @@ Coordonne emplacement;
         imgview.setImage(image);
         /*Affichage des temperature une par une sur la carte */
         for (int i = 0; i < emplacement.tabVille.size(); i++) {
-            float temp=new Float(emplacement.tabVille.get(i).temperature);
-            text=new Text(Float.toString(temp));
-            
+            double temp=new Double(emplacement.tabVille.get(i).temperature);
+            int t=(int)Math.ceil(temp);
+            text=new Text(Integer.toString(t)+"°");
+            text.setFill(Color.BROWN);
             gridPane.add(text, emplacement.tabVille.get(i).city.point.y, emplacement.tabVille.get(i).city.point.x);// colonne-ligne
             
         }

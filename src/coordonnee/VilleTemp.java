@@ -15,14 +15,14 @@ Cette Classe fait le lien entre une ville et sa temperature
 */
 public class VilleTemp {
    public Ville city;
-    public float temperature;
+    public double temperature;
 
-    public VilleTemp(Ville city, float temperature) {
+    public VilleTemp(Ville city, double temperature) {
         this.city = city;
         this.temperature = temperature;
     }
     
-    public void modifierTemperature(float f){
+    public void modifierTemperature(double f){
         temperature=f;
     }
 }

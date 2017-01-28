@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="603.0" prefWidth="523.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="603.0" prefWidth="523.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
    <children>
       <VBox layoutX="4.0" layoutY="5.0" prefHeight="595.0" prefWidth="516.0">
          <children>
@@ -27,11 +27,24 @@
                     <MenuItem mnemonicParsing="false" text="Delete" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                  <Menu mnemonicParsing="false" text="Window">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem mnemonicParsing="false" text="Maximize" />
+                        <MenuItem mnemonicParsing="false" text="Minimize" />
+                    </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="Seting">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem mnemonicParsing="false" text="Change Location default" />
+                        <MenuItem mnemonicParsing="false" text="preférence" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                    </items>
+                  </Menu>
               </menus>
             </MenuBar>
             <StackPane fx:id="stackPane" prefHeight="559.0" prefWidth="516.0">
