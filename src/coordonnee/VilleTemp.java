@@ -11,12 +11,19 @@ package coordonnee;
  */
 
 /*
-Cette Classe fait le lien entre une ville et sa temperature
+
 */
 public class VilleTemp {
+   /**
+     * 
+     * @param city
+     * @param temperature 
+     * Cette Classe fait le lien entre une ville et sa temperature
+     */
    public Ville city;
-    public double temperature;
+   public double temperature;
 
+    
     public VilleTemp(Ville city, double temperature) {
         this.city = city;
         this.temperature = temperature;

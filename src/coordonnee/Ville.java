@@ -10,11 +10,15 @@ package coordonnee;
  * @author karim
  */
 
-/*
-Cette classe represente une ville ayant un nom un id et une coordonnée 
-de type point sur la carte
-*/
 public class Ville {
+    /**
+     * 
+     * @param nom
+     * @param id
+     * @param point
+     * Cette classe represente une ville ayant un nom un id et une coordonnée 
+     * de type point sur la carte
+     */
     public String nom;
     public int id;
     public Point point;

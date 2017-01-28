@@ -6,27 +6,39 @@
 package coordonnee;
 
 /**
- *
+ * 
  * @author karim
+ * 
  */
-/*
-Cette Classe Crée un point de coordonnée X et Y 
-qui represente un point sur la carte de france de l'interface principal
-*/
+
 public class Point {
+/**
+ * 
+ * @param x
+ * @param y 
+ * Cette Classe Crée un point de coordonnée X et Y 
+ * qui represente un point sur la carte de france de l'interface principal
+ */
     public int x;
     public int y;
-
+    
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
+    
     public void modifierX(int x){
         this.x=x;
     }
+    
     public void modifierY(int y){
         this.y=y;
     }
+    /**
+     * 
+     * Modification d'un point 
+     * 
+     */
     public void modifierPoint(int X,int Y){
         modifierY(Y);
         modifierX(X);

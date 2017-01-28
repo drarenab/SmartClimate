@@ -36,7 +36,6 @@
                   </Menu>
                 <Menu mnemonicParsing="false" text="Seting">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Change Location default" />
                         <MenuItem mnemonicParsing="false" text="preférence" />
                   </items>
                 </Menu>
