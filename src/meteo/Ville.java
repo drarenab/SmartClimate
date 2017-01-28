@@ -13,7 +13,7 @@ public class Ville {
     String nom;
     Point point;
     
-
+    
     public Ville(String nom, Point point) {
         this.nom = nom;
         this.point = point;

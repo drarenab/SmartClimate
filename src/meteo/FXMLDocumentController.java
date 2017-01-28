@@ -5,8 +5,11 @@
  */
 package meteo;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,6 +54,14 @@ GridPane gridPane;
         text.setLayoutX(50);
         text.setLayoutY(50);
         gridPane.add(text, 5, 10);
+    
+    try {
+        Downloader.downLoadCsv();
+        Downloader.DecompresserGzip();
+    } catch (IOException ex) {
+        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+    }
     }    
+    
     
 }
