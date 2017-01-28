@@ -18,11 +18,14 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -61,7 +64,8 @@ public class FXMLDocumentController implements Initializable {
     MenuBar menuBar;
     @FXML
     AnchorPane anchorSeting;
-    
+    @FXML
+    RadioButton kelvin,celcius,online,offline;
     @FXML
     private void handleButtonActionPreference() throws IOException {
         
@@ -74,6 +78,7 @@ public class FXMLDocumentController implements Initializable {
         
         /*creation d'un menu dynamiquement commun a toutes les interfaces*/
         menuBar=new MenuBar();
+        
         Menu file =new Menu("File");
         
         Menu edit =new Menu("Edit");
@@ -104,7 +109,7 @@ public class FXMLDocumentController implements Initializable {
         seting.getItems().add(preference);
         
         menuBar.getMenus().addAll(file,edit,window,seting);
-        
+        //menuBar.setEffect("-fx-background-color:linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);");
         
         VboxPrincipal.getChildren().add(0, menuBar);
         if (Interface==0){
@@ -153,5 +158,15 @@ public class FXMLDocumentController implements Initializable {
     Image img=new Image(Meteo.class.getResourceAsStream("Image/BackgroundSetting2.jpg"));
         BackgroundImage background =new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         anchorSeting.setBackground(new Background(background));
+        
+        ToggleGroup kelvinCelcius=new ToggleGroup();
+        kelvin.setToggleGroup(kelvinCelcius);
+        
+        celcius.setToggleGroup(kelvinCelcius);
+        celcius.setSelected(true);
+        ToggleGroup onOffLine =new ToggleGroup();
+        online.setToggleGroup(onOffLine);
+        online.setSelected(true);
+        offline.setToggleGroup(onOffLine);
     }
 }
