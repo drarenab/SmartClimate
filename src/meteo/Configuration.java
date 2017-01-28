@@ -15,6 +15,7 @@ public class Configuration {
     public static String GZIP_FILE_SAVE_NAME = "output.csv.gz";
     //le nom du fichier telecharger apres la decompression
     public static String CSV_FILE_NAME = "output.csv";
+    public static String CITY_FILE_NAME= "Configuration.txt"; 
     
     /**
      * Cette methode retourne le chemin de l'application
