@@ -48,34 +48,44 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        /*recuperation de la l'image de la carte de france*/
-        image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
-        /*instanciation de la liste des villes*/
-        emplacement = new Coordonne();
-        /*appel de la methode qui recupére les donnée du fichier configuration.txt
-          et les mets dans la liste instancier précédement   
-         */
-        emplacement.ConstructTabVille();
-
-        imgview.setImage(image);
-        /*Affichage des temperature une par une sur la carte */
-        for (int i = 0; i < emplacement.tabVille.size(); i++) {
-            double temp = new Double(emplacement.tabVille.get(i).temperature);
-            int t = (int) Math.ceil(temp);
-            text = new Text(Integer.toString(t) + "°");
-            text.setFill(Color.BROWN);
-            gridPane.add(text, emplacement.tabVille.get(i).city.point.y, emplacement.tabVille.get(i).city.point.x);// colonne-ligne
-
-        }
-        
-        try {
-            /* Essai telechargement et decompression */
-            Downloader.downLoadCsv();
+       
+            image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
+            emplacement = new Coordonne();
+            emplacement.ConstructTabVille();
+            imgview.setImage(image);
+            for (int i = 0; i < emplacement.tabVille.size(); i++) {
+                double temp = new Double(emplacement.tabVille.get(i).temperature);
+                int t = (int) Math.ceil(temp);
+                text = new Text(Integer.toString(t) + "°");
+                text.setFill(Color.BROWN);
+                gridPane.add(text, emplacement.tabVille.get(i).city.point.y, emplacement.tabVille.get(i).city.point.x);// colonne-ligne
+                
+            }
+            
+        try { 
+            Downloader.downLoadCsvByDate("200010", "output.csv.gz");
+            Downloader.DecompresserGzip("output.csv.gz", "output.csv");
+            
+            Downloader.downLoadCsvByDate("199605", "temporaire.csv.gz");
+            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
+            
+            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199605");
+            
+            Downloader.downLoadCsvByDate("199601", "temporaire.csv.gz");
+            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
+           
+            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199601");
+         
+            Downloader.downLoadCsvByDate("199603", "temporaire.csv.gz");
+            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
+           
+            
+            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199603");
+         
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Downloader.DecompresserGzip();
+        
 
     }
 
