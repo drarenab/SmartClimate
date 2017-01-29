@@ -79,6 +79,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         // TODO
         /*Commun a toutes les interface */
         
@@ -152,7 +153,34 @@ public class FXMLDocumentController implements Initializable {
             initInterfaceSetting();
         }
         
-      
+
+        
+        /*
+        try { 
+            Downloader.downLoadCsvByDate("200010", "output.csv.gz");
+            Downloader.DecompresserGzip("output.csv.gz", "output.csv");
+            
+            Downloader.downLoadCsvByDate("199605", "temporaire.csv.gz");
+            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
+            
+            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199605");
+            
+            Downloader.downLoadCsvByDate("199601", "temporaire.csv.gz");
+            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
+           
+            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199601");
+         
+            Downloader.downLoadCsvByDate("199603", "temporaire.csv.gz");
+            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
+           
+            
+            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199603");
+         
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */
+        
     }
 
     public void InitInterfacePrincipal(){
