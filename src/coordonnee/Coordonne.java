@@ -21,12 +21,12 @@ import meteo.Configuration;
  */
 public class Coordonne {
     
-    public ArrayList <VilleTemp>tabVille;
-    boolean b=false;
+    public static ArrayList <VilleTemp>tabVille=new ArrayList<>();
+   static boolean  b=false;
     /*constructeur*/
-    public Coordonne() {
+    /*public Coordonne() {
         tabVille=new ArrayList<>();
-    }
+    }*/
     /**
      * 
      * @param nom
@@ -36,7 +36,7 @@ public class Coordonne {
      * @param temperature 
      * Ajouter une ville a la liste tabVille
      */
-    public void addVille(String nom,int id,int x,int y,double temperature){
+    public static void  addVille(String nom,int id,int x,int y,double temperature){
         VilleTemp v=new VilleTemp(new Ville(nom, id, new Point(x, y)), temperature);
         tabVille.add(v);
     }
@@ -46,7 +46,7 @@ public class Coordonne {
      * @param temperature 
      * Modification de la temperature d'une ville donnée
      */
-    public void modifyVille(int id,double temperature){
+    public static void modifyVille(int id,double temperature){
         for (int i = 0; i < tabVille.size(); i++) {
             if(tabVille.get(i).city.id==id){
                 tabVille.get(i).modifierTemperature(temperature);
@@ -59,11 +59,11 @@ public class Coordonne {
      * l'id, le nom et la position des villes dans la carte
      * et d'un deuxieme fichier contenant l'id et la temperature récuperer du site MeteoFrance.fr
      */
-    public void ConstructTabVille() {
+    public static void ConstructTabVille() {
       
        readFile(Configuration.CITY_FILE_NAME);
        readFile(Configuration.CSV_FILE_NAME);
-      
+      b=false;
         
 
     }
@@ -72,7 +72,7 @@ public class Coordonne {
      * @param fichier 
      * Lecture d'un fichier et ajout/modification des donnée de tabVille
      */
-    public void readFile(String fichier){
+    public static void readFile(String fichier){
         double d;
         try
         {
@@ -102,7 +102,6 @@ public class Coordonne {
   
                     }
                     else{
-                        
                         
                         if(!param[7].equals("mq")){
                             d=Double.parseDouble(param[7])-273.15;

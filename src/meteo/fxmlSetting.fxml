@@ -23,12 +23,12 @@
                            </font></Label>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <RadioButton fx:id="celcius" mnemonicParsing="false" text="Celcius">
+                              <RadioButton fx:id="celcius" mnemonicParsing="false" onAction="#handleButtonActionChngTemp" text="Celcius">
                                  <VBox.margin>
                                     <Insets bottom="5.0" top="5.0" />
                                  </VBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="kelvin" mnemonicParsing="false" text="kelvin" />
+                              <RadioButton fx:id="kelvin" mnemonicParsing="false" onAction="#handleButtonActionChngTemp" text="kelvin" />
                            </children>
                            <HBox.margin>
                               <Insets left="50.0" />

@@ -7,18 +7,18 @@ package meteo;
 
 import java.io.IOException;
 
-import coordonnee.Coordonne;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -37,7 +37,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -47,7 +46,7 @@ import javafx.stage.Stage;
  */
 public class FXMLDocumentController implements Initializable {
 
-    Image image;
+    
     @FXML
     ImageView imgview;
     @FXML
@@ -58,7 +57,6 @@ public class FXMLDocumentController implements Initializable {
     VBox v,VboxPrincipal;
     @FXML
     GridPane gridPane;
-    Coordonne emplacement;
     static int Interface;
     @FXML
     MenuBar menuBar;
@@ -66,9 +64,17 @@ public class FXMLDocumentController implements Initializable {
     AnchorPane anchorSeting;
     @FXML
     RadioButton kelvin,celcius,online,offline;
+    static String kelvin_celcius="celcius";
+    AfficheInterfacePrincipal A;
     @FXML
-    private void handleButtonActionPreference() throws IOException {
-        
+    private void handleButtonActionChngTemp() {
+        if (kelvin.isArmed()){
+                   kelvin_celcius="kelvin";
+                   
+                 }  
+        if(celcius.isArmed()){
+            kelvin_celcius="celcius";
+        }
     }
 
     @Override
@@ -109,49 +115,49 @@ public class FXMLDocumentController implements Initializable {
         seting.getItems().add(preference);
         
         menuBar.getMenus().addAll(file,edit,window,seting);
-        //menuBar.setEffect("-fx-background-color:linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);");
+        if(Interface==0){
+           menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);");
+ 
+        }
+        else{
+           menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+
+        }
         
         VboxPrincipal.getChildren().add(0, menuBar);
         if (Interface==0){
             InitInterfacePrincipal();
+          
+        Timer timer = new Timer ();
+        TimerTask t = new TimerTask () {
+            @Override
+            public void run () {
+             // some code
+//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
+            Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println();
+                      AfficheInterfacePrincipal.Afficher(stackPane,kelvin_celcius);
+                      
+                    }
+                  });   
+            }
+        };
+
+        timer.schedule (t, 01, 1000);
+      
         }
         else{
             initInterfaceSetting();
         }
+        
+      
     }
 
     public void InitInterfacePrincipal(){
-        Interface=0;
-        /*recuperation de la l'image de la carte de france*/
-        image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
-        /*instanciation de la liste des villes*/
-        emplacement = new Coordonne();
-        /*appel de la methode qui recupére les donnée du fichier configuration.txt
-          et les mets dans la liste instancier précédement   
-         */
-        emplacement.ConstructTabVille();
-
-        imgview.setImage(image);
-        /*Affichage des temperature une par une sur la carte */
-        for (int i = 0; i < emplacement.tabVille.size(); i++) {
-            double temp = new Double(emplacement.tabVille.get(i).temperature);
-            int t = (int) Math.ceil(temp);
-            text = new Text(Integer.toString(t) + "°");
-            text.setFill(Color.BROWN);
-            gridPane.add(text, emplacement.tabVille.get(i).city.point.y, emplacement.tabVille.get(i).city.point.x);// colonne-ligne
-
-        }
+       
         
-        try {
-            /* Essai telechargement et decompression */
-           Downloader.downLoadCsv();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            Downloader.DecompresserGzip();
-        } catch (Exception e) {
-        }
         Interface=1;
     }
     public void initInterfaceSetting(){
@@ -168,5 +174,7 @@ public class FXMLDocumentController implements Initializable {
         online.setToggleGroup(onOffLine);
         online.setSelected(true);
         offline.setToggleGroup(onOffLine);
+        Interface=1;
     }
+    
 }
