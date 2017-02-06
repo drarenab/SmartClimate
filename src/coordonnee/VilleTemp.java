@@ -22,14 +22,26 @@ public class VilleTemp {
      */
    public Ville city;
    public double temperature;
+   public int humidite;
+   public float nebulosite;
 
-    
-    public VilleTemp(Ville city, double temperature) {
+    public VilleTemp(Ville city, double temperature, int humidite, float nebulosite) {
         this.city = city;
         this.temperature = temperature;
+        this.humidite = humidite;
+        this.nebulosite = nebulosite;
     }
+
+    
+    
     
     public void modifierTemperature(double f){
         temperature=f;
+    }
+    public void modifierHumidite(int h){
+        humidite=h;
+    }
+    public void modifierNebulosite(float n){
+        nebulosite=n;
     }
 }

@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -23,12 +22,12 @@
                            </font></Label>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <RadioButton fx:id="celcius" mnemonicParsing="false" text="Celcius">
+                              <RadioButton fx:id="celcius" mnemonicParsing="false" onAction="#handleButtonActionChngTemp" text="Celcius">
                                  <VBox.margin>
                                     <Insets bottom="5.0" top="5.0" />
                                  </VBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="kelvin" mnemonicParsing="false" text="kelvin" />
+                              <RadioButton fx:id="kelvin" mnemonicParsing="false" onAction="#handleButtonActionChngTemp" text="kelvin" />
                            </children>
                            <HBox.margin>
                               <Insets left="50.0" />
@@ -67,13 +66,12 @@
                         <Insets bottom="50.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="250.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
+                  <HBox fx:id="HboxLocation" alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="250.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
                      <children>
-                        <Label prefHeight="21.0" prefWidth="158.0" text="Location Default" textFill="#945151">
+                        <Label prefHeight="21.0" prefWidth="136.0" text="Location Default" textFill="#945151">
                            <font>
-                              <Font size="18.0" />
+                              <Font size="15.0" />
                            </font></Label>
-                        <TextField prefHeight="26.0" prefWidth="105.0" />
                      </children>
                   </HBox>
                </children>

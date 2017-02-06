@@ -21,12 +21,12 @@ import meteo.Configuration;
  */
 public class Coordonne {
     
-    public ArrayList <VilleTemp>tabVille;
-    boolean b=false;
+    public static ArrayList <VilleTemp>tabVille=new ArrayList<>();
+   static boolean  b=false;
     /*constructeur*/
-    public Coordonne() {
+    /*public Coordonne() {
         tabVille=new ArrayList<>();
-    }
+    }*/
     /**
      * 
      * @param nom
@@ -36,8 +36,8 @@ public class Coordonne {
      * @param temperature 
      * Ajouter une ville a la liste tabVille
      */
-    public void addVille(String nom,int id,int x,int y,double temperature){
-        VilleTemp v=new VilleTemp(new Ville(nom, id, new Point(x, y)), temperature);
+    public static void  addVille(String nom,int id,int x,int y,double temperature,int humidite,float nebulosite){
+        VilleTemp v=new VilleTemp(new Ville(nom, id, new Point(x, y)), temperature,humidite,nebulosite);
         tabVille.add(v);
     }
     /**
@@ -46,10 +46,12 @@ public class Coordonne {
      * @param temperature 
      * Modification de la temperature d'une ville donnée
      */
-    public void modifyVille(int id,double temperature){
+    public static void modifyVille(int id,double temperature,int f,float g){
         for (int i = 0; i < tabVille.size(); i++) {
             if(tabVille.get(i).city.id==id){
                 tabVille.get(i).modifierTemperature(temperature);
+                tabVille.get(i).modifierHumidite(f);
+                tabVille.get(i).modifierNebulosite(g);
             }
         }
         //tabVille.get(id);
@@ -59,11 +61,11 @@ public class Coordonne {
      * l'id, le nom et la position des villes dans la carte
      * et d'un deuxieme fichier contenant l'id et la temperature récuperer du site MeteoFrance.fr
      */
-    public void ConstructTabVille() {
+    public static void ConstructTabVille() {
       
        readFile(Configuration.CITY_FILE_NAME);
        readFile(Configuration.CSV_FILE_NAME);
-      
+      b=false;
         
 
     }
@@ -72,8 +74,10 @@ public class Coordonne {
      * @param fichier 
      * Lecture d'un fichier et ajout/modification des donnée de tabVille
      */
-    public void readFile(String fichier){
-        double d;
+    public static void readFile(String fichier){
+        
+        String f;
+        String g;
         try
         {
         String fichConfig=fichier;
@@ -98,21 +102,35 @@ public class Coordonne {
                     */
                     if(b==false){
                         
-                     addVille(param[1],Integer.parseInt(param[0]),Integer.parseInt(param[2]),Integer.parseInt(param[3]),0);
+                     addVille(param[1],Integer.parseInt(param[0]),Integer.parseInt(param[2]),Integer.parseInt(param[3]),0,0,0);
   
                     }
                     else{
                         
-                        
-                        if(!param[7].equals("mq")){
-                            d=Double.parseDouble(param[7])-273.15;
-                            
-                            
-                        }
-                        else{
-                            d=100;
-                        }
-                        modifyVille(Integer.parseInt(param[0]),d);
+//                        if(!param[7].equals("mq")){
+//                          double  d=Double.parseDouble(param[7])-273.15;
+//                            
+//                        }
+//                        else{
+//                            d=100;
+//                        }
+//                        if(!param[9].equals("mq")){
+//                            f=param[9];
+//                        }
+//                        else{
+//                            f="101";
+//                        }
+//                        if(!param[14].equals("mq")){
+//                            g=param[14];
+//                        }
+//                        else{
+//                            g="101";
+//                        }
+                        //max = (a > b) ? a : b;
+                    modifyVille(Integer.parseInt(param[0]),
+                                /*d*/(!param[7].equals("mq")) ? Double.parseDouble(param[7])-273.15:101,
+                                (!param[9].equals("mq"))?Integer.parseInt(param[9]):101,
+                                (!param[14].equals("mq"))?Float.parseFloat(param[14]):101);//101 dans le cas ou les parametres ne sont pas connu
    
                     }
                     line = br.readLine();
