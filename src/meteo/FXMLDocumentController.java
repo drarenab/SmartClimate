@@ -10,6 +10,7 @@ import java.io.IOException;
 import coordonnee.Coordonne;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -55,7 +56,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     Text text, text2;
     @FXML
-    VBox v,VboxPrincipal;
+    VBox v, VboxPrincipal;
     @FXML
     GridPane gridPane;
     Coordonne emplacement;
@@ -65,92 +66,80 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     AnchorPane anchorSeting;
     @FXML
-    RadioButton kelvin,celcius,online,offline;
+    RadioButton kelvin, celcius, online, offline;
+
     @FXML
     private void handleButtonActionPreference() throws IOException {
-        
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        // TODO
-        /*Commun a toutes les interface */
-        
-        /*creation d'un menu dynamiquement commun a toutes les interfaces*/
-        menuBar=new MenuBar();
-        
-        Menu file =new Menu("File");
-        
-        Menu edit =new Menu("Edit");
-        Menu window =new Menu("Window");
-        Menu seting =new Menu("Seting");
-        MenuItem preference=new MenuItem("Preférence");
-        preference.setOnAction(new EventHandler<ActionEvent>(){
-        
 
+        try {
+            // TODO
+            /*Commun a toutes les interface */
+            /*creation d'un menu dynamiquement commun a toutes les interfaces*/
+            /*
+            menuBar=new MenuBar();
+            
+            Menu file =new Menu("File");
+            
+            Menu edit =new Menu("Edit");
+            Menu window =new Menu("Window");
+            Menu seting =new Menu("Seting");
+            MenuItem preference=new MenuItem("Preférence");
+            preference.setOnAction(new EventHandler<ActionEvent>(){
+            
+            
             @Override
             public void handle(ActionEvent event) {
-                Interface=1;
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("fxmlSetting.fxml"));
-                     Scene scene = new Scene(root);
-                     Stage s=new Stage();
-                     s.setScene(scene);
-                     s.show();
-                    
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-        
-       
+            Interface=1;
+            Parent root;
+            try {
+            root = FXMLLoader.load(getClass().getResource("fxmlSetting.fxml"));
+            Scene scene = new Scene(root);
+            Stage s=new Stage();
+            s.setScene(scene);
+            s.show();
+            
+            } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
-                });
-        seting.getItems().add(preference);
-        
-        menuBar.getMenus().addAll(file,edit,window,seting);
-        //menuBar.setEffect("-fx-background-color:linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);");
-        
-        VboxPrincipal.getChildren().add(0, menuBar);
-        if (Interface==0){
+            
+            
+            }
+            });
+            seting.getItems().add(preference);
+            
+            menuBar.getMenus().addAll(file,edit,window,seting);
+            //menuBar.setEffect("-fx-background-color:linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);");
+            
+            VboxPrincipal.getChildren().add(0, menuBar);
+            if (Interface==0){
             InitInterfacePrincipal();
-        }
-        else{
+            }
+            else{
             initInterfaceSetting();
-        }
-        
-        
-        /*
-        try { 
-            Downloader.downLoadCsvByDate("200010", "output.csv.gz");
-            Downloader.DecompresserGzip("output.csv.gz", "output.csv");
+            }
             
-            Downloader.downLoadCsvByDate("199605", "temporaire.csv.gz");
-            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
+            */
             
-            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199605");
-            
-            Downloader.downLoadCsvByDate("199601", "temporaire.csv.gz");
-            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
-           
-            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199601");
-         
-            Downloader.downLoadCsvByDate("199603", "temporaire.csv.gz");
-            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
-           
-            
-            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199603");
-         
+            //System.out.println("Last available date:"+Downloader.checkLastAvailableDataForDate("201202","availableDataByDate.txt"));
+            // Downloader.addDateTofile("output.csv","availableDataByDate.txt");
+//            Downloader.downLoadCsvByDate("201403");
+//            Downloader.downLoadCsvByDate("201404");
+//            Downloader.downLoadCsvByDate("201203");
+              String date = "200105";
+              Downloader.downLoadCsvByDate(date);
+              Downloader.DecompresserGzip(Downloader.getFilePathFromDate(date)+"/"+date+".csv.gz");
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        */
-        
     }
 
-    public void InitInterfacePrincipal(){
-        Interface=0;
+    public void InitInterfacePrincipal() {
+        Interface = 0;
         /*recuperation de la l'image de la carte de france*/
         image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
         /*instanciation de la liste des villes*/
@@ -168,24 +157,25 @@ public class FXMLDocumentController implements Initializable {
             text = new Text(Integer.toString(t) + "°");
             text.setFill(Color.BROWN);
             gridPane.add(text, emplacement.tabVille.get(i).city.point.y, emplacement.tabVille.get(i).city.point.x);// colonne-ligne
-
         }
-        
-        Interface=1;
+
+        Interface = 1;
     }
-    public void initInterfaceSetting(){
-    Image img=new Image(Meteo.class.getResourceAsStream("Image/BackgroundSetting2.jpg"));
-        BackgroundImage background =new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+
+    public void initInterfaceSetting() {
+        Image img = new Image(Meteo.class.getResourceAsStream("Image/BackgroundSetting2.jpg"));
+        BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         anchorSeting.setBackground(new Background(background));
-        
-        ToggleGroup kelvinCelcius=new ToggleGroup();
+
+        ToggleGroup kelvinCelcius = new ToggleGroup();
         kelvin.setToggleGroup(kelvinCelcius);
-        
+
         celcius.setToggleGroup(kelvinCelcius);
         celcius.setSelected(true);
-        ToggleGroup onOffLine =new ToggleGroup();
+        ToggleGroup onOffLine = new ToggleGroup();
         online.setToggleGroup(onOffLine);
         online.setSelected(true);
         offline.setToggleGroup(onOffLine);
     }
+
 }
