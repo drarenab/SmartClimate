@@ -129,8 +129,7 @@ public class Downloader {
     
     //year
     //mois
-    //jour
-    
+    //jour  
     public static String checkIfDataForDateExists(String date){
         // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient 
         //les données de la date demander
