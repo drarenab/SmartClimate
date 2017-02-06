@@ -75,7 +75,7 @@ public class Coordonne {
      * Lecture d'un fichier et ajout/modification des donnée de tabVille
      */
     public static void readFile(String fichier){
-        double d;
+        
         String f;
         String g;
         try
@@ -107,26 +107,30 @@ public class Coordonne {
                     }
                     else{
                         
-                        if(!param[7].equals("mq")){
-                            d=Double.parseDouble(param[7])-273.15;
-                            
-                        }
-                        else{
-                            d=100;
-                        }
-                        if(!param[9].equals("mq")){
-                            f=param[9];
-                        }
-                        else{
-                            f="101";
-                        }
-                        if(!param[14].equals("mq")){
-                            g=param[14];
-                        }
-                        else{
-                            g="101";
-                        }
-                        modifyVille(Integer.parseInt(param[0]),d,Integer.parseInt(f),Float.parseFloat(g));
+//                        if(!param[7].equals("mq")){
+//                          double  d=Double.parseDouble(param[7])-273.15;
+//                            
+//                        }
+//                        else{
+//                            d=100;
+//                        }
+//                        if(!param[9].equals("mq")){
+//                            f=param[9];
+//                        }
+//                        else{
+//                            f="101";
+//                        }
+//                        if(!param[14].equals("mq")){
+//                            g=param[14];
+//                        }
+//                        else{
+//                            g="101";
+//                        }
+                        //max = (a > b) ? a : b;
+                    modifyVille(Integer.parseInt(param[0]),
+                                /*d*/(!param[7].equals("mq")) ? Double.parseDouble(param[7])-273.15:101,
+                                (!param[9].equals("mq"))?Integer.parseInt(param[9]):101,
+                                (!param[14].equals("mq"))?Float.parseFloat(param[14]):101);//101 dans le cas ou les parametres ne sont pas connu
    
                     }
                     line = br.readLine();

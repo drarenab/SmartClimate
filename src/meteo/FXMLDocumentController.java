@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import java.net.URL;
 import java.util.ArrayList;
-import static java.util.Collections.list;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -66,7 +65,7 @@ public class FXMLDocumentController implements Initializable {
     VBox v,VboxPrincipal;
     @FXML
     GridPane gridPane;
-    static int Interface;
+    static int Interface=0;
     @FXML
     MenuBar menuBar;
     @FXML
@@ -82,6 +81,9 @@ public class FXMLDocumentController implements Initializable {
     HBox HboxLocation;
    // @FXML
    static ChoiceBox LocationDefault;
+   @FXML
+   ChoiceBox Station;
+   
     @FXML
     private void handleButtonActionChngTemp() {
         if (kelvin.isArmed()){
@@ -106,6 +108,26 @@ public class FXMLDocumentController implements Initializable {
         
         Menu edit =new Menu("Edit");
         Menu window =new Menu("Window");
+        Menu statistic =new Menu("Statistic");
+        MenuItem view=new MenuItem("View");
+        view.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               Interface=2;
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("interfaceComparaison.fxml"));
+                     Scene scene = new Scene(root);
+                     Stage s=new Stage();
+                     s.setScene(scene);
+                     s.show();
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        statistic.getItems().add(view);
         Menu seting =new Menu("Seting");
         MenuItem preference=new MenuItem("Preférence");
         preference.setOnAction(new EventHandler<ActionEvent>(){
@@ -131,15 +153,21 @@ public class FXMLDocumentController implements Initializable {
                 });
         seting.getItems().add(preference);
         
-        menuBar.getMenus().addAll(file,edit,window,seting);
+        menuBar.getMenus().addAll(file,edit,window,statistic,seting);
         if(Interface==0){//interface principal
            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
- 
+           Coordonne.ConstructTabVille();
         }
-        else{//interface setting
-           menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+        else //interface setting
+            if(Interface==1){
+            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+            }
+            else{//interface Comparaison et affichage
+            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
 
-        }
+            }
+
+        
         
         VboxPrincipal.getChildren().add(0, menuBar);
         if (Interface==0){
@@ -165,38 +193,15 @@ public class FXMLDocumentController implements Initializable {
         timer.schedule (t, 01, 1000);
       
         }
+        else if(Interface==1){
+             initInterfaceSetting();
+        }
         else{
-            initInterfaceSetting();
+            InitInterfaceComparaison();
         }
-        
-
-        
-        /*
-        try { 
-            Downloader.downLoadCsvByDate("200010", "output.csv.gz");
-            Downloader.DecompresserGzip("output.csv.gz", "output.csv");
-            
-            Downloader.downLoadCsvByDate("199605", "temporaire.csv.gz");
-            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
-            
-            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199605");
-            
-            Downloader.downLoadCsvByDate("199601", "temporaire.csv.gz");
-            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
            
-            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199601");
-         
-            Downloader.downLoadCsvByDate("199603", "temporaire.csv.gz");
-            Downloader.DecompresserGzip("temporaire.csv.gz", "temporaire.csv");
-           
-            
-            Downloader.concatenateCsvByDate("temporaire.csv","output.csv","199603");
-         
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
         
+       
     }
 
     public void InitInterfacePrincipal(){
@@ -227,13 +232,32 @@ public class FXMLDocumentController implements Initializable {
  
             @Override
             public void onChanged(ListChangeListener.Change change) {
-               // System.out.println("Detected a change! ");
             }
         });
+        LocationDefault.getItems().clear();
         LocationDefault.setItems(observableList); 
         LocationDefault.setValue(L.get(L.indexOf("BREST-GUIPAVAS")));
         HboxLocation.getChildren().add(1, LocationDefault);
-        Interface=0;
+        //Interface=0;
     }
-    
+     public void InitInterfaceComparaison(){
+        List L=new ArrayList();
+         
+         
+        for (int i = 0; i <Coordonne.tabVille.size(); i++) {
+            L.add(i, Coordonne.tabVille.get(i).city.nom);
+        }
+        ObservableList<String> observableList  = FXCollections.observableList(L);
+        observableList.addListener(new ListChangeListener() {
+ 
+            @Override
+            public void onChanged(ListChangeListener.Change change) {
+            }
+        });
+        
+        Station.setItems(observableList); 
+        Station.setAccessibleHelp("Choix ville");
+
+    //Interface=1;
+    }
 }

@@ -6,19 +6,15 @@
 package meteo;
 
 import coordonnee.Coordonne;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import javafx.scene.layout.RowConstraints;
@@ -37,20 +33,22 @@ public class AfficheInterfacePrincipal {
      *
      * @param stack
      * @param kelvin_celcius
-     * Methode static permettant d'afficher sur l'interface principale la temerature sur la carte en kelvin ou en celcius
+     * Methode static permettant d'afficher sur l'interface principale la temperature sur la carte en kelvin ou en celcius
      */
     public static void Afficher(VBox V,VBox v1,VBox v2,ImageView imgviewTempsActuel,ChoiceBox C,String kelvin_celcius){
      /*recuperation de la l'image de la carte de france*/
         int t;
-        Coordonne.ConstructTabVille();
+        /*Constrution de la table des villes avec leurs données*/
+        
         String X="°C";
-
+        
         StackPane stack=new StackPane();
        
         Text nomVille=new Text();
         nomVille.setFill(Color.CHOCOLATE);
         
         String nomVillle;
+        /*C is a choiceBox who contain the name of all station*/
         if(C!=null){
             
             nomVillle=C.getValue().toString();
@@ -60,6 +58,8 @@ public class AfficheInterfacePrincipal {
             nomVillle="BREST-GUIPAVAS";
             
         }
+        /*Affichage sur l'interface principal le nom de la ville selectionnée par défaut et la derniere date connu
+        avec les temératures,humidité et nébulosité adéquat +image representatif de la nébulosité*/
         nomVille.setText(nomVillle);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate localDate = LocalDate.now();
@@ -78,10 +78,28 @@ public class AfficheInterfacePrincipal {
          
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
             if(Coordonne.tabVille.get(i).city.nom.equals(nomVillle)){
+                if(Coordonne.tabVille.get(i).temperature!=101){
+                    Temp.setText("Température: "+Integer.toString((int) Math.ceil(Coordonne.tabVille.get(i).temperature))); 
+                }
+                else{
+                    Temp.setText("Température: "+"N/A");
+                }
                 
-               Temp.setText("Température: "+Integer.toString((int) Math.ceil(Coordonne.tabVille.get(i).temperature))); 
-               Humidite.setText("Humidité: "+Integer.toString(Coordonne.tabVille.get(i).humidite)+"%");
-               nebulosite.setText("Nébulosité: "+Float.toString(Coordonne.tabVille.get(i).nebulosite)+"%");
+               if(Coordonne.tabVille.get(i).humidite<=100){
+                    Humidite.setText("Humidité: "+Integer.toString(Coordonne.tabVille.get(i).humidite)+"%"); 
+               }
+             
+               else{
+                    Humidite.setText("Humidité: "+"N/A");
+                }
+               if(Coordonne.tabVille.get(i).nebulosite<=100){
+                    nebulosite.setText("Nébulosité: "+Float.toString(Coordonne.tabVille.get(i).nebulosite)+"%"); 
+                }
+                else{
+                    nebulosite.setText("Nébulosité: "+"N/A");
+                }
+               /*Affichage de l'image representatif de la nébulosité*/
+               
                String s="Image/".concat(getTempsActuel(Coordonne.tabVille.get(i).nebulosite)).concat(".png");
                 
                 Image tempactuel = new Image(Meteo.class.getResourceAsStream(s));
@@ -133,7 +151,14 @@ public class AfficheInterfacePrincipal {
             }
             
              t = (int) Math.ceil(temp);
-             Text text=new Text(Integer.toString(t)+X);
+             Text text;
+            if(t!=101){
+                 text=new Text(Integer.toString(t)+X);
+            }
+            else{
+                 text=new Text("N/A");
+            }
+             
              text.setFill(Color.CHOCOLATE);
             gridPane.add(text, Coordonne.tabVille.get(i).city.point.y, Coordonne.tabVille.get(i).city.point.x);// colonne-ligne
         } 
@@ -142,11 +167,19 @@ public class AfficheInterfacePrincipal {
 //        V.getChildren().set(1,H);
         V.getChildren().set(2,stack);
 }   
+    /**
+     * 
+     * @param nebul
+     * @return une chaine de caractére qui represente 
+     * le nom de l'image associé a la nébulosité d'une station donnée
+     */
     public static String getTempsActuel(float nebul){
         
         if(nebul<33) return "ensoleille";
         else if(nebul<66) return "nuageux";
-        else return "pluvieux";
+        
+        else if (nebul<=100) return "pluvieux";
+        else return "NA";
    
     }
 }
