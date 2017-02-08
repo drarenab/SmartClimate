@@ -77,30 +77,30 @@ public class AfficheInterfacePrincipal {
         nebulosite.setFill(Color.CHOCOLATE);
          
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
-            if(Coordonne.tabVille.get(i).city.nom.equals(nomVillle)){
-                if(Coordonne.tabVille.get(i).temperature!=101){
-                    Temp.setText("Température: "+Integer.toString((int) Math.ceil(Coordonne.tabVille.get(i).temperature))); 
+            if(Coordonne.tabVille.get(i).getCity().getNom().equals(nomVillle)){
+                if(Coordonne.tabVille.get(i).getTemperature()!=101){
+                    Temp.setText("Température: "+Integer.toString((int) Math.ceil(Coordonne.tabVille.get(i).getTemperature()))); 
                 }
                 else{
                     Temp.setText("Température: "+"N/A");
                 }
                 
-               if(Coordonne.tabVille.get(i).humidite<=100){
-                    Humidite.setText("Humidité: "+Integer.toString(Coordonne.tabVille.get(i).humidite)+"%"); 
+               if(Coordonne.tabVille.get(i).getHumidite()<=100){
+                    Humidite.setText("Humidité: "+Integer.toString(Coordonne.tabVille.get(i).getHumidite())+"%"); 
                }
              
                else{
                     Humidite.setText("Humidité: "+"N/A");
                 }
-               if(Coordonne.tabVille.get(i).nebulosite<=100){
-                    nebulosite.setText("Nébulosité: "+Float.toString(Coordonne.tabVille.get(i).nebulosite)+"%"); 
+               if(Coordonne.tabVille.get(i).getNebulosite()<=100){
+                    nebulosite.setText("Nébulosité: "+Float.toString(Coordonne.tabVille.get(i).getNebulosite())+"%"); 
                 }
                 else{
                     nebulosite.setText("Nébulosité: "+"N/A");
                 }
                /*Affichage de l'image representatif de la nébulosité*/
                
-               String s="Image/".concat(getTempsActuel(Coordonne.tabVille.get(i).nebulosite)).concat(".png");
+               String s="Image/".concat(getTempsActuel(Coordonne.tabVille.get(i).getNebulosite())).concat(".png");
                 
                 Image tempactuel = new Image(Meteo.class.getResourceAsStream(s));
                 imgviewTempsActuel.setImage(tempactuel);
@@ -144,9 +144,9 @@ public class AfficheInterfacePrincipal {
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
             double temp;
             
-            temp = Coordonne.tabVille.get(i).temperature;
+            temp = Coordonne.tabVille.get(i).getTemperature();
              if(kelvin_celcius.equals("kelvin")){
-                  temp= Coordonne.tabVille.get(i).temperature+237.15;
+                  temp= Coordonne.tabVille.get(i).getTemperature()+237.15;
                     X="k";
             }
             
@@ -160,7 +160,7 @@ public class AfficheInterfacePrincipal {
             }
              
              text.setFill(Color.CHOCOLATE);
-            gridPane.add(text, Coordonne.tabVille.get(i).city.point.y, Coordonne.tabVille.get(i).city.point.x);// colonne-ligne
+            gridPane.add(text, Coordonne.tabVille.get(i).getCity().getPoint().getY(), Coordonne.tabVille.get(i).getCity().getPoint().getX());// colonne-ligne
         } 
         
         stack.getChildren().addAll(imgview,gridPane);

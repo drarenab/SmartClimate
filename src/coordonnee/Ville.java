@@ -19,9 +19,37 @@ public class Ville {
      * Cette classe represente une ville ayant un nom un id et une coordonnée 
      * de type point sur la carte
      */
-    public String nom;
-    public int id;
-    public Point point;
+    private String nom;
+    
+    private int id;
+    private Point point;
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public void setPoint(Point point) {
+        this.point = point;
+    }
+    
+    
+    
     public Ville(String nom,int id,Point point) {
         this.nom = nom;
         this.id=id;

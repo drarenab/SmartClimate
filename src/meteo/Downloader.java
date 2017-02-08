@@ -1,22 +1,40 @@
 package meteo;
 
+import coordonnee.VilleTemp;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import java.net.*;
+import coordonnee.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 /**
+ * TODO getLastAvaialbleDateFile() ==> private called by getLastAvailableData()
+ * : specefique pour la map
+ *
+ * getDataByDate() ==> will not use x,y points , null on point object as well as
+ * city name
+ *
+ * important: add more cities to config file to map : city to id
+ *
+ *
+ * ==> move coordonnee methods to downloader and reorganise all :D démenagement
+ */
+
+/**
+ *
  * Le role de cette classe est de Telecharger des données depuis le site de
  * meteofrance , Sauvegarder ces données dans un fichier csv ,
  *
@@ -24,68 +42,137 @@ import java.util.zip.GZIPInputStream;
  */
 public class Downloader {
 
+    
+    private static Map<Integer, Ville> villes;
+    private static String line;
+
+    static {
+
+        FileReader fr = null;
+        try {
+            File file = new File(Configuration.CITY_FILE_NAME);
+            fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            line = br.readLine();
+            line = br.readLine();
+
+            villes = new HashMap<Integer, Ville>() {
+                {
+                    while (line != null) {
+
+                        put(Integer.parseInt(line.split(";")[0]),
+                                new Ville(line.split(";")[1],
+                                        Integer.parseInt(line.split(";")[0]),
+                                        new Point(Integer.parseInt(line.split(";")[2]), Integer.parseInt(line.split(";")[3]))
+                                ));
+                        line = br.readLine();
+                    }
+
+                }
+            };
+
+            br.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    
+    public static Ville getVilleFromId(int id) {
+        return (villes.get(id));
+    }
+    
+    public static void createDirectory(String directory) {
+        File theDir = new File(directory);
+
+        // if the directory does not exist, create it
+        if (!theDir.exists()) {
+            System.out.println("creating directory: " + directory);
+            boolean result = false;
+
+            try {
+                theDir.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                //handle it
+            }
+            if (result) {
+                System.out.println("DIR created");
+            }
+        }
+    }
+    
+    /**
+     * Cette mthode donne apartir une date de la forme yyymmjjhh.. , le chemin vers le fichier csv qui contient cette date
+     * @param date
+     * @return 
+     */
+    public static String getCsvFilePathFromDate(String date) {
+        return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
+    }
+
+     /**
+     * Cette mthode donne apartir une date de la forme yyymmjjhh.. , le chemin vers le fichier csv.gz qui contient cette date
+     * @param date
+     * @return 
+     */
+    public static String getGzipFilePathFromDate(String date) {
+        return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv.gz";
+    }
+
+    
     /**
      * Methode static qui telecharger et sauvegarde un fichier depuis un URL
      *
      * @param date la date de telechargement (yyyymm)
      * @param outputfile le nom de fichier apres le telechargement(*.csv.gz)
      */
-    
-    public static void createDirectory(String directory) {
-            File theDir = new File(directory);
-
-            // if the directory does not exist, create it
-            if (!theDir.exists()) {
-                System.out.println("creating directory: " + directory);
-                boolean result = false;
-
-                try {
-                    theDir.mkdir();
-                    result = true;
-                } catch (SecurityException se) {
-                    //handle it
-                }
-                if (result) {
-                    System.out.println("DIR created");
-                }
-            }   
-    }
-    
-    //a faire passer url dans les parametres
-    public static void downLoadCsvByDate(String date) throws IOException {
+    public static String downLoadCsvByDate(String date) throws IOException {
         try {
             File saveFile;
             URL url;
             String newUrl;
             String directory;
+            String path;
 
             //avoir l'année depuis la date , pour telecharger le fichier dans le dossier qui correspond a l'année
-            directory = Configuration.DATA_DIRECTORY_NAME+"/"+date.substring(0, 4);
+            directory = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4);
             createDirectory(directory);
-            
 
             //Creation d'un obj url qui pointe vers l'url qui se trouve dans la classe Configuration
             newUrl = Configuration.DATA_GZIP_URL.replace("#", date);
             System.out.println("url:" + newUrl);
             url = new URL(newUrl);
 
+            //le chemin de fichier ou on va telecharger les donnés
+            path = Configuration.getApplicationPath() + "/" + directory + "/" + date + ".csv.gz";
             //Creation d'un fichier ou on va sauvegarder le fichier telecharger
-            saveFile = new File(Configuration.getApplicationPath() + "/" + directory + "/" + date + ".csv.gz");
+            saveFile = new File(path);
 
             //utilisation de la methode copyURLToFile de apache , qui telecharger et sauvegarde un fichier
             FileUtils.copyURLToFile(url, saveFile);
 
+            return path;
         } catch (MalformedURLException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     /**
+     * **
      * Methode static qui fait la decompression d'un fichier Gzip et sauvegarde
      * le fichier decompressé
-     *
      * @param inputFile le nom de fichier qui va etre decompresser
      * @param outputFile le nom de fichier resultat apres la decompression
      */
@@ -120,159 +207,75 @@ public class Downloader {
             ex.printStackTrace();
         }
     }
-    
-      //returns the file path from the file date 
-    public static String getFilePathFromDate(String date) {
-        return Configuration.DATA_DIRECTORY_NAME+"/"+date.substring(0,4);
-    }
 
-    
-    //year
-    //mois
-    //jour  
-    public static String checkIfDataForDateExists(String date){
+    /**
+     * Cette methode Donne les donnée qui correspond a une date dans une liste, 
+     * @param date la date des donner quand veux recuperer dans la list : Si yyyymm fournit elle donne tout les donner du moi , 
+     *                                                                    Si yyyymmjj elle donne les donner du jour jj,
+     * @param cityId la ville des donner quand veux recuperer dans la list, si elle contient "all" la mthode retourne les donner de tout les villes
+     * @return une arrayList de type VilleTemp qui contient les donner demander
+     */
+    public static ArrayList<VilleTemp> getDataForDateByCity(String date, String cityId) {
         // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient 
         //les données de la date demander
-        String fileName = Configuration.DATA_DIRECTORY_NAME +"/"+ date.substring(0,4)+"/"+ date.substring(4,6)+".csv";
-        
+        System.out.println("Recuperation des donnée de la ville => "+cityId+" et la date =>"+date);
+        String fileName = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
+        String idVille;
+        float nebu;
+        double temperature;
+        int himudite;
+        aDate adate;
         //si le fichier de donnée correspondant n'existe pas 
-        if(!checkIfFileExists(fileName)) {
+        if (!checkIfFileExists(fileName))             
             return null;
-        }
-        else {
-           
-            try {
-                //parcourir le fichier correspondant et chercher si la date demander jour et heure
-                File dateFile = new File(fileName);
-                FileReader dataFR = new FileReader(dateFile);
-                BufferedReader dataBR = new BufferedReader(dataFR);
-                String line,dateLine;
-                
-                Pattern pattern = Pattern.compile(date+"*;");
-                line = dataBR.readLine();
-                while(line!=null) {
-                    dateLine = line.split(";")[1];
-                    if(pattern.matcher(dateLine).matches()) {
-                        // si on a bien matcher une date 
-                        
-                        
-                    }
-                        
-                    line = dataBR.readLine();
-                }
-                
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-           
-        }
-        return "haja";
-    }
-    
-    /**
-     * Cette methode determine si un fichier existe ou pas 
-     * @param file le fichier qu'on va chercher
-     * @return TRUE si le fichier existe, FALSE sinon
-     */
-    public static boolean checkIfFileExists(String file) {
-        return (new File(file).exists());
-    } 
-    
-    public static void addDateTofile(String datafile, String datesFile) {
-        FileReader dataFR, availableDatesFR;
-        FileWriter availableDatesFWTemp;
-
-        BufferedReader dataBR, availableDatesBR;
-
-        BufferedWriter availableDatesBWTemp;
-
-        File dataFile, availableDatesFile, availableDatesFileTemp;
-        String currentLine = "", previousLine = "", lastDate = "";
+        
         try {
+            //parcourir le fichier correspondant et chercher si la date demander jour et heure
+            File dateFile = new File(fileName);
+            FileReader dataFR = new FileReader(dateFile);
+            BufferedReader dataBR = new BufferedReader(dataFR);
+            String line, dateLine, splitedLine[];
 
-            dataFile = new File(datafile);
-            dataFR = new FileReader(dataFile);
-            dataBR = new BufferedReader(dataFR);
+            ArrayList<VilleTemp> listDonnees = new ArrayList<VilleTemp>();
 
-            availableDatesFile = new File(datesFile);
-            availableDatesFR = new FileReader(availableDatesFile);
-            availableDatesBR = new BufferedReader(availableDatesFR);
-
-            availableDatesFileTemp = new File("new_" + datesFile);
-            availableDatesFWTemp = new FileWriter(availableDatesFileTemp);
-            availableDatesBWTemp = new BufferedWriter(availableDatesFWTemp);
-
-            //aller jusqu'a la fin du fichier <datafile>
-            while ((currentLine = dataBR.readLine()) != null) {
-                previousLine = currentLine;
+            Pattern pattern = Pattern.compile(date + ".*");
+            line = dataBR.readLine();
+            Ville ville;
+            //sauter la premiere ligne si elle contient un string , pour éviter les erreurs
+            if (line.startsWith("numer_sta")) {
+                line = dataBR.readLine();
             }
-            // on est a la fin du fichier
-            // et previousLine contient la derneire ligne qui a été lus
 
-            lastDate = previousLine.split(";")[1].substring(0, 10); //yyyymmddhh
+            while (line != null) {
 
-            String date1 = lastDate.substring(0, 6);//yyyymm
-            String date2;
+                //diviser la line qu'on a lu selon la regex ";" en un tableau de string
+                splitedLine = line.split(";");
+                //recuperer l'id de la ville (premier champ)
+                idVille = splitedLine[0];
+                //si c'est la ville qu'on cherche
+                if (idVille.equals(cityId) || cityId.equals("all")) {
+                    dateLine = splitedLine[1];
+                    Matcher match = pattern.matcher(dateLine);
+                    //si on a trouver la date qu'on cherche
+                    if (match.find()) {
+                        System.out.println("match date=>"+dateLine);
+                        // si on a bien matcher une date 
+                        //recuperation des données apartir du fichier 
+                        temperature = !splitedLine[7].equals("mq") ? Double.parseDouble(splitedLine[7]) -273.15 : 101;
+                        nebu = !splitedLine[14].equals("mq") ? Float.parseFloat(splitedLine[14]) : 101;
+                        himudite = !splitedLine[9].equals("mq") ? Integer.parseInt(splitedLine[9]) : 101;
+                        //                                 annéé                           mois                            jour                            heure
+                        adate = new aDate(splitedLine[1].substring(0, 4), splitedLine[1].substring(4, 6), splitedLine[1].substring(6, 8), splitedLine[1].substring(8, 10));
+                        //noter j'ai pa mis le nom de la ville a rajouter
+                        ville = getVilleFromId(Integer.parseInt(idVille));
+                        listDonnees.add(new VilleTemp(ville, temperature, himudite, nebu, adate));
+                    }
 
-            //mainentant on mit a jour le fichier des donnée 
-            currentLine = availableDatesBR.readLine();
-
-            while (currentLine != null) {
-                date2 = currentLine.substring(0, 6);
-                if (date1.equals(date2)) {
-                    availableDatesBWTemp.write(currentLine.substring(0, 6) + "#" + lastDate + "\n");
-                    System.out.println("match!");
-                } else {
-                    availableDatesBWTemp.write(currentLine + "\n");
                 }
-
-                currentLine = availableDatesBR.readLine();
+                line = dataBR.readLine();
             }
             dataBR.close();
-            availableDatesBR.close();
-            availableDatesBWTemp.close();
-
-            //suppression de fichier <datafile> car on n'en a plus besoin , on a déja créer availableDatesFileTemp le tout!
-            if (availableDatesFile.delete()) {
-                System.out.println("File deleted");
-            }
-
-            //renommer <f3> en lui donnant le meme nom comme celui de <f2>
-            availableDatesFileTemp.renameTo(new File(datesFile));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    //format date : yyyymm
-    //return un truc : yyyymmddhh EX: 20140609 => 9 juin 2014 a 9h
-    public static String checkLastAvailableDataForDate(String date, String file) {
-        File f;
-        FileReader fr;
-        BufferedReader br;
-        String line;
-        try {
-
-            f = new File(file);
-            fr = new FileReader(f);
-            br = new BufferedReader(fr);
-            line = br.readLine();
-            while (line != null) {
-                if (line.substring(0, 6).equals(date)) {
-                    return line.substring(7, 17);
-                }
-
-                line = br.readLine();
-            }
-
-            fr.close();
-            br.close();
-            return null;
-
+            return listDonnees;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -282,140 +285,99 @@ public class Downloader {
     }
 
     /**
+     * Cette methode cherche le fichier le plus recent (qui contient les données
+     * les plus recentes)
      *
-     * @param file1 fichier qui contient les donnée (temperatures) d'un mois
-     * @param file2 fichier qui contient les donnée (temperatures) de plusieurs
-     * mois dates
-     * @param newDate la date des donnée qui sont dans le <file1>
+     * @return le chemin du fichier le plus recent
      */
-    public static void concatenateCsvByDate(String file1, String file2) {
+    public static String getLatesttAvailableFile() {
+        int maxYear = 0, maxFileName = 0;
+        File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
+        for (File file : file1.listFiles()) {
+            System.out.println("name:" + file.getName());
+            if (Integer.parseInt(file.getName()) > maxYear) {
+                maxYear = Integer.parseInt(file.getName());
+            }
+        }
+
+        file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + maxYear);
+        for (File file : file1.listFiles()) {
+            System.out.println("name:" + file.getName());
+            if (Integer.parseInt(file.getName().substring(0, 6)) > maxFileName) {
+                maxFileName = Integer.parseInt(file.getName().substring(0, 6));
+            }
+        }
+        System.out.println("pathDate:" + maxFileName);
+        if (maxFileName == 0) {
+            return null;
+        } else {
+            return String.valueOf(maxFileName);
+        }
+    }
+
+    /**
+     * Cette methode retourne la date des donner la plus recente inclut dans un fichier 
+     * @param date sous la forme de yyyymm correspond au nom du fichier qu'on veux chercher dedans
+     * @return la date la plus recente dans le fichier qui correspond a @date
+     */
+    public static String getLatestAvailableDateOnFile(String date) {
+        File f;
+        FileReader fr;
+        BufferedReader br;
+        String line;
+        int latestDate=0;
+        String dateLine;
+        String filePath;
+        
         try {
-
-            String tempName = file2, newDate;
-            File f1, f2, f3;
-            FileReader fr1, fr2;
-            FileWriter fw3;
-            String line1, line2;
-
-            BufferedReader br1, br2;
-            BufferedWriter bw3;
-            String oldDate = null;
-
-            f1 = new File(file1);
-            f2 = new File(file2);
-            //fichier temporaire : on va l'utiliser pour fusionner les deux
-            f3 = new File("new_" + tempName);
-
-            fr1 = new FileReader(f1);
-            fr2 = new FileReader(f2);
-            fw3 = new FileWriter(f3);
-
-            br1 = new BufferedReader(fr1);
-            br2 = new BufferedReader(fr2);
-            bw3 = new BufferedWriter(fw3);
-
-            /**
-             * étape1 : recuperer la date des donnée (yyyymm) depuis <file1>
-             */
-            //lire la premiere ligne depuis <file1>
-            line1 = br1.readLine();
-
-            //sauter la premiere ligne si elle contient un string , pour éviter les erreurs
-            if (line1.startsWith("numer_sta")) {
-                System.out.println("Premiere ligne sauter dans <" + file1 + ">");
-                line1 = br1.readLine();
+            filePath = getCsvFilePathFromDate(date);
+            if(!checkIfFileExists(filePath))
+                return null;
+            
+            f = new File(filePath);
+            fr = new FileReader(f);
+            br = new BufferedReader(fr);
+            line = br.readLine();
+            
+            if (line.startsWith("numer_sta")) {
+                line = br.readLine();
             }
 
-            //Recupération de la date des temperatures depuis le petit fichier <file1>
-            newDate = line1.split(";")[1].substring(0, 6);
-
-            /**
-             * étpae2: copiers le données de <file2> des dates inferieure a la
-             * date de <file1> dans le fichier temporaire (pour avoire un
-             * fichier fusioner ET Trié :p)
-             */
-            //lire une ligne depuis le <file2>
-            line2 = br2.readLine();
-            //sauter la premiere ligne si elle contient un string , pour éviter les erreurs
-            if (line2.startsWith("numer_sta")) {
-                System.out.println("Premiere ligne sauter dans <" + file2 + ">");
-                line2 = br2.readLine();
-
-            }
-
-            //copier les donnée qui des dates inferieure a la date de <file1>  
-            while (line2 != null) {
-                //deviser la line en tab de string selon une regex et prendre la premiere case puis extraire la sous chaine qui contient la date(yyyymm)
-                oldDate = line2.split(";")[1].substring(0, 6);
-
-                //si on trouve une date plus grande que la date de fichier 1(date) on sort!
-                if (Integer.parseInt(oldDate) >= Integer.parseInt(newDate)) {
-                    break;
+            
+            while (line != null) {
+                dateLine = line.split(";")[1].substring(0,10);
+                
+                if(Integer.parseInt(dateLine)>latestDate) {
+                    latestDate = Integer.parseInt(dateLine);
                 }
-
-                //ecrire dans le fichier qui va contenir la concat des deux autres fichiers
-                bw3.write(line2 + "\n");
-                //lire une nouvelle line
-                line2 = br2.readLine();
+                
+                line = br.readLine();
             }
 
-            /**
-             * Etape 3 : supprimer (sauter) , les données de la meme dates que
-             * celle de <file1>
-             */
-            //On supprime tout les donnée qui ont  la meme date que celle de file 1
-            //EX: file1 contient les donnée de la date 201203 , alors avant de copier les donnée de file1 vers file2 on doit supprimer tout les donnée 
-            //de la date 201203 depuis file2 (pour eviter d'avoir des doublons)
-            while ((line2 != null)) {
-                oldDate = line2.split(";")[1].substring(0, 6);
-                if (Integer.parseInt(oldDate) > Integer.parseInt(newDate)) {
-                    break;
-                }
-                System.out.println("tick");
-                line2 = br2.readLine();
-
-            }
-
-            /**
-             * Etape 4 : copiers les données de <file1>
-             */
-            //maintenant le curseur est apres la date donnée, on peut commencer a inserer les données de file1 dans file2    
-            while (line1 != null) {
-                bw3.write(line1 + "\n");
-                line1 = br1.readLine();
-            }
-
-            /**
-             * Etape5 : copier ce qui reste de file2
-             */
-            //copier ce qui reste de file2 dans file3
-            while (line2 != null) {
-                bw3.write(line2 + "\n");
-                line2 = br2.readLine();
-            }
-
-            //on doit renomer les fichiers 
-            bw3.close();
-            br1.close();
-            br2.close();
-            fr1.close();
-            fr2.close();
-            fw3.close();
-
-            //suppression de <f2> car on n'en a plus besoin , on a déja créer f3 qui contient la concaténation !
-            if (f2.delete()) {
-                System.out.println("File deleted");
-            }
-
-            //renommer <f3> en lui donnant le meme nom comme celui de <f2>
-            f3.renameTo(new File(tempName));
-
+            fr.close();
+            br.close();
+            return String.valueOf(latestDate);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return null;
+    }
+    
+    /**
+     * Cette methode determine si un fichier existe ou pas
+     *
+     * @param file le fichier qu'on va chercher
+     * @return TRUE si le fichier existe, FALSE sinon
+     */
+    public static boolean checkIfFileExists(String file) {
+        return (new File(file).exists());
     }
 
+       /**
+      * Cette Methode retourne la date exacte des donnée les plus recents yyyymmjjhh 
+      * @param date sous la forme de yyyymm
+      * @return date sous form yyyymmjjhh
+      */
 }

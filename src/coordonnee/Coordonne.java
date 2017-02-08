@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import meteo.Configuration;
+import meteo.Downloader;
 
 /**
  *
@@ -36,9 +37,10 @@ public class Coordonne {
      * @param temperature 
      * Ajouter une ville a la liste tabVille
      */
+   
     public static void  addVille(String nom,int id,int x,int y,double temperature,int humidite,float nebulosite){
-        VilleTemp v=new VilleTemp(new Ville(nom, id, new Point(x, y)), temperature,humidite,nebulosite);
-        tabVille.add(v);
+   //     VilleTemp v=new VilleTemp(new Ville(nom, id, new Point(x, y)), temperature,humidite,nebulosite);
+      //  tabVille.add(v);
     }
     /**
      * 
@@ -48,7 +50,7 @@ public class Coordonne {
      */
     public static void modifyVille(int id,double temperature,int f,float g){
         for (int i = 0; i < tabVille.size(); i++) {
-            if(tabVille.get(i).city.id==id){
+            if(tabVille.get(i).getCity().getId()==id){
                 tabVille.get(i).modifierTemperature(temperature);
                 tabVille.get(i).modifierHumidite(f);
                 tabVille.get(i).modifierNebulosite(g);
@@ -61,13 +63,22 @@ public class Coordonne {
      * l'id, le nom et la position des villes dans la carte
      * et d'un deuxieme fichier contenant l'id et la temperature récuperer du site MeteoFrance.fr
      */
+    
+    
+    
     public static void ConstructTabVille() {
-      
+      /*
        readFile(Configuration.CITY_FILE_NAME);
        readFile(Configuration.CSV_FILE_NAME);
-      b=false;
-        
-
+       b=false;
+       
+      */ 
+        String file = Downloader.getLatesttAvailableFile();
+        String date = Downloader.getLatestAvailableDateOnFile(file);       
+        if(date!=null) {
+           tabVille = Downloader.getDataForDateByCity(date, "all");
+        }
+       
     }
     /**
      * 
@@ -150,5 +161,7 @@ public class Coordonne {
             }
         b=true;
 }
+    
+    
     
 }

@@ -22,8 +22,7 @@ public class Configuration {
    */
     
     public static String DATA_DIRECTORY_NAME ="donnees";
-    public static String CITY_FILE_NAME= "Configuration.txt"; 
-    
+    public static String CITY_FILE_NAME= "Configuration.txt";    
     public static String TEMPORARY_CSV_FILE_NAME = "temporary.csv";
     
     /**
