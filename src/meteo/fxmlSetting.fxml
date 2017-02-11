@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorSeting" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="603.0" prefWidth="523.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
+   <children>
+      <VBox fx:id="VboxPrincipal" layoutX="74.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="602.0" prefWidth="523.0">
+               <children>
+                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="305.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
+                     <children>
+                        <Label text="Temperature" textFill="#945151">
+                           <font>
+                              <Font name="Garuda Bold" size="19.0" />
+                           </font></Label>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <RadioButton fx:id="celcius" mnemonicParsing="false" onAction="#handleButtonActionChngTemp" text="Celcius">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="kelvin" mnemonicParsing="false" onAction="#handleButtonActionChngTemp" text="kelvin" />
+                           </children>
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="50.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="271.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
+                     <children>
+                        <Label text="OnLine" textFill="#945151">
+                           <font>
+                              <Font name="Garuda Bold" size="18.0" />
+                           </font></Label>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <RadioButton fx:id="online" mnemonicParsing="false" text="On">
+                                 <VBox.margin>
+                                    <Insets left="21.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="offline" mnemonicParsing="false" text="Off">
+                                 <VBox.margin>
+                                    <Insets left="21.0" top="5.0" />
+                                 </VBox.margin>
+                              </RadioButton>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="50.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox fx:id="HboxLocation" alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="250.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
+                     <children>
+                        <Label prefHeight="21.0" prefWidth="136.0" text="Location Default" textFill="#945151">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="80.0" />
+               </VBox.margin>
+            </VBox>
+         </children></VBox>
+   </children>
+</AnchorPane>

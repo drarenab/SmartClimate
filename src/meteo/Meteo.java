@@ -3,19 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package smartclimate4;
+package meteo;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
  *
+ * @author SEIF
  * @author karim
  */
-public class SmartClimate4 extends Application {
+public class Meteo extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -25,6 +29,8 @@ public class SmartClimate4 extends Application {
         
         stage.setScene(scene);
         stage.show();
+        
+        
     }
 
     /**
