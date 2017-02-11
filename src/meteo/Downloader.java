@@ -169,6 +169,11 @@ public class Downloader {
         return null;
     }
 
+    
+    public static String downLoadCsvByYear(String year) throws IOException {
+        return "c";
+    }
+    
     /**
      * **
      * Methode static qui fait la decompression d'un fichier Gzip et sauvegarde
@@ -284,6 +289,30 @@ public class Downloader {
         return null;
     }
 
+    
+    public static ArrayList<VilleTemp> getDataForYearByCity(String date, String cityId) {
+        String year = date.substring(0,4);
+        ArrayList<VilleTemp> liste= new ArrayList<VilleTemp>();
+        ArrayList<VilleTemp> tempList = new ArrayList<VilleTemp>();
+        String yearMonth;
+        for(int i=1;i<=12;i++) {
+            if(i<10) 
+                yearMonth = year + ("00" + i).substring("i".length());
+            else
+                yearMonth = year + String.valueOf(i);
+            
+            tempList = getDataForDateByCity(yearMonth, cityId);
+            if(tempList==null)
+                return null;
+            
+            liste.addAll(tempList);
+            System.out.println("tour:"+i);
+        }
+        
+        return liste;
+    }
+    
+    
     /**
      * Cette methode cherche le fichier le plus recent (qui contient les données
      * les plus recentes)
