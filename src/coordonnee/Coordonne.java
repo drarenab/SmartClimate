@@ -10,7 +10,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import meteo.Configuration;
 import meteo.Downloader;
 
@@ -73,6 +79,29 @@ public class Coordonne {
        b=false;
        
       */ 
+      
+      /**
+       * TODO:
+       * verifier si il y a connexion
+       * si oui verifier si la derniere date est bien celle d'aujourd'hui
+       * si oui afficher sinon telecharger 
+       * si pas de connexion afficher la derniere date existante
+       */
+      
+     /* if(Downloader.netIsAvailable()){
+          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+          LocalDate localDate = LocalDate.now();
+          String file = Downloader.getLatesttAvailableFile();
+          String date = Downloader.getLatestAvailableDateOnFile(file);
+          try {
+              //          if(dtf.format(localDate)  != date  ){
+              Downloader.downLoadCsvByDate(date);
+//          }
+          } catch (IOException ex) {
+              Logger.getLogger(Coordonne.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        tabVille = Downloader.getDataForDateByCity(date, "all");
+      }*/
         String file = Downloader.getLatesttAvailableFile();
         String date = Downloader.getLatestAvailableDateOnFile(file);       
         if(date!=null) {

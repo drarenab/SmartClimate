@@ -56,6 +56,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import static meteo.Downloader.getIdFromNameVille;
+import static meteo.Model.ConstructChart;
 import static meteo.Model.getListForChart;
 /**
  *
@@ -130,9 +131,19 @@ public class FXMLDocumentController implements Initializable {
     @FXML
 private void handleButtonActionAfficher() {
 
+    /*String[] errors = Model.validateDate(year.getText(), month.getText(), day.getText());
+    if( errors!=null) {        
+        year.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+        year.setText(errors[0]);
+        month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+        month.setText(errors[1]);
+        day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+        day.setText(errors[2]);
+        } else {*/
         AfficheTemp.setTitle("Températures");
         AfficheHum.setTitle("Humidité");
         AfficheNebul.setTitle("Nébulosité");
+        /*************/
         XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
         XYChart.Series<Number, Number> series1 = new XYChart.Series<Number, Number>();
         XYChart.Series<Number, Number> series2 = new XYChart.Series<Number, Number>();
@@ -151,10 +162,17 @@ private void handleButtonActionAfficher() {
             series2.getData().add(new XYChart.Data<Number, Number>(i, Resultat.get(i).getNebulosite()));
 
         }
-
+        /********
+        ArrayList<XYChart.Series> S=ConstructChart(year.getText() + month.getText(), Station.getValue().toString());
+        AfficheTemp.getData().add(S.get(0));
+        AfficheHum.getData().add(S.get(1));
+        AfficheNebul.getData().add(S.get(2));
+        **********/
         AfficheTemp.getData().add(series);
         AfficheHum.getData().add(series1);
         AfficheNebul.getData().add(series2);
+       // }
+        
 
     }
 @FXML
@@ -205,6 +223,14 @@ private void handleButtonActionAfficher() {
             series5.getData().add(new XYChart.Data<Number, Number>(i, list2.get(i).getNebulosite()));
 
         }
+        
+        /*
+        ArrayList<XYChart.Series> S=ConstructChart(Date1, StationComparaison.getValue().toString());
+        ArrayList<XYChart.Series> S2=ConstructChart(Date2, StationComparaison.getValue().toString());
+        lineCharttemp.getData().setAll(S.get(0), S1.get(0));
+        lineCharthum.getData().setAll(S.get(1), S1.get(1));
+        lineChartnebul.getData().setAll(S.get(2), S1.get(2));
+        */
         lineCharttemp.getData().setAll(series, series3);
         lineCharthum.getData().setAll(series1, series4);
         lineChartnebul.getData().setAll(series2, series5);
@@ -281,7 +307,7 @@ private void handleButtonActionAfficher() {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        String date="2016";
+       /* String date="2016";
         List<VilleTemp> listee = Downloader.getDataForYearByCity(date,"all");
         if(listee==null){
             try {
@@ -316,7 +342,7 @@ private void handleButtonActionAfficher() {
             }
             
             listee = Downloader.getDataForYearByCity(date,"all");
-        } 
+        } */
         
         //testss
         // TODO
@@ -372,19 +398,13 @@ private void handleButtonActionAfficher() {
         seting.getItems().add(preference);
 
         menuBar.getMenus().addAll(file, edit, window, statistic, seting);
-        if (Interface == 0) {//interface principal
-            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
-            Coordonne.ConstructTabVille();
-        } else //interface setting
-         if (Interface == 1) {
-                menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
-            } else {//interface Comparaison et affichage
-                menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
-
-            }
-
+      
         VboxPrincipal.getChildren().add(0, menuBar);
         if (Interface == 0) {
+            
+            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
+            Coordonne.ConstructTabVille();
+            
             InitInterfacePrincipal();
 
             Timer timer = new Timer();
@@ -407,8 +427,16 @@ private void handleButtonActionAfficher() {
             timer.schedule(t, 01, 1000);
 
         } else if (Interface == 1) {
+            
+             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+
+            
             initInterfaceSetting();
         } else {
+            
+            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+
+            
             InitInterfaceComparaison();
         }
 
