@@ -434,6 +434,5 @@ public static boolean netIsAvailable(){
         return false;
     }
     }
-        
    
 }

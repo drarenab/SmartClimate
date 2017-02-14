@@ -58,6 +58,7 @@ public class aDate {
         this.time = time;
     }
 
-    
-    
+    public String toString(){
+        return(year + month + day + time);
+    }
 }

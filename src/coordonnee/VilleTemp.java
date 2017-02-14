@@ -91,4 +91,14 @@ public class VilleTemp {
         System.out.println("name:"+city.getNom()+" id:"+city.getId()+"["+temperature+","+humidite+","+nebulosite+"]"+ " date:"+date.getYear()+
                 "/"+date.getMonth()+"/"+date.getDay()+":"+date.getTime());
     }
+    
+    public DataBean toDataBean() {
+        DataBean dataBean = new DataBean();
+        dataBean.setDate(date.toString());
+        dataBean.setHumidite(String.valueOf(humidite));
+        dataBean.setNebulosite(String.valueOf(nebulosite));
+        dataBean.setTemperature(String.valueOf(temperature));
+        dataBean.setNomVille(city.getNom());
+        return dataBean;
+    }
 }

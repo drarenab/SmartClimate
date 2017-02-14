@@ -56,6 +56,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import static meteo.Downloader.getIdFromNameVille;
 import static meteo.Model.ConstructChart;
 import static meteo.Model.getListForChart;
@@ -84,7 +85,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     RadioButton kelvin, celcius, online, offline;
     static String kelvin_celcius = "celcius";
-    static String onLine_offLine="onLine";
+    static String onLine_offLine = "onLine";
     @FXML
     VBox v1, v2, VboxComparaison;
     @FXML
@@ -116,9 +117,17 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     Tab tabVisualisation, tabComparaison;
     @FXML
-    TableView tableView;
+    TableView<DataBean> tableView;
     @FXML
-    TableColumn columnName, columnDate, columnTemp, columnHum, columnNebul;
+    TableColumn<DataBean, String> columnName;
+    @FXML
+    TableColumn<DataBean, String> columnDate;
+    @FXML
+    TableColumn<DataBean, String> columnTemp;
+    @FXML
+    TableColumn<DataBean, String> columnHum;
+    @FXML
+    TableColumn<DataBean, String> columnNebul;
     @FXML
     TextField Year1Comparaison, Year2Comparaison, MonthComparaison, DayComparaison;
 
@@ -132,17 +141,15 @@ public class FXMLDocumentController implements Initializable {
             kelvin_celcius = "celcius";
         }
     }
-    
+
     @FXML
     private void handleButtonActionChngOnline() {
         if (online.isArmed()) {
-            if(Downloader.netIsAvailable()){
+            if (Downloader.netIsAvailable()) {
                 onLine_offLine = "onLine";
+            } else {
+                offline.arm();
             }
-            else{
-            offline.arm();
-        }
-                        
 
         }
         if (offline.isArmed()) {
@@ -166,38 +173,56 @@ public class FXMLDocumentController implements Initializable {
             /*
             si année pas vide et correcte on test le mois et le jour (peuvent etre vide
              */
-        } else {
-            if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
-                if (!errors.get("Month").equals("")) {
-                    month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-                    month.setPromptText(errors.get("Month").toString());
-                }
-                if (!errors.get("Day").equals("")) {
-                    day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-                    day.setPromptText(errors.get("Day").toString());
-                }
-            } else {
-                /*
-                Chart
-                 */
-                AfficheTemp.setTitle("Températures");
-                AfficheHum.setTitle("Humidité");
-                AfficheNebul.setTitle("Nébulosité");
-
-                ArrayList<XYChart.Series> S = ConstructChart(year.getText()
-                        + month.getText() + day.getText(), Station.getValue().toString());
-                
-                AfficheTemp.getData().setAll(S.get(0));
-                AfficheHum.getData().setAll(S.get(1));
-                AfficheNebul.getData().setAll(S.get(2));
-                /*
-                TableView
-                 */
-                
+        } else if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
+            if (!errors.get("Month").equals("")) {
+                month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                month.setPromptText(errors.get("Month").toString());
             }
+            if (!errors.get("Day").equals("")) {
+                day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                day.setPromptText(errors.get("Day").toString());
+            }
+        } else {
+            /*
+                Chart
+             */
+            AfficheTemp.setTitle("Températures");
+            AfficheHum.setTitle("Humidité");
+            AfficheNebul.setTitle("Nébulosité");
+
+            ArrayList<XYChart.Series> S = ConstructChart(year.getText()
+                    + month.getText() + day.getText(), Station.getValue().toString());
+
+            AfficheTemp.getData().setAll(S.get(0));
+            AfficheHum.getData().setAll(S.get(1));
+            AfficheNebul.getData().setAll(S.get(2));
+            /*
+                TableView
+             */
+            
+            columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
+            columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
+            columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
+            columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
+            columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
+            tableView.getItems().setAll(parseDataList(year.getText() + month.getText() + day.getText(),
+                                                        Station.getValue().toString()
+                                        ));
+            
         }
     }
-
+    
+    private List<DataBean> parseDataList(String date,String station){
+          ArrayList<VilleTemp> listDonnee = Model.getListForChart(date,station);
+          ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
+          if(listDonnee!=null) {
+              for(VilleTemp villeTemp : listDonnee) {
+                  listDataBean.add(villeTemp.toDataBean());
+              }
+          }
+           return listDataBean;
+    }
+    
     @FXML
     private void handleButtonActionComparer() throws IOException {
 
@@ -220,29 +245,26 @@ public class FXMLDocumentController implements Initializable {
                 Year2Comparaison.setPromptText(errors.get("Year").toString());
             }
 
+        } else if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
+            if (!errors.get("Month").equals("")) {
+                MonthComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                MonthComparaison.setPromptText(errors.get("Month").toString());
+            }
+            if (!errors.get("Day").equals("")) {
+                DayComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                DayComparaison.setPromptText(errors.get("Day").toString());
+            }
         } else {
-            if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
-                if (!errors.get("Month").equals("")) {
-                    MonthComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-                    MonthComparaison.setPromptText(errors.get("Month").toString());
-                }
-                if (!errors.get("Day").equals("")) {
-                    DayComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-                    DayComparaison.setPromptText(errors.get("Day").toString());
-                }
-            } else {
 
 //        downLoadCsvByDate(String date)
-                String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-                String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
+            String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
+            String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
 
-                ArrayList<XYChart.Series> S = ConstructChart(Date1, StationComparaison.getValue().toString());
-                ArrayList<XYChart.Series> S2 = ConstructChart(Date2, StationComparaison.getValue().toString());
-                lineCharttemp.getData().setAll(S.get(0), S2.get(0));
-                lineCharthum.getData().setAll(S.get(1), S2.get(1));
-                lineChartnebul.getData().setAll(S.get(2), S2.get(2));
-
-            }
+            ArrayList<XYChart.Series> S = ConstructChart(Date1, StationComparaison.getValue().toString());
+            ArrayList<XYChart.Series> S2 = ConstructChart(Date2, StationComparaison.getValue().toString());
+            lineCharttemp.getData().setAll(S.get(0), S2.get(0));
+            lineCharthum.getData().setAll(S.get(1), S2.get(1));
+            lineChartnebul.getData().setAll(S.get(2), S2.get(2));
 
         }
     }
@@ -267,16 +289,14 @@ public class FXMLDocumentController implements Initializable {
                 lineChartnebul.setVisible(false);
                 RadioBtnTemp.setSelected(true);
             }
+        } else if (VboxComparaison.isVisible()) {
+            tableView.setVisible(true);
+            VboxComparaison.setVisible(false);
+            radioBtnTableur.setSelected(true);
         } else {
-            if (VboxComparaison.isVisible()) {
-                tableView.setVisible(true);
-                VboxComparaison.setVisible(false);
-                radioBtnTableur.setSelected(true);
-            } else {
-                tableView.setVisible(false);
-                VboxComparaison.setVisible(true);
-                radioBtnCourbes.setSelected(true);
-            }
+            tableView.setVisible(false);
+            VboxComparaison.setVisible(true);
+            radioBtnCourbes.setSelected(true);
         }
 
     }
@@ -300,16 +320,14 @@ public class FXMLDocumentController implements Initializable {
                 lineChartnebul.setVisible(false);
                 RadioBtnHum.setSelected(true);
             }
+        } else if (VboxComparaison.isVisible()) {
+            tableView.setVisible(true);
+            VboxComparaison.setVisible(false);
+            radioBtnTableur.setSelected(true);
         } else {
-            if (VboxComparaison.isVisible()) {
-                tableView.setVisible(true);
-                VboxComparaison.setVisible(false);
-                radioBtnTableur.setSelected(true);
-            } else {
-                tableView.setVisible(false);
-                VboxComparaison.setVisible(true);
-                radioBtnCourbes.setSelected(true);
-            }
+            tableView.setVisible(false);
+            VboxComparaison.setVisible(true);
+            radioBtnCourbes.setSelected(true);
         }
 
     }
@@ -317,9 +335,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb
     ) {
-        
-        
-        
+
         /* String date="2016";
         List<VilleTemp> listee = Downloader.getDataForYearByCity(date,"all");
         if(listee==null){
@@ -356,7 +372,6 @@ public class FXMLDocumentController implements Initializable {
             
             listee = Downloader.getDataForYearByCity(date,"all");
         } */
-
         //testss
         // TODO
         /*Commun a toutes les interface */
@@ -429,14 +444,13 @@ public class FXMLDocumentController implements Initializable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                          /*
+                            /*
                             si il y a une connexion internet 
                             si temps % 3 = 0 alors telecharger
                             
-                            */
-                          //verifier continuellement si il y a une connexion internet
-                          
-                          
+                             */
+                            //verifier continuellement si il y a une connexion internet
+
                             AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius);
 
                         }
@@ -462,12 +476,11 @@ public class FXMLDocumentController implements Initializable {
 
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
-       if(Downloader.netIsAvailable()==true){
-           onLine_offLine = "onLine";
-       }
-       else{
-           onLine_offLine="offLine";
-       }
+        if (Downloader.netIsAvailable() == true) {
+            onLine_offLine = "onLine";
+        } else {
+            onLine_offLine = "offLine";
+        }
         Interface = 1;
     }
 
@@ -481,18 +494,16 @@ public class FXMLDocumentController implements Initializable {
 
         celcius.setToggleGroup(kelvinCelcius);
         celcius.setSelected(true);
-              //  celcius.setStyle("-fx-selected-color: yellow;-fx-unselected-color: blue;");
+        //  celcius.setStyle("-fx-selected-color: yellow;-fx-unselected-color: blue;");
 //celcius.getStyleClass().add("red-radio-button");
         ToggleGroup onOffLine = new ToggleGroup();
         online.setToggleGroup(onOffLine);
         online.setSelected(true);
         offline.setToggleGroup(onOffLine);
-        
+
         //au debut on verifie si il y a une connexion et on initialise online_offline
-        
-        
         LocationDefault = new ChoiceBox();
-        
+
         LocationDefault.setStyle("-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
         List L = new ArrayList();
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {

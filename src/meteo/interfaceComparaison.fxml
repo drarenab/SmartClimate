@@ -71,9 +71,6 @@
                                                             <TableColumn fx:id="columnHum" prefWidth="84.0" text="Humidité" />
                                                             <TableColumn fx:id="columnNebul" prefWidth="26.0" text="Nébulosité" />
                                                         </columns>
-                                                         <columnResizePolicy>
-                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                         </columnResizePolicy>
                                                       </TableView>
                                                    </children>
                                                 </StackPane>
