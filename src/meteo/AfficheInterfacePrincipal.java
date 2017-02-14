@@ -26,7 +26,7 @@ import javafx.scene.text.Text;
 /**
  *
  * @author karim
- */
+ */ 
 public class AfficheInterfacePrincipal {
  
     /**

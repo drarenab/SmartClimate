@@ -23,7 +23,9 @@ public class aDate {
         this.year = annee;
         this.time = heure;
     }
-
+    public String getDate(){
+        return year+month+day;
+    }
     public String getDay() {
         return day;
     }

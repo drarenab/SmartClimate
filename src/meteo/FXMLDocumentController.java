@@ -48,6 +48,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import coordonnee.*;
+import java.util.Map;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -58,11 +59,13 @@ import javafx.scene.control.TextField;
 import static meteo.Downloader.getIdFromNameVille;
 import static meteo.Model.ConstructChart;
 import static meteo.Model.getListForChart;
+
 /**
  *
  * @author karim
  */
 public class FXMLDocumentController implements Initializable {
+
     @FXML
     ImageView imgview;
     @FXML
@@ -81,6 +84,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     RadioButton kelvin, celcius, online, offline;
     static String kelvin_celcius = "celcius";
+    static String onLine_offLine="onLine";
     @FXML
     VBox v1, v2, VboxComparaison;
     @FXML
@@ -128,113 +132,119 @@ public class FXMLDocumentController implements Initializable {
             kelvin_celcius = "celcius";
         }
     }
+    
     @FXML
-private void handleButtonActionAfficher() {
-
-    /*String[] errors = Model.validateDate(year.getText(), month.getText(), day.getText());
-    if( errors!=null) {        
-        year.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-        year.setText(errors[0]);
-        month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-        month.setText(errors[1]);
-        day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-        day.setText(errors[2]);
-        } else {*/
-        AfficheTemp.setTitle("Températures");
-        AfficheHum.setTitle("Humidité");
-        AfficheNebul.setTitle("Nébulosité");
-        /*************/
-        XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series2 = new XYChart.Series<Number, Number>();
-
-        int k = getIdFromNameVille(Station.getValue().toString());
-        String t = Integer.toString(k);
-
-        ArrayList<VilleTemp> Resultat = Downloader.getDataForDateByCity(year.getText() + month.getText(), t.length() == 5 ? t : '0' + t);
-        //System.out.println(Resultat.size()); 
-
-        ObservableList observableList = FXCollections.observableList(Resultat);
-        for (int i = 0; i < Resultat.size(); i++) {
-
-            series.getData().add(new XYChart.Data<Number, Number>(i, Resultat.get(i).getTemperature()));
-            series1.getData().add(new XYChart.Data<Number, Number>(i, Resultat.get(i).getHumidite()));
-            series2.getData().add(new XYChart.Data<Number, Number>(i, Resultat.get(i).getNebulosite()));
+    private void handleButtonActionChngOnline() {
+        if (online.isArmed()) {
+            if(Downloader.netIsAvailable()){
+                onLine_offLine = "onLine";
+            }
+            else{
+            offline.arm();
+        }
+                        
 
         }
-        /********
-        ArrayList<XYChart.Series> S=ConstructChart(year.getText() + month.getText(), Station.getValue().toString());
-        AfficheTemp.getData().add(S.get(0));
-        AfficheHum.getData().add(S.get(1));
-        AfficheNebul.getData().add(S.get(2));
-        **********/
-        AfficheTemp.getData().add(series);
-        AfficheHum.getData().add(series1);
-        AfficheNebul.getData().add(series2);
-       // }
-        
-
+        if (offline.isArmed()) {
+            onLine_offLine = "offLine";
+        }
     }
-@FXML
-    private void handleButtonActionComparer() throws IOException {
-//        downLoadCsvByDate(String date)
-        String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-        String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
 
-       // telechargerETdecompresser(Date1);
-        //telechargerETdecompresser(Date2);
+    @FXML
+    private void handleButtonActionAfficher() {
 
-        lineCharttemp.setTitle("Températures");
-        lineCharthum.setTitle("Humidité");
-        lineChartnebul.setTitle("Nébulosité");
-        XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series2 = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series3 = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series4 = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series5 = new XYChart.Series<Number, Number>();
-
-//            int k = getIdFromNameVille(StationComparaison.getValue().toString());
-//            String t = Integer.toString(k);
-//            ArrayList<VilleTemp> Resultat = Downloader.getDataForDateByCity(
-//                    Date1,
-//                    t.length() == 5 ? t : '0' + t);
-//
-//            ArrayList<VilleTemp> Resultat2 = Downloader.getDataForDateByCity(
-//                    Date2,
-//                    t.length() == 5 ? t : '0' + t);
-//            ObservableList observableList = FXCollections.observableList(Resultat);
-//            ObservableList observableList2 = FXCollections.observableList(Resultat2);
-//            
-        ArrayList<VilleTemp> list1 = getListForChart(Date1, StationComparaison.getValue().toString());
-        ArrayList<VilleTemp> list2 = getListForChart(Date2, StationComparaison.getValue().toString());
-
-        for (int i = 0; i < list1.size(); i++) {
-
-            series.getData().add(new XYChart.Data<Number, Number>(i, list1.get(i).getTemperature()));
-            series1.getData().add(new XYChart.Data<Number, Number>(i, list1.get(i).getHumidite()));
-            series2.getData().add(new XYChart.Data<Number, Number>(i, list1.get(i).getNebulosite()));
-
-        }
-        for (int i = 0; i < list2.size(); i++) {
-
-            series3.getData().add(new XYChart.Data<Number, Number>(i, list2.get(i).getTemperature()));
-            series4.getData().add(new XYChart.Data<Number, Number>(i, list2.get(i).getHumidite()));
-            series5.getData().add(new XYChart.Data<Number, Number>(i, list2.get(i).getNebulosite()));
-
-        }
-        
         /*
-        ArrayList<XYChart.Series> S=ConstructChart(Date1, StationComparaison.getValue().toString());
-        ArrayList<XYChart.Series> S2=ConstructChart(Date2, StationComparaison.getValue().toString());
-        lineCharttemp.getData().setAll(S.get(0), S1.get(0));
-        lineCharthum.getData().setAll(S.get(1), S1.get(1));
-        lineChartnebul.getData().setAll(S.get(2), S1.get(2));
-        */
-        lineCharttemp.getData().setAll(series, series3);
-        lineCharthum.getData().setAll(series1, series4);
-        lineChartnebul.getData().setAll(series2, series5);
+        Test si le formulaire est bien rempli
+         */
+        Map errors = Model.validateDate(year.getText(), month.getText(), day.getText());
+        /*
+        test si la année n'est pas vide (champs obligatoire)
+         */
+        if (!errors.get("Year").toString().equals("")) {
+            year.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+            year.setPromptText(errors.get("Year").toString());
+            /*
+            si année pas vide et correcte on test le mois et le jour (peuvent etre vide
+             */
+        } else {
+            if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
+                if (!errors.get("Month").equals("")) {
+                    month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                    month.setPromptText(errors.get("Month").toString());
+                }
+                if (!errors.get("Day").equals("")) {
+                    day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                    day.setPromptText(errors.get("Day").toString());
+                }
+            } else {
+                /*
+                Chart
+                 */
+                AfficheTemp.setTitle("Températures");
+                AfficheHum.setTitle("Humidité");
+                AfficheNebul.setTitle("Nébulosité");
 
+                ArrayList<XYChart.Series> S = ConstructChart(year.getText()
+                        + month.getText() + day.getText(), Station.getValue().toString());
+                
+                AfficheTemp.getData().setAll(S.get(0));
+                AfficheHum.getData().setAll(S.get(1));
+                AfficheNebul.getData().setAll(S.get(2));
+                /*
+                TableView
+                 */
+                
+            }
+        }
+    }
+
+    @FXML
+    private void handleButtonActionComparer() throws IOException {
+
+        /*
+        verifier le formulaire done
+        afficher les donnée  done
+        verifier si donnée existe sinon les telecharger
+        verifier si ville selectionné
+         */
+        Map errors = Model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
+        Map errors2 = Model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
+
+        if (!errors.get("Year").toString().equals("") & !errors2.get("Year").toString().equals("")) {
+            if (!errors.get("Year").toString().equals("")) {
+                Year1Comparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                Year1Comparaison.setPromptText(errors.get("Year").toString());
+            }
+            if (!errors2.get("Year").toString().equals("")) {
+                Year2Comparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                Year2Comparaison.setPromptText(errors.get("Year").toString());
+            }
+
+        } else {
+            if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
+                if (!errors.get("Month").equals("")) {
+                    MonthComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                    MonthComparaison.setPromptText(errors.get("Month").toString());
+                }
+                if (!errors.get("Day").equals("")) {
+                    DayComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                    DayComparaison.setPromptText(errors.get("Day").toString());
+                }
+            } else {
+
+//        downLoadCsvByDate(String date)
+                String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
+                String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
+
+                ArrayList<XYChart.Series> S = ConstructChart(Date1, StationComparaison.getValue().toString());
+                ArrayList<XYChart.Series> S2 = ConstructChart(Date2, StationComparaison.getValue().toString());
+                lineCharttemp.getData().setAll(S.get(0), S2.get(0));
+                lineCharthum.getData().setAll(S.get(1), S2.get(1));
+                lineChartnebul.getData().setAll(S.get(2), S2.get(2));
+
+            }
+
+        }
     }
 
     @FXML
@@ -304,10 +314,13 @@ private void handleButtonActionAfficher() {
 
     }
 
-
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-       /* String date="2016";
+    public void initialize(URL url, ResourceBundle rb
+    ) {
+        
+        
+        
+        /* String date="2016";
         List<VilleTemp> listee = Downloader.getDataForYearByCity(date,"all");
         if(listee==null){
             try {
@@ -343,7 +356,7 @@ private void handleButtonActionAfficher() {
             
             listee = Downloader.getDataForYearByCity(date,"all");
         } */
-        
+
         //testss
         // TODO
         /*Commun a toutes les interface */
@@ -398,13 +411,13 @@ private void handleButtonActionAfficher() {
         seting.getItems().add(preference);
 
         menuBar.getMenus().addAll(file, edit, window, statistic, seting);
-      
+
         VboxPrincipal.getChildren().add(0, menuBar);
         if (Interface == 0) {
-            
+
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
             Coordonne.ConstructTabVille();
-            
+
             InitInterfacePrincipal();
 
             Timer timer = new Timer();
@@ -416,7 +429,14 @@ private void handleButtonActionAfficher() {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-
+                          /*
+                            si il y a une connexion internet 
+                            si temps % 3 = 0 alors telecharger
+                            
+                            */
+                          //verifier continuellement si il y a une connexion internet
+                          
+                          
                             AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius);
 
                         }
@@ -427,22 +447,27 @@ private void handleButtonActionAfficher() {
             timer.schedule(t, 01, 1000);
 
         } else if (Interface == 1) {
-            
-             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
 
-            
-            initInterfaceSetting();
-        } else {
-            
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
 
-            
+            initInterfaceSetting();
+        } else {
+
+            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+
             InitInterfaceComparaison();
         }
 
     }
 
     public void InitInterfacePrincipal() {
+        //au debut on verifie si il y a une connexion et on initialise online_offline
+       if(Downloader.netIsAvailable()==true){
+           onLine_offLine = "onLine";
+       }
+       else{
+           onLine_offLine="offLine";
+       }
         Interface = 1;
     }
 
@@ -456,11 +481,19 @@ private void handleButtonActionAfficher() {
 
         celcius.setToggleGroup(kelvinCelcius);
         celcius.setSelected(true);
+              //  celcius.setStyle("-fx-selected-color: yellow;-fx-unselected-color: blue;");
+//celcius.getStyleClass().add("red-radio-button");
         ToggleGroup onOffLine = new ToggleGroup();
         online.setToggleGroup(onOffLine);
         online.setSelected(true);
         offline.setToggleGroup(onOffLine);
+        
+        //au debut on verifie si il y a une connexion et on initialise online_offline
+        
+        
         LocationDefault = new ChoiceBox();
+        
+        LocationDefault.setStyle("-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
         List L = new ArrayList();
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
             L.add(i, Coordonne.tabVille.get(i).getCity().getNom());
@@ -480,7 +513,7 @@ private void handleButtonActionAfficher() {
     }
 
     public void InitInterfaceComparaison() {
-                List L = new ArrayList();
+        List L = new ArrayList();
 
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
             L.add(i, Coordonne.tabVille.get(i).getCity().getNom());

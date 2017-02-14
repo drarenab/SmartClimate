@@ -319,7 +319,7 @@ public class Downloader {
                 return null;
             
             liste.addAll(tempList);
-            System.out.println("tour:"+i);
+            //System.out.println("tour:"+i);
         }
         
         return liste;
@@ -423,7 +423,7 @@ public class Downloader {
       * @return date sous form yyyymmjjhh
       */
 public static boolean netIsAvailable(){
-         try {
+        try {
         final URL url = new URL("http://donneespubliques.meteofrance.fr");
         final URLConnection conn = url.openConnection();
         conn.connect();
@@ -434,4 +434,6 @@ public static boolean netIsAvailable(){
         return false;
     }
     }
+        
+   
 }

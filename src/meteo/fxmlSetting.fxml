@@ -14,9 +14,9 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="602.0" prefWidth="523.0">
                <children>
-                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="305.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
+                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="354.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="354.0" style="-fx-border-color: B7695C; -fx-border-radius: 30; -fx-border-width: 3;">
                      <children>
-                        <Label text="Temperature" textFill="#945151">
+                        <Label text="Temperature" textFill="#F1A94E">
                            <font>
                               <Font name="Garuda Bold" size="19.0" />
                            </font></Label>
@@ -38,9 +38,9 @@
                         <Insets bottom="50.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="271.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
+                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="354.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="354.0" style="-fx-border-color: B7695C; -fx-border-radius: 30; -fx-border-width: 3;">
                      <children>
-                        <Label text="OnLine" textFill="#945151">
+                        <Label text="OnLine" textFill="#F1A94E">
                            <font>
                               <Font name="Garuda Bold" size="18.0" />
                            </font></Label>
@@ -66,11 +66,11 @@
                         <Insets bottom="50.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox fx:id="HboxLocation" alignment="CENTER" maxHeight="100.0" maxWidth="305.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="250.0" style="-fx-border-color: #B78178; -fx-border-radius: 30; -fx-border-width: 3;">
+                  <HBox fx:id="HboxLocation" alignment="CENTER" maxHeight="100.0" maxWidth="354.0" minHeight="0.0" minWidth="0.0" prefHeight="67.0" prefWidth="354.0" style="-fx-border-color: B7695C; -fx-border-radius: 30; -fx-border-width: 3;">
                      <children>
-                        <Label prefHeight="21.0" prefWidth="136.0" text="Location Default" textFill="#945151">
+                        <Label prefHeight="21.0" prefWidth="144.0" text="Location Default" textFill="#F1A94E">
                            <font>
-                              <Font size="15.0" />
+                              <Font name="Garuda Bold" size="18.0" />
                            </font></Label>
                      </children>
                   </HBox>
