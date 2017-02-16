@@ -23,6 +23,35 @@ import static meteo.Downloader.*;
  * @author karim
  */
 public class Model {
+    ArrayList<VilleTemp> data;
+    
+    /*
+    Constructeur privé 
+    methode charger 
+    */
+    private Model() {
+        this.data =new ArrayList ();
+    }
+    
+    public void chargerListe(){
+       if(data==null){
+           data=new ArrayList();
+       } 
+       
+       
+    }
+    /*****************************Partie Interface Principale*******************************/
+    
+    
+    /*****************************Partie Interface Setting**********************************/
+    
+    
+    /*****************************Partie Interface Comparaison******************************/
+    
+    
+    
+    
+    
 
     /**
      *
