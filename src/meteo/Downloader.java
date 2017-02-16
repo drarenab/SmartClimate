@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
 import java.net.*;
 import coordonnee.*;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+import org.apache.commons.io.FileUtils;
 
 /**
  * TODO getLastAvaialbleDateFile() ==> private called by getLastAvailableData()
@@ -434,6 +434,5 @@ public static boolean netIsAvailable(){
         return false;
     }
     }
-        
    
 }

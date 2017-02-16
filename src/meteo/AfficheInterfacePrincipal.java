@@ -75,8 +75,10 @@ public class AfficheInterfacePrincipal {
         Humidite.setFill(Color.CHOCOLATE);
         Text  nebulosite=new Text("nébulosité: ");
         nebulosite.setFill(Color.CHOCOLATE);
-         
+        
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
+            //faux : on accede jamais comme sa , getters et setter -_-
+            //System.out.println("nom ville:"+nomVillle+ "tabVille:"+Coordonne.tabVille.get(i).getCity().getNom());
             if(Coordonne.tabVille.get(i).getCity().getNom().equals(nomVillle)){
                 if(Coordonne.tabVille.get(i).getTemperature()!=101){
                     Temp.setText("Température: "+Integer.toString((int) Math.ceil(Coordonne.tabVille.get(i).getTemperature()))); 
