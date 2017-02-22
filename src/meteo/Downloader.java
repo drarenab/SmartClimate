@@ -416,7 +416,50 @@ public class Downloader {
     public static boolean checkIfFileExists(String file) {
         return (new File(file).exists());
     }
+ /**
+     *
+     * @param date sous forme yyyymmjj
+     * @return  false si pas de connexion ou si le fichier et a jour sinon elle retourne vrai si le fichier a était télécharger et decompresser
+     */
+    //manque la fonction qui telecharge toute une année si la date est du format yyyy
+    
+    public static boolean telechargerETdecompresser(String date, String onLine_offLine ) {
+        
+        /****
+         verifier si netisavailable 
+         * verifier si en mode en ligne
+         * verifier si le fichier rechercher n'est pas deja présent  a faire avant de faire appel a cette methode
+         * telecharger et décompresser
+         
+         ****/
+        //verifier si le fichier du mois existe
+        if (netIsAvailable() && onLine_offLine == "onLine" ) {
+            //String lastDate = getLatestAvailableDateOnFile(date);
+            //System.out.println(Integer.parseInt(lastDate) +"date" +Integer.parseInt(date));
+           
+            //if (lastDate == null || Integer.parseInt(lastDate.substring(6, 8)) < Integer.parseInt(date.substring(6, 8))) {
+                //telechargement
+                try {
 
+                   return Downloader.downLoadCsvByDate(date.substring(0, 6))!=null;
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //decompression
+                DecompresserGzip(getGzipFilePathFromDate(date));
+            /*} else {
+                System.out.println("pas besoin de telecharger les données nécessaires existes déja");
+                
+            }*/
+        } else {
+            
+            System.out.println("No connection !");
+            
+        }
+    return false;
+    }
+    
        /**
       * Cette Methode retourne la date exacte des donnée les plus recents yyyymmjjhh 
       * @param date sous la forme de yyyymm

@@ -15,19 +15,19 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
    <children>
-      <VBox fx:id="VboxPrincipal" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="VboxPrincipal" prefHeight="200.0" prefWidth="100.0" stylesheets="@../CSS/CSSComparaison.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
               <tabs>
                 <Tab fx:id="tabVisualisation" text="Visualisation">
                   <content>
-                    <AnchorPane>
+                    <AnchorPane fx:id="AnchorVisu">
                            <children>
-                              <SplitPane dividerPositions="0.25559947299077734" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane fx:id="splitPane" dividerPositions="0.25559947299077734" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <items>
-                                    <VBox alignment="CENTER" prefHeight="457.0" prefWidth="173.0" style="-fx-background-color: #E9967A;">
+                                    <VBox alignment="CENTER">
                                        <children>
                                           <ChoiceBox fx:id="Station" prefHeight="26.0" prefWidth="196.0">
                                              <VBox.margin>
@@ -48,33 +48,36 @@
                                                 <Insets bottom="30.0" />
                                              </VBox.margin>
                                           </TextField>
-                                          <Button mnemonicParsing="false" onAction="#handleButtonActionAfficher" prefHeight="26.0" prefWidth="203.0" text="Afficher">
+                                          <Button id="afficher" mnemonicParsing="false" onAction="#handleButtonActionAfficher" prefHeight="26.0" prefWidth="203.0" text="Afficher">
                                              <VBox.margin>
                                                 <Insets bottom="30.0" />
                                              </VBox.margin>
                                           </Button>
                                        </children>
                                     </VBox>
-                                    <VBox alignment="CENTER_LEFT">
+                                    <VBox alignment="BASELINE_LEFT" maxHeight="1.7976931348623157E308">
                                        <children>
                                           <HBox alignment="CENTER">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#handleButtonActionChangerGauche" text="&lt;" />
+                                                <Button fx:id="leftVisu" mnemonicParsing="false" onAction="#handleButtonActionChangerGauche" style="-fx-background-color: transparent;" />
                                                 <StackPane alignment="TOP_LEFT">
                                                    <children>
-                                                      <VBox fx:id="VboxComparaison" prefHeight="414.0" prefWidth="503.0" />
+                                                      <VBox fx:id="VboxComparaison" />
                                                       <TableView fx:id="tableView">
                                                         <columns>
-                                                          <TableColumn fx:id="columnName" prefWidth="79.0" text="Nom" />
-                                                          <TableColumn fx:id="columnDate" prefWidth="119.0" text="Date" />
-                                                            <TableColumn fx:id="columnTemp" prefWidth="119.0" text="Température" />
-                                                            <TableColumn fx:id="columnHum" prefWidth="84.0" text="Humidité" />
-                                                            <TableColumn fx:id="columnNebul" prefWidth="26.0" text="Nébulosité" />
+                                                          <TableColumn fx:id="columnName" prefWidth="109.0" text="Nom" />
+                                                          <TableColumn fx:id="columnDate" prefWidth="102.0" text="Date" />
+                                                            <TableColumn fx:id="columnTemp" prefWidth="127.0" text="Température" />
+                                                            <TableColumn fx:id="columnHum" prefWidth="102.0" text="Humidité" />
+                                                            <TableColumn fx:id="columnNebul" prefWidth="101.0" text="Nébulosité" />
                                                         </columns>
+                                                         <columnResizePolicy>
+                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                         </columnResizePolicy>
                                                       </TableView>
                                                    </children>
                                                 </StackPane>
-                                                <Button mnemonicParsing="false" onAction="#handleButtonActionChangerDroite" text="&gt;" />
+                                                <Button fx:id="rightVisu" mnemonicParsing="false" onAction="#handleButtonActionChangerDroite" style="-fx-background-color: transparent;" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER">
@@ -82,6 +85,9 @@
                                                 <RadioButton fx:id="radioBtnTableur" mnemonicParsing="false" text="Tableur" />
                                                 <RadioButton fx:id="radioBtnCourbes" mnemonicParsing="false" text="Courbes" />
                                              </children>
+                                             <VBox.margin>
+                                                <Insets bottom="7.0" />
+                                             </VBox.margin>
                                           </HBox>
                                        </children>
                                     </VBox>
@@ -93,14 +99,17 @@
                 </Tab>
                 <Tab fx:id="tabComparaison" text="Comparaison">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0">
+                    <AnchorPane fx:id="anchorComp" minHeight="0.0" minWidth="0.0" style="-fx-background-color: linear-gradient(to bottom, #2B2B2B 10%, #333333 100%);">
                            <children>
                               <VBox layoutX="8.0" layoutY="7.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <VBox alignment="CENTER" prefHeight="142.0" prefWidth="761.0">
+                                    <VBox alignment="CENTER">
                                        <children>
-                                          <ChoiceBox fx:id="StationComparaison" prefWidth="150.0" />
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                          <ChoiceBox fx:id="StationComparaison" prefWidth="150.0">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin></ChoiceBox>
+                                          <HBox alignment="CENTER" prefHeight="17.0" prefWidth="815.0">
                                              <children>
                                                 <TextField fx:id="Year1Comparaison" promptText="Année1" />
                                                 <TextField fx:id="Year2Comparaison" promptText="Année2">
@@ -109,9 +118,18 @@
                                                    </HBox.margin>
                                                 </TextField>
                                              </children>
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
                                           </HBox>
-                                          <TextField fx:id="MonthComparaison" promptText="Mois" VBox.vgrow="ALWAYS" />
-                                          <TextField fx:id="DayComparaison" promptText="Jour" />
+                                          <TextField fx:id="MonthComparaison" maxWidth="171.0" promptText="Mois">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin></TextField>
+                                          <TextField fx:id="DayComparaison" maxWidth="171.0" promptText="Jour">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin></TextField>
                                           <Button mnemonicParsing="false" onAction="#handleButtonActionComparer" text="Comparer" />
                                        </children>
                                     </VBox>
@@ -121,9 +139,9 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="237.0" prefWidth="761.0">
                                                    <children>
-                                                      <Button mnemonicParsing="false" onAction="#handleButtonActionChangerGauche" text="&lt;" />
+                                                      <Button fx:id="leftComp" mnemonicParsing="false" onAction="#handleButtonActionChangerGauche" style="-fx-background-color: transparent;" />
                                                       <StackPane fx:id="stack3" prefHeight="237.0" prefWidth="642.0" />
-                                                      <Button mnemonicParsing="false" onAction="#handleButtonActionChangerDroite" text="&gt;" />
+                                                      <Button fx:id="rightComp" mnemonicParsing="false" onAction="#handleButtonActionChangerDroite" style="-fx-background-color: transparent;" text="&gt;" />
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefHeight="27.0" prefWidth="761.0">

@@ -49,10 +49,14 @@ import javafx.stage.Stage;
 
 import coordonnee.*;
 import java.util.Map;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -99,9 +103,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     LineChart LineChartTemp;
 
-    LineChart<Number, Number> AfficheTemp;
-    LineChart<Number, Number> AfficheHum;
-    LineChart<Number, Number> AfficheNebul;
+    AreaChart<Number, Number> AfficheTemp;
+    AreaChart<Number, Number> AfficheHum;
+    AreaChart<Number, Number> AfficheNebul;
 
     LineChart<Number, Number> lineCharttemp;
     LineChart<Number, Number> lineCharthum;
@@ -130,7 +134,14 @@ public class FXMLDocumentController implements Initializable {
     TableColumn<DataBean, String> columnNebul;
     @FXML
     TextField Year1Comparaison, Year2Comparaison, MonthComparaison, DayComparaison;
-
+    @FXML 
+     TabPane tabPane;
+    @FXML
+    SplitPane splitPane;
+    @FXML
+    Button rightVisu,leftVisu,rightComp,leftComp;
+    @FXML
+    AnchorPane AnchorVisu,anchorComp;
     @FXML
     private void handleButtonActionChngTemp() {
         if (kelvin.isArmed()) {
@@ -190,6 +201,10 @@ public class FXMLDocumentController implements Initializable {
             AfficheHum.setTitle("Humidité");
             AfficheNebul.setTitle("Nébulosité");
 
+                   // Model.chargerListe(year.getText()
+                   // + month.getText() + day.getText(), Station.getValue().toString(), onLine_offLine);
+
+            
             ArrayList<XYChart.Series> S = ConstructChart(year.getText()
                     + month.getText() + day.getText(), Station.getValue().toString());
 
@@ -378,11 +393,11 @@ public class FXMLDocumentController implements Initializable {
  /*creation d'un menu dynamiquement commun a toutes les interfaces*/
         menuBar = new MenuBar();
 
-        Menu file = new Menu("File");
+        Menu file = new Menu("_File");
 
-        Menu edit = new Menu("Edit");
-        Menu window = new Menu("Window");
-        Menu statistic = new Menu("Statistic");
+        Menu edit = new Menu("_Edit");
+        Menu window = new Menu("_Window");
+        Menu statistic = new Menu("_Statistic");
         MenuItem view = new MenuItem("View");
         view.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -402,7 +417,7 @@ public class FXMLDocumentController implements Initializable {
             }
         });
         statistic.getItems().add(view);
-        Menu seting = new Menu("Seting");
+        Menu seting = new Menu("_Seting");
         MenuItem preference = new MenuItem("Preférence");
         preference.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -466,9 +481,12 @@ public class FXMLDocumentController implements Initializable {
 
             initInterfaceSetting();
         } else {
-
-            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
-
+            menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
+//            menuBar.setStyle("-fx-background-color:#2B2B2B;");
+//          menuBar.setStyle("-fx-text-fill: #D9E577;");
+//             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #67BEC5 0%, #FDE6B4 90%);");
+//              menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #43C6AC 5%, #F8FFAE 90%);"); 
+//               menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #44A08D 5%, #093637 90%);");
             InitInterfaceComparaison();
         }
 
@@ -524,6 +542,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void InitInterfaceComparaison() {
+       
         List L = new ArrayList();
 
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
@@ -543,16 +562,16 @@ public class FXMLDocumentController implements Initializable {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Température");
-        AfficheTemp = new LineChart<Number, Number>(xAxis, yAxis);
+        AfficheTemp = new AreaChart<Number, Number>(xAxis, yAxis);
         //AfficheTemp.setStyle("-fx-background-color:#9C9F84;");
         final NumberAxis xAxiss = new NumberAxis();
         final NumberAxis yAxiss = new NumberAxis();
         xAxiss.setLabel("Température");
-        AfficheHum = new LineChart<Number, Number>(xAxiss, yAxiss);
+        AfficheHum = new AreaChart<Number, Number>(xAxiss, yAxiss);
         final NumberAxis xAxisss = new NumberAxis();
         final NumberAxis yAxisss = new NumberAxis();
         xAxisss.setLabel("Température");
-        AfficheNebul = new LineChart<Number, Number>(xAxisss, yAxisss);
+        AfficheNebul = new AreaChart<Number, Number>(xAxisss, yAxisss);
         VboxComparaison.getChildren().add(AfficheTemp);
         VboxComparaison.getChildren().add(AfficheHum);
         VboxComparaison.getChildren().add(AfficheNebul);
@@ -596,5 +615,28 @@ public class FXMLDocumentController implements Initializable {
         //Interface=1;
 
         tableView.setEditable(true);
+        tabPane.getStylesheets().add("/CSS/CSSTabPane.css");
+        System.out.println("styleSheet");
+
+        AnchorVisu.getStylesheets().add("/CSS/CSSSplitPane.css");
+        anchorComp.getStylesheets().add("/CSS/CSSSplitPane.css");
+        ImageView image_view_btn_right = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/right1.png"),
+                      35, 35, true, false));
+        rightVisu.setGraphic(image_view_btn_right );
+        
+         ImageView image_view_btn_left = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/left1.png"),
+                        35, 35, true, false));
+        leftVisu.setGraphic(image_view_btn_left );
+         image_view_btn_right = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/right1.png"),
+                      35, 35, true, false));
+        rightComp.setGraphic(image_view_btn_right );
+        
+          image_view_btn_left = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/left1.png"),
+                        35, 35, true, false));
+        leftComp.setGraphic(image_view_btn_left );
     }
 }

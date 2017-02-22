@@ -7,6 +7,7 @@ package meteo;
 
 import coordonnee.VilleTemp;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ import static meteo.Downloader.*;
  *
  * @author karim
  */
-public class Model {
+public class Model implements Serializable{
     ArrayList<VilleTemp> data;
     
     /*
@@ -33,13 +34,31 @@ public class Model {
         this.data =new ArrayList ();
     }
     
-    public void chargerListe(){
-       if(data==null){
+    public  void  chargerListe(String date, String stationName,String online) {
+        if(data==null){
            data=new ArrayList();
+        }
+        int k = getIdFromNameVille(stationName);
+        String t = Integer.toString(k);
+        /*
+        si la date voulu n'existe pas alors telecharger
+        */
+        String lastDate = getLatestAvailableDateOnFile(date);
+
+        if (lastDate == null || Integer.parseInt(lastDate.substring(6, 8)) < Integer.parseInt(date.substring(6, 8))) {
+            telechargerETdecompresser(date, online);
+        }
+        /*
+        charger la liste par la date desiré
+        */
+        data = date.length()==4 ? 
+                                Downloader.getDataForYearByCity(date,  t.length() == 5 ? t : '0' + t):
+                                Downloader.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
+    
        } 
        
        
-    }
+    
     /*****************************Partie Interface Principale*******************************/
     
     
@@ -51,49 +70,14 @@ public class Model {
     
     
     
-    
-
-    /**
-     *
-     * @param date sous forme yyyymmjj
-     * @return  false si pas de connexion ou si le fichier et a jour sinon elle retourne vrai si le fichier a était télécharger et decompresser
-     */
-    //manque la fonction qui telecharge toute une année si la date est du format yyyy
-    public static boolean telechargerETdecompresser(String date) {
-        //verifier si le fichier du mois existe
-        if (netIsAvailable()) {
-            String lastDate = getLatestAvailableDateOnFile(date);
-            //System.out.println(Integer.parseInt(lastDate) +"date" +Integer.parseInt(date));
-            if (lastDate == null || Integer.parseInt(lastDate.substring(6, 8)) < Integer.parseInt(date.substring(6, 8))) {
-                //telechargement
-                try {
-
-                   return Downloader.downLoadCsvByDate(date.substring(0, 6))!=null;
-                    
-                } catch (IOException ex) {
-                    Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                //decompression
-                DecompresserGzip(getGzipFilePathFromDate(date));
-            } else {
-                System.out.println("pas besoin de telecharger les données nécessaires existes déja");
-                
-            }
-        } else {
-            
-            System.out.println("No connection !");
-            
-        }
-    return false;
-    }
-
-    /**
+     /**
      *
      * @param date
      * @param stationName
      * @return observableList for Chart
      */
-    public static ArrayList<VilleTemp> getListForChart(String date, String stationName) {
+       
+     public static ArrayList<VilleTemp> getListForChart(String date, String stationName) {
         int k = getIdFromNameVille(stationName);
         String t = Integer.toString(k);
         
@@ -102,7 +86,6 @@ public class Model {
                                 Downloader.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
                 //Downloader.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
                 
-                        ObservableList<VilleTemp> observableList = FXCollections.observableList(Resultat);
 
         return Resultat;
     }
@@ -122,7 +105,7 @@ public class Model {
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
 
         ArrayList<VilleTemp> Resultat = getListForChart(date, stationName);
-
+        
         for (int i = 0; i < Resultat.size(); i++) {
 
             series.getData().add(new XYChart.Data<>(i, Resultat.get(i).getTemperature()));
@@ -174,6 +157,14 @@ public class Model {
         errors.put("Day", errorDay);
         return errors;
     }
+    
+    
+    
+
+   
+    
+
+   
 public static boolean IsOnline(String online_offline){
     return online_offline.equals("onLine");
 }

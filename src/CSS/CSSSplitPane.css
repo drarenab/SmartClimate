@@ -1,0 +1,303 @@
+/*******************************************************************************
+ *                                                                             *
+ * SplitPane                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.split-pane > .split-pane-divider {
+    -fx-padding: 0 0.25em 0 0.25em; /* 0 3 0 3 */
+    -fx-background-color: #D0D0D0;
+}
+/* horizontal the two nodes are placed to the left/right of each other. */
+.split-pane:horizontal > .split-pane-divider {
+   -fx-background-color:#D0D0D0;
+   -fx-background-insets: 0, 0 1 0 1;
+}
+
+.split-pane {
+        -fx-background-color: linear-gradient(to bottom, #2B2B2B 10%, #333333 100%);
+
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * RadioButton                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.radio-button {
+    -fx-label-padding: 0.0em 0.0em 0.0em 0.416667em; /* 0 0 0 5 */
+    -fx-text-fill: #D9E577;
+}
+.radio-button > .radio,
+.radio-button:focused > .radio  {
+   -fx-background-radius: 1.0em; /* large value to make sure this remains circular */
+   -fx-padding: 0.333333em; /* 4 -- padding from outside edge to the inner black dot */
+   -fx-background-color: #96b946;
+}
+.radio-button:selected >.radio > .dot{
+    -fx-background-color: #2B2B2B;
+}
+.radio-button > .radio > .dot {
+   -fx-background-color: transparent;
+
+   -fx-background-radius: 1.0em; /* large value to make sure this remains circular */
+   -fx-padding: 0.333333em; /* 4 -- radius of the inner black dot when selected */
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * TableView                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.table-view,
+.tree-table-view {
+    /* Constants used throughout the tableview. */
+    -fx-table-header-border-color: -fx-box-border;
+    -fx-background-color: #828282;
+    -fx-table-cell-border-color: derive(-fx-color,5%);
+    -fx-background-radius: 5;
+}
+
+/***** ROW CELLS **************************************************************/
+/* Each row in the table is a table-row-cell. Inside a table-row-cell is any
+   number of table-cell. */
+.table-row-cell{
+    -fx-background: -fx-control-inner-background;
+    /*-fx-background-color: -fx-table-cell-border-color, -fx-background;*/
+    -fx-background-color: #6b6a6b;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0;
+    -fx-text-fill: -fx-text-background-color;
+   
+}
+.table-row-cell:odd {
+    -fx-background: -fx-control-inner-background-alt;
+}
+.table-view .column-header{
+    -fx-background-color: #D0D0D0;
+    -fx-background-insets: 0, 0 1 1 0, 1 2 2 1;
+    -fx-font-weight: bold;
+    -fx-size: 2em;
+    -fx-text-fill: #96b946;
+    -fx-padding: 0.166667em;
+}
+
+.table-view .column-header .label,
+.tree-table-view .column-header .label {
+    -fx-alignment: center;
+    -fx-text-fill: #BFA4A4;
+}
+
+
+
+/*******************************************************************************
+ *                                                                             *
+ * Charts                                                                      *
+ *                                                                             *
+ ******************************************************************************/
+
+.chart {
+    -fx-padding: 5px;
+}
+.chart-plot-background {
+    -fx-background-color: -fx-background;
+}
+.chart-content {
+    -fx-padding: 10px;
+}
+.chart-title {
+    -fx-font-size: 1.4em;
+}
+.chart-legend {
+   -fx-background-color: -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(-fx-background, -10%), derive(-fx-background, -5%)),
+        linear-gradient(from 0px 0px to 0px 4px, derive(-fx-background, -4%), derive(-fx-background, 10%));
+   -fx-background-insets: 0 0 -1 0, 0,1;
+   -fx-background-radius: 4,4,3;
+   -fx-padding: 6px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Axis                                                                        *
+ *                                                                             *
+ ******************************************************************************/
+
+.axis {
+    AXIS_COLOR: derive(-fx-background,-20%);
+    -fx-tick-label-font-size: 0.833333em; /* 10px */
+    -fx-tick-label-fill: derive(-fx-text-background-color, 30%);
+}
+.axis:top {
+    -fx-border-color: transparent transparent AXIS_COLOR transparent;
+}
+.axis:right {
+    -fx-border-color: transparent transparent transparent AXIS_COLOR;
+}
+.axis:bottom {
+    -fx-border-color: AXIS_COLOR transparent transparent transparent;
+}
+.axis:left {
+    -fx-border-color: transparent AXIS_COLOR transparent transparent;
+}
+.axis:top > .axis-label,
+.axis:left > .axis-label {
+    -fx-padding: 0 0 4px 0;
+}
+.axis:bottom > .axis-label,
+.axis:right > .axis-label {
+    -fx-padding: 4px 0 0 0;
+}
+.axis-tick-mark,
+.axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: AXIS_COLOR;
+}
+
+/*.root{
+    Chart Color Palette 
+    CHART_COLOR_1: #f3622d;
+    CHART_COLOR_2: #fba71b;
+    CHART_COLOR_3: #57b757;
+    CHART_COLOR_4: #41a9c9;
+    CHART_COLOR_5: #4258c9;
+    CHART_COLOR_6: #9a42c8;
+    CHART_COLOR_7: #c84164;
+    CHART_COLOR_8: #888888;
+     Chart Color Palette Semi-Transparent
+     * These are used by charts that need semi transparent versions of the above colors, such as BubbleChart. They
+     * are exactly the same colors as above just with alpha
+     *
+     * 20% opacity
+     
+    CHART_COLOR_1_TRANS_20: #f3622d33;
+    CHART_COLOR_2_TRANS_20: #fba71b33;
+    CHART_COLOR_3_TRANS_20: #57b75733;
+    CHART_COLOR_4_TRANS_20: #41a9c933;
+    CHART_COLOR_5_TRANS_20: #4258c933;
+    CHART_COLOR_6_TRANS_20: #9a42c833;
+    CHART_COLOR_7_TRANS_20: #c8416433;
+    CHART_COLOR_8_TRANS_20: #88888833;
+     70% opacity 
+    CHART_COLOR_1_TRANS_70: #f3622db3;
+    CHART_COLOR_2_TRANS_70: #fba71bb3;
+    CHART_COLOR_3_TRANS_70: #57b757b3;
+    CHART_COLOR_4_TRANS_70: #41a9c9b3;
+    CHART_COLOR_5_TRANS_70: #4258c9b3;
+    CHART_COLOR_6_TRANS_70: #9a42c8b3;
+    CHART_COLOR_7_TRANS_70: #c84164b3;
+    CHART_COLOR_8_TRANS_70: #888888b3; 
+}
+ */
+
+/*******************************************************************************
+ *                                                                             *
+ * LineChart                                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+.chart-line-symbol {
+    -fx-background-color: #f3622d, white;
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+}
+.chart-series-line {
+    -fx-stroke: #f3622d;
+    -fx-stroke-width: 3px;
+}
+.default-color0.chart-line-symbol { -fx-background-color: #c84164, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #57b757, white; }
+
+.default-color0.chart-series-line { -fx-stroke: #c84164; }
+.default-color1.chart-series-line { -fx-stroke: #57b757; }
+
+   
+.text-field {
+    -fx-background-color: #333333, #D9E577 , #333333;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+    -fx-text-fill: #f3622d;
+}
+
+.text-field:focused {
+    -fx-background-color: #333333, #D9E577 , #333333;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+
+/*.button {
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+    -fx-background-radius: 8;
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+}
+
+.button:hover {
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #ea7f4b, #c54e2c);
+}
+.button:pressed {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+.button Text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0,0,0,2 );
+}*/
+
+#afficher {
+    -fx-background-color: 
+        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+        linear-gradient(#020b02, #3a3a3a),
+        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),
+        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),
+        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
+    -fx-background-insets: 0,1,4,5,6;
+    -fx-background-radius: 9,8,5,4,3;
+    -fx-padding: 5 15 5 15;
+    -fx-font-family: "Helvetica";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+}
+#afficher Text {
+    -fx-effect: dropshadow( one-pass-box , black , 0, 0.0 , 0 , -1 );
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ChoiceBox                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.choice-box  {
+-fx-background-color: 
+        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+        linear-gradient(#020b02, #3a3a3a),
+        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),
+        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),
+        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
+    -fx-background-insets: 0,1,4,5,6;
+    -fx-background-radius: 9,8,5,4,3;
+    -fx-padding: 5 15 5 15;
+        -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+        
+}
+.choice-box > .label{
+    -fx-text-fill: #f3622d;
+}
+.choice-box > .context-menu {
+    -fx-background-radius: 6, 5, 4;
+}
