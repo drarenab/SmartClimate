@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?> 
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="640.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
    <children>
-      <VBox fx:id="VboxPrincipal" prefHeight="640.0" prefWidth="520.0">
+      <VBox fx:id="VboxPrincipal" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="H" alignment="CENTER" prefHeight="61.0" prefWidth="503.0">
                <children>

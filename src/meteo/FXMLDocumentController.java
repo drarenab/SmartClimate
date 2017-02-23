@@ -5,6 +5,8 @@ package meteo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.javafx.application.HostServicesDelegate;
 import coordonnee.Coordonne;
 import java.io.IOException;
 import java.net.URL;
@@ -48,12 +50,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import coordonnee.*;
+import java.awt.Desktop;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
+import javafx.application.HostServices;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -61,7 +69,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import static meteo.Downloader.getIdFromNameVille;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+//import static meteo.Downloader.getIdFromNameVille;
 import static meteo.Model.ConstructChart;
 import static meteo.Model.getListForChart;
 
@@ -134,14 +144,17 @@ public class FXMLDocumentController implements Initializable {
     TableColumn<DataBean, String> columnNebul;
     @FXML
     TextField Year1Comparaison, Year2Comparaison, MonthComparaison, DayComparaison;
-    @FXML 
-     TabPane tabPane;
+    @FXML
+    TabPane tabPane;
     @FXML
     SplitPane splitPane;
     @FXML
-    Button rightVisu,leftVisu,rightComp,leftComp;
+    Button rightVisu, leftVisu, rightComp, leftComp;
     @FXML
-    AnchorPane AnchorVisu,anchorComp;
+    AnchorPane AnchorVisu, anchorComp;
+    @FXML
+    ProgressIndicator progressComparaison;
+
     @FXML
     private void handleButtonActionChngTemp() {
         if (kelvin.isArmed()) {
@@ -197,14 +210,14 @@ public class FXMLDocumentController implements Initializable {
             /*
                 Chart
              */
+            progressComparaison.setVisible(true);
+
             AfficheTemp.setTitle("Températures");
             AfficheHum.setTitle("Humidité");
             AfficheNebul.setTitle("Nébulosité");
 
-                   // Model.chargerListe(year.getText()
-                   // + month.getText() + day.getText(), Station.getValue().toString(), onLine_offLine);
-
-            
+            // Model.chargerListe(year.getText()
+            // + month.getText() + day.getText(), Station.getValue().toString(), onLine_offLine);
             ArrayList<XYChart.Series> S = ConstructChart(year.getText()
                     + month.getText() + day.getText(), Station.getValue().toString());
 
@@ -214,30 +227,29 @@ public class FXMLDocumentController implements Initializable {
             /*
                 TableView
              */
-            
+
             columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
             columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
             columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
             columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
             columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
             tableView.getItems().setAll(parseDataList(year.getText() + month.getText() + day.getText(),
-                                                        Station.getValue().toString()
-                                        ));
-            
+                    Station.getValue().toString()
+            ));
         }
     }
-    
-    private List<DataBean> parseDataList(String date,String station){
-          ArrayList<VilleTemp> listDonnee = Model.getListForChart(date,station);
-          ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
-          if(listDonnee!=null) {
-              for(VilleTemp villeTemp : listDonnee) {
-                  listDataBean.add(villeTemp.toDataBean());
-              }
-          }
-           return listDataBean;
+
+    private List<DataBean> parseDataList(String date, String station) {
+        ArrayList<VilleTemp> listDonnee = Model.getListForChart(date, station);
+        ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
+        if (listDonnee != null) {
+            for (VilleTemp villeTemp : listDonnee) {
+                listDataBean.add(villeTemp.toDataBean());
+            }
+        }
+        return listDataBean;
     }
-    
+
     @FXML
     private void handleButtonActionComparer() throws IOException {
 
@@ -394,14 +406,81 @@ public class FXMLDocumentController implements Initializable {
         menuBar = new MenuBar();
 
         Menu file = new Menu("_File");
+        MenuItem VisiteWebSite = new MenuItem("Visit Web Site");
+
+        VisiteWebSite.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                String url = "http://www.donneespubliques.meteofrance.fr/";
+
+                //how to open default browser and visit url defined below
+            }
+
+        }
+        );
+        MenuItem Close = new MenuItem("Close");
+
+        Close.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if (Interface == 0) {
+                    System.exit(0);
+                    
+                } else {
+                    Stage s = (Stage) menuBar.getScene().getWindow();
+                    s.close();
+                }
+
+            }
+
+        }
+        );
+        file.getItems()
+                .addAll(VisiteWebSite, Close);
 
         Menu edit = new Menu("_Edit");
         Menu window = new Menu("_Window");
+        MenuItem maximize = new MenuItem("Full Screen");
+
+        maximize.setOnAction(
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event
+            ) {
+//                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
+                Stage s = (Stage) menuBar.getScene().getWindow();
+                s.setMaximized(true);
+
+            }
+        }
+        );
+
+        MenuItem minimize = new MenuItem("Windowed Screen");
+
+        minimize.setOnAction(
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event
+            ) {
+//                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
+                Stage s = (Stage) menuBar.getScene().getWindow();
+                s.setMaximized(false);
+
+            }
+        }
+        );
+        window.getItems()
+                .addAll(maximize, minimize);
         Menu statistic = new Menu("_Statistic");
         MenuItem view = new MenuItem("View");
-        view.setOnAction(new EventHandler<ActionEvent>() {
+
+        view.setOnAction(
+                new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(ActionEvent event
+            ) {
                 Interface = 2;
                 Parent root;
                 try {
@@ -415,14 +494,19 @@ public class FXMLDocumentController implements Initializable {
                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        });
-        statistic.getItems().add(view);
+        }
+        );
+        statistic.getItems()
+                .add(view);
         Menu seting = new Menu("_Seting");
         MenuItem preference = new MenuItem("Preférence");
-        preference.setOnAction(new EventHandler<ActionEvent>() {
+
+        preference.setOnAction(
+                new EventHandler<ActionEvent>() {
 
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(ActionEvent event
+            ) {
                 Interface = 1;
                 Parent root;
                 try {
@@ -437,13 +521,18 @@ public class FXMLDocumentController implements Initializable {
                 }
 
             }
-        });
-        seting.getItems().add(preference);
+        }
+        );
+        seting.getItems()
+                .add(preference);
 
-        menuBar.getMenus().addAll(file, edit, window, statistic, seting);
+        menuBar.getMenus()
+                .addAll(file, edit, window, statistic, seting);
 
-        VboxPrincipal.getChildren().add(0, menuBar);
-        if (Interface == 0) {
+        VboxPrincipal.getChildren()
+                .add(0, menuBar);
+        if (Interface
+                == 0) {
 
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
             Coordonne.ConstructTabVille();
@@ -475,7 +564,11 @@ public class FXMLDocumentController implements Initializable {
 
             timer.schedule(t, 01, 1000);
 
-        } else if (Interface == 1) {
+            //Enlever le droit du full screen
+            maximize.setDisable(true);
+            minimize.setDisable(true);
+        } else if (Interface
+                == 1) {
 
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
 
@@ -503,7 +596,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void initInterfaceSetting() {
-        Image img = new Image(Meteo.class.getResourceAsStream("Image/BackgroundSetting2.jpg"));
+        Image img = new Image(Meteo.class
+                .getResourceAsStream("Image/BackgroundSetting2.jpg"));
         BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         anchorSeting.setBackground(new Background(background));
 
@@ -542,7 +636,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void InitInterfaceComparaison() {
-       
+
         List L = new ArrayList();
 
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
@@ -622,21 +716,22 @@ public class FXMLDocumentController implements Initializable {
         anchorComp.getStylesheets().add("/CSS/CSSSplitPane.css");
         ImageView image_view_btn_right = new ImageView(
                 new Image(getClass().getResourceAsStream("Image/right1.png"),
-                      35, 35, true, false));
-        rightVisu.setGraphic(image_view_btn_right );
-        
-         ImageView image_view_btn_left = new ImageView(
+                        35, 35, true, false));
+        rightVisu.setGraphic(image_view_btn_right);
+
+        ImageView image_view_btn_left = new ImageView(
                 new Image(getClass().getResourceAsStream("Image/left1.png"),
                         35, 35, true, false));
-        leftVisu.setGraphic(image_view_btn_left );
-         image_view_btn_right = new ImageView(
+        leftVisu.setGraphic(image_view_btn_left);
+        image_view_btn_right = new ImageView(
                 new Image(getClass().getResourceAsStream("Image/right1.png"),
-                      35, 35, true, false));
-        rightComp.setGraphic(image_view_btn_right );
-        
-          image_view_btn_left = new ImageView(
+                        35, 35, true, false));
+        rightComp.setGraphic(image_view_btn_right);
+
+        image_view_btn_left = new ImageView(
                 new Image(getClass().getResourceAsStream("Image/left1.png"),
                         35, 35, true, false));
-        leftComp.setGraphic(image_view_btn_left );
+        leftComp.setGraphic(image_view_btn_left);
+        progressComparaison.setVisible(false);
     }
 }
