@@ -419,6 +419,28 @@ public class FXMLDocumentController implements Initializable {
 
         }
         );
+         MenuItem Information = new MenuItem("Informations sur les données");
+
+        Information.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                
+            }
+
+        }
+        );
+        MenuItem EtatServeur = new MenuItem("Etat du serveur MeteoFrance");
+
+        EtatServeur.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                
+            }
+
+        }
+        );
         MenuItem Close = new MenuItem("Close");
 
         Close.setOnAction(new EventHandler<ActionEvent>() {
@@ -438,9 +460,8 @@ public class FXMLDocumentController implements Initializable {
         }
         );
         file.getItems()
-                .addAll(VisiteWebSite, Close);
+                .addAll(VisiteWebSite,Information,EtatServeur, Close);
 
-        Menu edit = new Menu("_Edit");
         Menu window = new Menu("_Window");
         MenuItem maximize = new MenuItem("Full Screen");
 
@@ -525,9 +546,13 @@ public class FXMLDocumentController implements Initializable {
         );
         seting.getItems()
                 .add(preference);
-
+        Menu help = new Menu("_Help");
+        MenuItem aide = new MenuItem("Aide");
+        MenuItem aPropos = new MenuItem("A Propos");
+        help.getItems()
+                .addAll(aide,aPropos);
         menuBar.getMenus()
-                .addAll(file, edit, window, statistic, seting);
+                .addAll(file, window, statistic, seting,help);
 
         VboxPrincipal.getChildren()
                 .add(0, menuBar);
