@@ -70,6 +70,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -156,6 +158,10 @@ public class FXMLDocumentController implements Initializable {
     AnchorPane AnchorVisu, anchorComp;
     @FXML
     ProgressIndicator progressComparaison;
+    @FXML
+    Text etatConnexion;
+    @FXML
+    TreeView treeView;
 
     @FXML
     private void handleButtonActionChngTemp() {
@@ -171,7 +177,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleButtonActionChngOnline() {
         if (online.isArmed()) {
-            if (Downloader.netIsAvailable()) {
+            if (Downloader.netIsAvailable() != -1) {
                 onLine_offLine = "onLine";
             } else {
                 offline.arm();
@@ -365,7 +371,6 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb
     ) {
 
-       
         //testss
         // TODO
         /*Commun a toutes les interface */
@@ -382,8 +387,7 @@ public class FXMLDocumentController implements Initializable {
                 String url = "https://donneespubliques.meteofrance.fr/";
 
                 //how to open default browser and visit url defined below
-                if(Desktop.isDesktopSupported())
-                {
+                if (Desktop.isDesktopSupported()) {
                     try {
                         Desktop.getDesktop().browse(new URI(url));
                     } catch (IOException ex) {
@@ -396,13 +400,24 @@ public class FXMLDocumentController implements Initializable {
 
         }
         );
-         MenuItem Information = new MenuItem("Informations sur les données");
+        MenuItem Information = new MenuItem("Informations sur les données");
 
         Information.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
-                
+                Parent root;
+                try {
+                    Interface = 3;
+                    root = FXMLLoader.load(getClass().getResource("InterfaceDataInformation.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }
@@ -413,11 +428,21 @@ public class FXMLDocumentController implements Initializable {
 
             @Override
             public void handle(ActionEvent e) {
-                
+                Parent root;
+                try {
+                    Interface = 4;
+                    root = FXMLLoader.load(getClass().getResource("InterfaceInformations.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
-        }
-        );
+        });
         MenuItem Close = new MenuItem("Close");
 
         Close.setOnAction(new EventHandler<ActionEvent>() {
@@ -426,7 +451,7 @@ public class FXMLDocumentController implements Initializable {
             public void handle(ActionEvent e) {
                 if (Interface == 0) {
                     System.exit(0);
-                    
+
                 } else {
                     Stage s = (Stage) menuBar.getScene().getWindow();
                     s.close();
@@ -437,7 +462,7 @@ public class FXMLDocumentController implements Initializable {
         }
         );
         file.getItems()
-                .addAll(VisiteWebSite,Information,EtatServeur, Close);
+                .addAll(VisiteWebSite, Information, EtatServeur, Close);
 
         Menu window = new Menu("_Window");
         MenuItem maximize = new MenuItem("Full Screen");
@@ -494,8 +519,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         );
-        statistic.getItems()
-                .add(view);
+        statistic.getItems().add(view);
         Menu seting = new Menu("_Seting");
         MenuItem preference = new MenuItem("Preférence");
 
@@ -548,18 +572,12 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         );
-        
-        
-        help.getItems()
-                .addAll(aide,aPropos);
-        menuBar.getMenus()
-                .addAll(file, window, statistic, seting,help);
 
-        VboxPrincipal.getChildren()
-                .add(0, menuBar);
-        if (Interface
-                == 0) {
+        help.getItems().addAll(aide, aPropos);
+        menuBar.getMenus().addAll(file, window, statistic, seting, help);
 
+        if (Interface == 0) {
+            VboxPrincipal.getChildren().add(0, menuBar);
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
             Coordonne.ConstructTabVille();
 
@@ -593,27 +611,67 @@ public class FXMLDocumentController implements Initializable {
             //Enlever le droit du full screen
             maximize.setDisable(true);
             minimize.setDisable(true);
-        } else if (Interface
-                == 1) {
-
+        } else if (Interface == 1) {
+            VboxPrincipal.getChildren().add(0, menuBar);
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
 
             initInterfaceSetting();
-        } else {
+        } else if (Interface == 2) {
+            VboxPrincipal.getChildren().add(0, menuBar);
             menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
-//            menuBar.setStyle("-fx-background-color:#2B2B2B;");
-//          menuBar.setStyle("-fx-text-fill: #D9E577;");
-//             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #67BEC5 0%, #FDE6B4 90%);");
-//              menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #43C6AC 5%, #F8FFAE 90%);"); 
-//               menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #44A08D 5%, #093637 90%);");
             InitInterfaceComparaison();
+        } else if (Interface == 3) {//informations sur les donnée
+
+            final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
+            treeRoot.setExpanded(true);
+            ArrayList<String> list = Downloader.getYearExists();
+
+            for (int i = 0; i < list.size(); i++) {
+                final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
+                ArrayList<String> liste = Downloader.getMonthsExistsForYear(list.get(i));
+               
+                for (int j = 0; j < liste.size(); j++) {
+                    fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
+                }
+
+                fruitItem.setExpanded(true);
+                treeRoot.getChildren().add(i, fruitItem);
+
+            }
+
+////            treeRoot.getChildren().setAll(fruitItem, vegetableItem);
+//            final TreeItem<String> fruitItem = new TreeItem<>("Fruits");
+//            fruitItem.getChildren().setAll(
+//                    new TreeItem("Fraise"),
+//                    new TreeItem("Pomme"),
+//                    new TreeItem("Poire")
+//            );
+//            fruitItem.setExpanded(true);
+//            final TreeItem<String> vegetableItem = new TreeItem<>("Légumes");
+//            vegetableItem.getChildren().setAll(
+//                    new TreeItem("Artichaut"),
+//                    new TreeItem("Laitue"),
+//                    new TreeItem("Radis")
+//            );
+//            vegetableItem.setExpanded(true);
+            
+            treeView.setRoot(treeRoot);
+
+        } else if (Interface == 4) {//etat serveur
+            double time = Downloader.netIsAvailable();
+            if (time != -1) {
+                etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
+            } else {
+                etatConnexion.setText("Hors service ");
+            }
+
         }
 
     }
 
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
-        if (Downloader.netIsAvailable() == true) {
+        if (Downloader.netIsAvailable() != -1) {
             onLine_offLine = "onLine";
         } else {
             onLine_offLine = "offLine";
