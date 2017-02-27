@@ -363,42 +363,7 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb
     ) {
 
-        /* String date="2016";
-        List<VilleTemp> listee = Downloader.getDataForYearByCity(date,"all");
-        if(listee==null){
-            try {
-                Downloader.downLoadCsvByDate("201601");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201601"));  
-                Downloader.downLoadCsvByDate("201602");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201602"));
-                Downloader.downLoadCsvByDate("201603");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201603"));
-                Downloader.downLoadCsvByDate("201604");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201604"));
-                Downloader.downLoadCsvByDate("201605");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201605"));  
-                Downloader.downLoadCsvByDate("201606");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201606"));  
-                Downloader.downLoadCsvByDate("201607");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201607"));  
-                Downloader.downLoadCsvByDate("201608");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201608"));  
-                Downloader.downLoadCsvByDate("201609");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201609"));  
-                Downloader.downLoadCsvByDate("201610");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201610")); 
-                Downloader.downLoadCsvByDate("201611");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201611"));
-                Downloader.downLoadCsvByDate("201612");
-                Downloader.DecompresserGzip(Downloader.getGzipFilePathFromDate("201612"));  
-                
-                
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            listee = Downloader.getDataForYearByCity(date,"all");
-        } */
+       
         //testss
         // TODO
         /*Commun a toutes les interface */
@@ -549,6 +514,30 @@ public class FXMLDocumentController implements Initializable {
         Menu help = new Menu("_Help");
         MenuItem aide = new MenuItem("Aide");
         MenuItem aPropos = new MenuItem("A Propos");
+        aPropos.setOnAction(
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event
+            ) {
+                Interface = 1;
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("APropos.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+        );
+        
+        
         help.getItems()
                 .addAll(aide,aPropos);
         menuBar.getMenus()
