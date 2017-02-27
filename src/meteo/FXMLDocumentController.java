@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
+import java.awt.Desktop;
+import java.net.URI;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -377,9 +379,19 @@ public class FXMLDocumentController implements Initializable {
 
             @Override
             public void handle(ActionEvent e) {
-                String url = "http://www.donneespubliques.meteofrance.fr/";
+                String url = "https://donneespubliques.meteofrance.fr/";
 
                 //how to open default browser and visit url defined below
+                if(Desktop.isDesktopSupported())
+                {
+                    try {
+                        Desktop.getDesktop().browse(new URI(url));
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (URISyntaxException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
 
         }
