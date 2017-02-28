@@ -72,6 +72,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -160,6 +162,10 @@ public class FXMLDocumentController implements Initializable {
     AnchorPane AnchorVisu, anchorComp;
     @FXML
     ProgressIndicator progressComparaison;
+    @FXML
+    Text etatConnexion;
+    @FXML
+    TreeView treeView;
 
     private List<DataBean> parseDataList(String date, String station) {
         ArrayList<VilleTemp> listDonnee = model.getListForChart(date, station);
@@ -295,7 +301,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleButtonActionChngOnline() {
         if (online.isArmed()) {
-            if (model.netIsAvailable()) {
+            if (model.netIsAvailable()!=-1) {
                 //onLine_offLine = "onLine";
                 onlineMode = true;
             } else {
@@ -368,7 +374,7 @@ public class FXMLDocumentController implements Initializable {
                     }
                     System.out.println("trying again to construct the cart");
                     S = model.constructChart(year.getText()
-                                            + month.getText() + day.getText(), Station.getValue().toString());
+                            + month.getText() + day.getText(), Station.getValue().toString());
                 } else if (yearMode) {
                     System.out.println("downloading data for multiple months");
                     ArrayList<String> missedMonths = model.getMissedMonthsFiles(year.getText());
@@ -381,10 +387,9 @@ public class FXMLDocumentController implements Initializable {
                     }
                     System.out.println("trying again to construct the cart");
                     S = model.constructChart(year.getText()
-                                            + month.getText() + day.getText(), Station.getValue().toString());
+                            + month.getText() + day.getText(), Station.getValue().toString());
                 }
 
-              
                 //                if (S == null) {
                 //                    //no data found , launch download process! 
                 //                    // model.downloadAndUncompress();
@@ -443,18 +448,8 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb
     ) {
-
         model = new MyModel();
-        /*
-        ArrayList<String> missed = model.getMissedMonthsFiles("2013");
-        for (String month : missed) {
-            System.out.println("missedmonth:" + month);
-        }
-        System.out.println("one:" + model.validateDateLogically("2017", "02", "29"));
-        System.out.println("two:" + model.validateDateLogically("2018", "", ""));
-        System.out.println("three:" + model.validateDateLogically("2017", "02", "28"));
-        ذ
-        dataList = new ArrayList<VilleTemp>();
+
         /*Commun a toutes les interface */
  /*creation d'un menu dynamiquement commun a toutes les interfaces*/
         menuBar = new MenuBar();
@@ -489,6 +484,18 @@ public class FXMLDocumentController implements Initializable {
             @Override
             public void handle(ActionEvent e) {
 
+                Parent root;
+                try {
+                    Interface = 3;
+                    root = FXMLLoader.load(getClass().getResource("InterfaceDataInformation.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }
@@ -500,10 +507,21 @@ public class FXMLDocumentController implements Initializable {
             @Override
             public void handle(ActionEvent e) {
 
+                Parent root;
+                try {
+                    Interface = 4;
+                    root = FXMLLoader.load(getClass().getResource("InterfaceInformations.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
-        }
-        );
+        });
         MenuItem Close = new MenuItem("Close");
 
         Close.setOnAction(new EventHandler<ActionEvent>() {
@@ -580,8 +598,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         );
-        statistic.getItems()
-                .add(view);
+        statistic.getItems().add(view);
         Menu seting = new Menu("_Seting");
         MenuItem preference = new MenuItem("Preférence");
 
@@ -612,16 +629,35 @@ public class FXMLDocumentController implements Initializable {
         Menu help = new Menu("_Help");
         MenuItem aide = new MenuItem("Aide");
         MenuItem aPropos = new MenuItem("A Propos");
-        help.getItems()
-                .addAll(aide, aPropos);
-        menuBar.getMenus()
-                .addAll(file, window, statistic, seting, help);
 
-        VboxPrincipal.getChildren()
-                .add(0, menuBar);
-        if (Interface
-                == 0) {
+        aPropos.setOnAction(
+                new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent event
+            ) {
+                Interface = 1;
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("APropos.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+        );
+
+        help.getItems().addAll(aide, aPropos);
+        menuBar.getMenus().addAll(file, window, statistic, seting, help);
+
+        if (Interface == 0) {
+            VboxPrincipal.getChildren().add(0, menuBar);
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
 
             InitInterfacePrincipal();
@@ -642,7 +678,7 @@ public class FXMLDocumentController implements Initializable {
                              */
                             //verifier continuellement si il y a une connexion internet
 
-                            //AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius, model);
+                            AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius, model);
                         }
                     });
                 }
@@ -653,27 +689,66 @@ public class FXMLDocumentController implements Initializable {
             //Enlever le droit du full screen
             maximize.setDisable(true);
             minimize.setDisable(true);
-        } else if (Interface
-                == 1) {
-
+        } else if (Interface == 1) {
+            VboxPrincipal.getChildren().add(0, menuBar);
             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
 
             initInterfaceSetting();
-        } else {
+        } else if (Interface == 2) {
+            VboxPrincipal.getChildren().add(0, menuBar);
             menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
-//            menuBar.setStyle("-fx-background-color:#2B2B2B;");
-//          menuBar.setStyle("-fx-text-fill: #D9E577;");
-//             menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #67BEC5 0%, #FDE6B4 90%);");
-//              menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #43C6AC 5%, #F8FFAE 90%);"); 
-//               menuBar.setStyle("-fx-background-color:linear-gradient(to bottom,  #44A08D 5%, #093637 90%);");
             InitInterfaceComparaison();
+        } else if (Interface == 3) {//informations sur les donnée
+
+            final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
+            treeRoot.setExpanded(true);
+            ArrayList<String> list = model.getYearExists();
+
+            for (int i = 0; i < list.size(); i++) {
+                final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
+                ArrayList<String> liste = model.getMonthsExistsForYear(list.get(i));
+
+                for (int j = 0; j < liste.size(); j++) {
+                    fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
+                }
+
+                fruitItem.setExpanded(true);
+                treeRoot.getChildren().add(i, fruitItem);
+
+            }
+
+////            treeRoot.getChildren().setAll(fruitItem, vegetableItem);
+//            final TreeItem<String> fruitItem = new TreeItem<>("Fruits");
+//            fruitItem.getChildren().setAll(
+//                    new TreeItem("Fraise"),
+//                    new TreeItem("Pomme"),
+//                    new TreeItem("Poire")
+//            );
+//            fruitItem.setExpanded(true);
+//            final TreeItem<String> vegetableItem = new TreeItem<>("Légumes");
+//            vegetableItem.getChildren().setAll(
+//                    new TreeItem("Artichaut"),
+//                    new TreeItem("Laitue"),
+//                    new TreeItem("Radis")
+//            );
+//            vegetableItem.setExpanded(true);
+            treeView.setRoot(treeRoot);
+
+        } else if (Interface == 4) {//etat serveur
+            double time = model.netIsAvailable();
+            if (time != -1) {
+                etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
+            } else {
+                etatConnexion.setText("Hors service ");
+            }
+
         }
 
     }
 
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
-        if (model.netIsAvailable() == true) {
+        if (model.netIsAvailable() != -1) {
             // onLine_offLine = "onLine";
             onlineMode = true;
         } else {

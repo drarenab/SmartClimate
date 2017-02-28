@@ -510,19 +510,6 @@ public class MyModel {
         return liste;
     }
 
-    public boolean netIsAvailable() {
-        try {
-            final URL url = new URL("http://donneespubliques.meteofrance.fr");
-            final URLConnection conn = url.openConnection();
-            conn.connect();
-            return true;
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
     /**
      *
      * @param date
@@ -637,5 +624,53 @@ public class MyModel {
             return true;
         }
 
+    }
+    
+    
+    
+    
+    /*********************KARIM**************************/
+     /**
+     * Cette Methode retourne la date exacte des donnée les plus recents
+     * yyyymmjjhh
+     *
+     * @param date sous la forme de yyyymm
+     * @return date sous form yyyymmjjhh
+     */
+    public double netIsAvailable() {
+        try {
+            final URL url = new URL("http://donneespubliques.meteofrance.fr");
+            long startTime = System.nanoTime();
+            final URLConnection conn = url.openConnection();
+            conn.setConnectTimeout(1000);
+            conn.connect();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1000000;  //divide by 1000000 to get milliseconds.
+
+            return duration;
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            return -1;
+        }
+    }
+
+    public ArrayList<String> getYearExists() {
+        ArrayList<String> list=new ArrayList<>();
+        File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
+        for (File file : file1.listFiles()) {
+            list.add(file.toString().substring(8));
+        }
+
+        return list;
+    }
+     public ArrayList<String> getMonthsExistsForYear(String year) {
+        ArrayList<String> list=new ArrayList<>();
+        File file1 = new File(Configuration.DATA_DIRECTORY_NAME+"/"+year);
+        for (File file : file1.listFiles()) {
+            list.add(file.toString().substring(8));
+        }
+
+        return list;
     }
 }
