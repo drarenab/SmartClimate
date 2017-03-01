@@ -5,7 +5,12 @@ package meteo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+<<<<<<< HEAD
 import coordonnee.Coordonne;
+=======
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.javafx.application.HostServicesDelegate;
+>>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -51,6 +56,9 @@ import coordonnee.*;
 import java.awt.Desktop;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
@@ -67,7 +75,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+<<<<<<< HEAD
 import static meteo.Model.ConstructChart;
+=======
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+//import static meteo.Downloader.getIdFromNameVille;
+>>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
 
 /**
  *
@@ -75,6 +89,8 @@ import static meteo.Model.ConstructChart;
  */
 public class FXMLDocumentController implements Initializable {
 
+    private List<VilleTemp> dataList;
+    private MyModel model;
     @FXML
     ImageView imgview;
     @FXML
@@ -93,14 +109,16 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     RadioButton kelvin, celcius, online, offline;
     static String kelvin_celcius = "celcius";
-    static String onLine_offLine = "onLine";
+    //static String onLine_offLine = "onLine";
+
+    static boolean onlineMode = true;
     @FXML
     VBox v1, v2, VboxComparaison;
     @FXML
     ImageView imgviewTempsActuel;
     @FXML
     HBox HboxLocation;
-    // @FXML
+    // @FXMLE
     static ChoiceBox LocationDefault;
     @FXML
     ChoiceBox Station, StationComparaison;
@@ -153,6 +171,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     TreeView treeView;
 
+<<<<<<< HEAD
     
     @FXML
     private void handleButtonActionChngTemp() {
@@ -239,8 +258,10 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+=======
+>>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
     private List<DataBean> parseDataList(String date, String station) {
-        ArrayList<VilleTemp> listDonnee = Model.getListForChart(date, station);
+        ArrayList<VilleTemp> listDonnee = model.getListForChart(date, station);
         ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
         if (listDonnee != null) {
             for (VilleTemp villeTemp : listDonnee) {
@@ -259,8 +280,8 @@ public class FXMLDocumentController implements Initializable {
         verifier si donnée existe sinon les telecharger
         verifier si ville selectionné
          */
-        Map errors = Model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
-        Map errors2 = Model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
+        Map errors = model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
+        Map errors2 = model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
 
         if (!errors.get("Year").toString().equals("") & !errors2.get("Year").toString().equals("")) {
             if (!errors.get("Year").toString().equals("")) {
@@ -287,8 +308,8 @@ public class FXMLDocumentController implements Initializable {
             String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
             String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
 
-            ArrayList<XYChart.Series> S = ConstructChart(Date1, StationComparaison.getValue().toString());
-            ArrayList<XYChart.Series> S2 = ConstructChart(Date2, StationComparaison.getValue().toString());
+            ArrayList<XYChart.Series> S = model.constructChart(Date1, StationComparaison.getValue().toString());
+            ArrayList<XYChart.Series> S2 = model.constructChart(Date2, StationComparaison.getValue().toString());
             lineCharttemp.getData().setAll(S.get(0), S2.get(0));
             lineCharthum.getData().setAll(S.get(1), S2.get(1));
             lineChartnebul.getData().setAll(S.get(2), S2.get(2));
@@ -359,11 +380,173 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    private void handleButtonActionChngTemp() {
+        if (kelvin.isArmed()) {
+            kelvin_celcius = "kelvin";
 
-        //testss
-        // TODO
+        }
+        if (celcius.isArmed()) {
+            kelvin_celcius = "celcius";
+        }
+    }
+
+    @FXML
+    private void handleButtonActionChngOnline() {
+        if (online.isArmed()) {
+            if (model.netIsAvailable()!=-1) {
+                //onLine_offLine = "onLine";
+                onlineMode = true;
+            } else {
+                offline.arm();
+            }
+
+        }
+        if (offline.isArmed()) {
+            //onLine_offLine = "offLine";
+            onlineMode = false;
+        }
+    }
+
+    @FXML
+    private void handleButtonActionAfficher() {
+        boolean yearMode;
+        /*
+        Test si le formulaire est bien rempli
+         */
+        Map errors = model.validateDate(year.getText(), month.getText(), day.getText());
+
+        /*
+        test si la année n'est pas vide (champs obligatoire)
+         */
+        if (!errors.get("Year").toString().equals("")) {
+            year.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+            year.setPromptText(errors.get("Year").toString());
+            /*
+            si année pas vide et correcte on test le mois et le jour (peuvent etre vide
+             */
+        } else if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
+            if (!errors.get("Month").equals("")) {
+                month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                month.setPromptText(errors.get("Month").toString());
+            }
+            if (!errors.get("Day").equals("")) {
+                day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                day.setPromptText(errors.get("Day").toString());
+            }
+        } else {
+            /*
+                Chart
+             */
+            System.out.println("1");
+            boolean logicalyValideDate;
+            logicalyValideDate = model.validateDateLogically(year.getText(), month.getText(), day.getText());
+            System.out.println(2);
+            if (logicalyValideDate) {
+                progressComparaison.setVisible(true);
+
+                AfficheTemp.setTitle("Températures");
+                AfficheHum.setTitle("Humidité");
+                AfficheNebul.setTitle("Nébulosité");
+                if (month.getText().length() > 0) {
+                    yearMode = false;
+                } else {
+                    yearMode = true;
+                }
+                // Model.chargerListe(year.getText()
+                // + month.getText() + day.getText(), Station.getValue().toString(), onLine_offLine);
+                ArrayList<XYChart.Series> S = model.constructChart(year.getText()
+                        + month.getText() + day.getText(), Station.getValue().toString());
+
+                if (!yearMode && S == null) {
+                    System.out.println("downloading data for one month");
+                    try {
+                        model.downloadAndUncompress(year.getText() + month.getText());
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    System.out.println("trying again to construct the cart");
+                    S = model.constructChart(year.getText()
+                            + month.getText() + day.getText(), Station.getValue().toString());
+                } else if (yearMode) {
+                    System.out.println("downloading data for multiple months");
+                    ArrayList<String> missedMonths = model.getMissedMonthsFiles(year.getText());
+                    for (String month : missedMonths) {
+                        try {
+                            model.downloadAndUncompress(month);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    System.out.println("trying again to construct the cart");
+                    S = model.constructChart(year.getText()
+                            + month.getText() + day.getText(), Station.getValue().toString());
+                }
+
+                //                if (S == null) {
+                //                    //no data found , launch download process! 
+                //                    // model.downloadAndUncompress();
+                //                    System.out.println("No data found locally for corresponding date");
+                //                    System.out.println("begin downloading data phase");
+                //                    if (month.getText().length() > 0) {
+                //                        //telecharger uniquement le fichier de mois correspondant
+                //                        //parceque le mois est fournit donc on a besoin que des données d'un seul mois
+                //                        System.out.println("downloading data for one month");
+                //                        try {
+                //                            model.downloadAndUncompress(year.getText() + month.getText());
+                //                        } catch (IOException ex) {
+                //                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                //                        }
+                //                    } else {
+                //                        //telecharger totu les fichiers des mois manquants
+                //                        //au premier lieu on fournit les les fichiers des mois qui manques
+                //                        System.out.println("downloading data for multiple months");
+                //                        ArrayList<String> missedMonths = model.getMissedMonthsFiles(year.getText());
+                //                        for (String month : missedMonths) {
+                //                            try {
+                //                                model.downloadAndUncompress(month);
+                //                            } catch (IOException ex) {
+                //                                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                //                            }
+                //                        }
+                //                    }
+                //                    //second try after downloading needed files
+                //                    System.out.println("trying again to construct the cart");
+                //                    S = model.constructChart(year.getText()
+                //                            + month.getText() + day.getText(), Station.getValue().toString());
+                //
+                //                }
+                AfficheTemp.getData().setAll(S.get(0));
+                AfficheHum.getData().setAll(S.get(1));
+                AfficheNebul.getData().setAll(S.get(2));
+                /*
+                TableView
+                 */
+
+                columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
+                columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
+                columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
+                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
+                columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
+                tableView.getItems().setAll(parseDataList(year.getText() + month.getText() + day.getText(),
+                        Station.getValue().toString()
+                ));
+            } else {
+                //not logicaly valid date!
+            }
+        }
+
+    }
+
+    @Override
+<<<<<<< HEAD
+    public void initialize(URL url, ResourceBundle rb) {
+=======
+    public void initialize(URL url, ResourceBundle rb
+    ) {
+        model = new MyModel();
+>>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
+
         /*Commun a toutes les interface */
  /*creation d'un menu dynamiquement commun a toutes les interfaces*/
         menuBar = new MenuBar();
@@ -397,6 +580,7 @@ public class FXMLDocumentController implements Initializable {
 
             @Override
             public void handle(ActionEvent e) {
+
                 Parent root;
                 try {
                     Interface = 3;
@@ -419,6 +603,7 @@ public class FXMLDocumentController implements Initializable {
 
             @Override
             public void handle(ActionEvent e) {
+
                 Parent root;
                 try {
                     Interface = 4;
@@ -541,6 +726,7 @@ public class FXMLDocumentController implements Initializable {
         Menu help = new Menu("_Help");
         MenuItem aide = new MenuItem("Aide");
         MenuItem aPropos = new MenuItem("A Propos");
+
         aPropos.setOnAction(
                 new EventHandler<ActionEvent>() {
 
@@ -568,8 +754,41 @@ public class FXMLDocumentController implements Initializable {
         menuBar.getMenus().addAll(file, window, statistic, seting, help);
 
         if (Interface == 0) {
+<<<<<<< HEAD
 
             InitInterfacePrincipal();
+=======
+            VboxPrincipal.getChildren().add(0, menuBar);
+            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
+
+            InitInterfacePrincipal();
+
+            Timer timer = new Timer();
+            TimerTask t = new TimerTask() {
+                @Override
+                public void run() {
+                    // some code
+//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            /*
+                            si il y a une connexion internet 
+                            si temps % 3 = 0 alors telecharger
+                            
+                             */
+                            //verifier continuellement si il y a une connexion internet
+
+                            AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius, model);
+                        }
+                    });
+                }
+            };
+
+            timer.schedule(t, 01, 1000);
+
+            //Enlever le droit du full screen
+>>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
             maximize.setDisable(true);
             minimize.setDisable(true);
 
@@ -581,9 +800,53 @@ public class FXMLDocumentController implements Initializable {
             InitInterfaceComparaison();
         } else if (Interface == 3) {//informations sur les donnée
 
+<<<<<<< HEAD
             initInterfaceInformation();
 
         } else if (Interface == 4) {//etat serveur
+=======
+            final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
+            treeRoot.setExpanded(true);
+            ArrayList<String> list = model.getYearExists();
+
+            for (int i = 0; i < list.size(); i++) {
+                final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
+                ArrayList<String> liste = model.getMonthsExistsForYear(list.get(i));
+
+                for (int j = 0; j < liste.size(); j++) {
+                    fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
+                }
+
+                fruitItem.setExpanded(true);
+                treeRoot.getChildren().add(i, fruitItem);
+
+            }
+
+////            treeRoot.getChildren().setAll(fruitItem, vegetableItem);
+//            final TreeItem<String> fruitItem = new TreeItem<>("Fruits");
+//            fruitItem.getChildren().setAll(
+//                    new TreeItem("Fraise"),
+//                    new TreeItem("Pomme"),
+//                    new TreeItem("Poire")
+//            );
+//            fruitItem.setExpanded(true);
+//            final TreeItem<String> vegetableItem = new TreeItem<>("Légumes");
+//            vegetableItem.getChildren().setAll(
+//                    new TreeItem("Artichaut"),
+//                    new TreeItem("Laitue"),
+//                    new TreeItem("Radis")
+//            );
+//            vegetableItem.setExpanded(true);
+            treeView.setRoot(treeRoot);
+
+        } else if (Interface == 4) {//etat serveur
+            double time = model.netIsAvailable();
+            if (time != -1) {
+                etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
+            } else {
+                etatConnexion.setText("Hors service ");
+            }
+>>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
 
             initInterfaceEtatServeur();
         }
@@ -594,10 +857,12 @@ public class FXMLDocumentController implements Initializable {
      */
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
-        if (Downloader.netIsAvailable() != -1) {
-            onLine_offLine = "onLine";
+        if (model.netIsAvailable() != -1) {
+            // onLine_offLine = "onLine";
+            onlineMode = true;
         } else {
-            onLine_offLine = "offLine";
+            //onLine_offLine = "offLine";
+            onlineMode = false;
         }
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
@@ -659,8 +924,9 @@ public class FXMLDocumentController implements Initializable {
 
         LocationDefault.setStyle("-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
         List L = new ArrayList();
-        for (int i = 0; i < Coordonne.tabVille.size(); i++) {
-            L.add(i, Coordonne.tabVille.get(i).getCity().getNom());
+        dataList = model.getLatestAvailableData();
+        for (int i = 0; i < dataList.size(); i++) {
+            L.add(i, dataList.get(i).getCity().getNom());
         }
         ObservableList<String> observableList = FXCollections.observableList(L);
         observableList.addListener(new ListChangeListener() {
@@ -682,9 +948,9 @@ public class FXMLDocumentController implements Initializable {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
         List L = new ArrayList();
-
-        for (int i = 0; i < Coordonne.tabVille.size(); i++) {
-            L.add(i, Coordonne.tabVille.get(i).getCity().getNom());
+        dataList = model.getLatestAvailableData();
+        for (int i = 0; i < dataList.size(); i++) {
+            L.add(i, dataList.get(i).getCity().getNom());
         }
         ObservableList<String> observableList = FXCollections.observableList(L);
         observableList.addListener(new ListChangeListener() {

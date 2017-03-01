@@ -12,22 +12,20 @@ package coordonnee;
 
 /*
 
-*/
+ */
 public class VilleTemp {
-   /**
-     * 
+
+    /**
      * @param city
-     * @param temperature 
-     * Cette Classe fait le lien entre une ville et sa temperature
+     * @param temperature Cette Classe fait le lien entre une ville et sa
+     * temperature
      */
-   
-    
-   private Ville city;
-   private double temperature;
-   private int humidite;
-   private float nebulosite;
-   private aDate date;
-   
+    private Ville city;
+    private double temperature;
+    private int humidite;
+    private float nebulosite;
+    private aDate date;
+
     public VilleTemp(Ville city, double temperature, int humidite, float nebulosite, aDate date) {
         this.city = city;
         this.temperature = temperature;
@@ -44,7 +42,6 @@ public class VilleTemp {
         this.date = date;
     }
 
-    
     public Ville getCity() {
         return city;
     }
@@ -77,21 +74,23 @@ public class VilleTemp {
         this.nebulosite = nebulosite;
     }
 
-    public void modifierTemperature(double f){
-        temperature=f;
+    public void modifierTemperature(double f) {
+        temperature = f;
     }
-    public void modifierHumidite(int h){
-        humidite=h;
+
+    public void modifierHumidite(int h) {
+        humidite = h;
     }
-    public void modifierNebulosite(float n){
-        nebulosite=n;
+
+    public void modifierNebulosite(float n) {
+        nebulosite = n;
     }
-    
+
     public void afficher() {
-        System.out.println("name:"+city.getNom()+" id:"+city.getId()+"["+temperature+","+humidite+","+nebulosite+"]"+ " date:"+date.getYear()+
-                "/"+date.getMonth()+"/"+date.getDay()+":"+date.getTime());
+        System.out.println("name:" + city.getNom() + " id:" + city.getId() + "[" + temperature + "," + humidite + "," + nebulosite + "]" + " date:" + date.getYear()
+                + "/" + date.getMonth() + "/" + date.getDay() + ":" + date.getTime());
     }
-    
+
     public DataBean toDataBean() {
         DataBean dataBean = new DataBean();
         dataBean.setDate(date.toString());
