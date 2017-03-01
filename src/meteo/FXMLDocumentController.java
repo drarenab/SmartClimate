@@ -5,8 +5,6 @@ package meteo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
-import com.sun.javafx.application.HostServicesDelegate;
 import coordonnee.Coordonne;
 import java.io.IOException;
 import java.net.URL;
@@ -14,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
-import java.awt.Desktop;
-import java.net.URI;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,11 +49,9 @@ import javafx.stage.Stage;
 
 import coordonnee.*;
 import java.awt.Desktop;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
-import javafx.application.HostServices;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -73,11 +67,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-//import static meteo.Downloader.getIdFromNameVille;
 import static meteo.Model.ConstructChart;
-import static meteo.Model.getListForChart;
 
 /**
  *
@@ -163,6 +153,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     TreeView treeView;
 
+    
     @FXML
     private void handleButtonActionChngTemp() {
         if (kelvin.isArmed()) {
@@ -176,15 +167,16 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleButtonActionChngOnline() {
-        if (online.isArmed()) {
+        if (online.isSelected()) {
             if (Downloader.netIsAvailable() != -1) {
                 onLine_offLine = "onLine";
             } else {
-                offline.arm();
+                System.out.println("jj");
+                offline.setSelected(true);
             }
 
         }
-        if (offline.isArmed()) {
+        if (offline.isSelected()) {
             onLine_offLine = "offLine";
         }
     }
@@ -368,8 +360,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle rb
-    ) {
+    public void initialize(URL url, ResourceBundle rb) {
 
         //testss
         // TODO
@@ -577,98 +568,30 @@ public class FXMLDocumentController implements Initializable {
         menuBar.getMenus().addAll(file, window, statistic, seting, help);
 
         if (Interface == 0) {
-            VboxPrincipal.getChildren().add(0, menuBar);
-            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
-            Coordonne.ConstructTabVille();
 
             InitInterfacePrincipal();
-
-            Timer timer = new Timer();
-            TimerTask t = new TimerTask() {
-                @Override
-                public void run() {
-                    // some code
-//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            /*
-                            si il y a une connexion internet 
-                            si temps % 3 = 0 alors telecharger
-                            
-                             */
-                            //verifier continuellement si il y a une connexion internet
-
-                            AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius);
-
-                        }
-                    });
-                }
-            };
-
-            timer.schedule(t, 01, 1000);
-
-            //Enlever le droit du full screen
             maximize.setDisable(true);
             minimize.setDisable(true);
+
         } else if (Interface == 1) {
-            VboxPrincipal.getChildren().add(0, menuBar);
-            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
 
             initInterfaceSetting();
         } else if (Interface == 2) {
-            VboxPrincipal.getChildren().add(0, menuBar);
-            menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
+
             InitInterfaceComparaison();
         } else if (Interface == 3) {//informations sur les donnée
 
-            final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
-            treeRoot.setExpanded(true);
-            ArrayList<String> list = Downloader.getYearExists();
-
-            for (int i = 0; i < list.size(); i++) {
-                final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
-                ArrayList<String> liste = Downloader.getMonthsExistsForYear(list.get(i));
-               
-                for (int j = 0; j < liste.size(); j++) {
-                    fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
-                }
-
-                fruitItem.setExpanded(true);
-                treeRoot.getChildren().add(i, fruitItem);
-
-            }
-
-////            treeRoot.getChildren().setAll(fruitItem, vegetableItem);
-//            final TreeItem<String> fruitItem = new TreeItem<>("Fruits");
-//            fruitItem.getChildren().setAll(
-//                    new TreeItem("Fraise"),
-//                    new TreeItem("Pomme"),
-//                    new TreeItem("Poire")
-//            );
-//            fruitItem.setExpanded(true);
-//            final TreeItem<String> vegetableItem = new TreeItem<>("Légumes");
-//            vegetableItem.getChildren().setAll(
-//                    new TreeItem("Artichaut"),
-//                    new TreeItem("Laitue"),
-//                    new TreeItem("Radis")
-//            );
-//            vegetableItem.setExpanded(true);
-            
-            treeView.setRoot(treeRoot);
+            initInterfaceInformation();
 
         } else if (Interface == 4) {//etat serveur
-            double time = Downloader.netIsAvailable();
-            if (time != -1) {
-                etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
-            } else {
-                etatConnexion.setText("Hors service ");
-            }
 
+            initInterfaceEtatServeur();
         }
 
     }
-
+    /**
+     * permet d'initialiser l'interface principale 
+     */
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
         if (Downloader.netIsAvailable() != -1) {
@@ -676,10 +599,44 @@ public class FXMLDocumentController implements Initializable {
         } else {
             onLine_offLine = "offLine";
         }
-        Interface = 1;
-    }
+        VboxPrincipal.getChildren().add(0, menuBar);
+        menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
+        Coordonne.ConstructTabVille();
 
+        Timer timer = new Timer();
+        TimerTask t = new TimerTask() {
+            @Override
+            public void run() {
+                // some code
+//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*
+                            si il y a une connexion internet 
+                            si temps % 3 = 0 alors telecharger
+                            
+                         */
+                        //verifier continuellement si il y a une connexion internet
+
+                        AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius);
+
+                    }
+                });
+            }
+        };
+
+        timer.schedule(t, 01, 1000);
+
+        //Enlever le droit du full screen
+    }
+    /**
+     * permet d'initialiser l'interface setting
+     */
     public void initInterfaceSetting() {
+        VboxPrincipal.getChildren().add(0, menuBar);
+        menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+
         Image img = new Image(Meteo.class
                 .getResourceAsStream("Image/BackgroundSetting2.jpg"));
         BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -718,9 +675,12 @@ public class FXMLDocumentController implements Initializable {
         HboxLocation.getChildren().add(1, LocationDefault);
         //Interface=0;
     }
-
+    /**
+     * permet d'initialiser l'interface d'affichage et de comparaison des données
+     */
     public void InitInterfaceComparaison() {
-
+        VboxPrincipal.getChildren().add(0, menuBar);
+        menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
         List L = new ArrayList();
 
         for (int i = 0; i < Coordonne.tabVille.size(); i++) {
@@ -817,5 +777,39 @@ public class FXMLDocumentController implements Initializable {
                         35, 35, true, false));
         leftComp.setGraphic(image_view_btn_left);
         progressComparaison.setVisible(false);
+    }
+    /**
+     * permet d'initialiser l'interface permettant de savoir quelles données l'utilisateur a sur sa machine 
+     */
+    public void initInterfaceInformation() {
+        final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
+        treeRoot.setExpanded(true);
+        ArrayList<String> list = Downloader.getYearExists();
+
+        for (int i = 0; i < list.size(); i++) {
+            final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
+            ArrayList<String> liste = Downloader.getMonthsExistsForYear(list.get(i));
+
+            for (int j = 0; j < liste.size(); j++) {
+                fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
+            }
+
+            fruitItem.setExpanded(true);
+            treeRoot.getChildren().add(i, fruitItem);
+
+        }
+        treeView.setRoot(treeRoot);
+    }
+    /**
+     * permet d'initialiser l'interface permettant de savoir si le serveur de meteo france 
+     * contenant les données nécessaires est bien en marche est combien de temps a fallut pour faire un ping
+     */
+    public void initInterfaceEtatServeur() {
+        double time = Downloader.netIsAvailable();
+        if (time != -1) {
+            etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
+        } else {
+            etatConnexion.setText("Hors service ");
+        }
     }
 }
