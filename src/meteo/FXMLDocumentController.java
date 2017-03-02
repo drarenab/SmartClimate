@@ -57,6 +57,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.Map;
 import javafx.application.HostServices;
@@ -317,7 +318,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleButtonActionAfficher() {
-        boolean yearMode;
+        boolean yearMode,monthMode;
         /*
         Test si le formulaire est bien rempli
          */
@@ -345,17 +346,18 @@ public class FXMLDocumentController implements Initializable {
             /*
                 Chart
              */
-            System.out.println("1");
-            boolean logicalyValideDate;
-            logicalyValideDate = model.validateDateLogically(year.getText(), month.getText(), day.getText());
+            //System.out.println("1");
+            boolean validated;
+            validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             System.out.println(2);
-            if (logicalyValideDate) {
+            if (validated) {
                 progressComparaison.setVisible(true);
 
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
-                if (month.getText().length() > 0) {
+                if (month
+                        .getText().length() > 0) {
                     yearMode = false;
                 } else {
                     yearMode = true;
@@ -448,6 +450,9 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb
     ) {
+       
+        
+        
         model = new MyModel();
 
         /*Commun a toutes les interface */
@@ -678,7 +683,7 @@ public class FXMLDocumentController implements Initializable {
                              */
                             //verifier continuellement si il y a une connexion internet
 
-                            AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius, model);
+                            //AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius, model);
                         }
                     });
                 }
