@@ -5,12 +5,6 @@ package meteo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-<<<<<<< HEAD
-import coordonnee.Coordonne;
-=======
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
-import com.sun.javafx.application.HostServicesDelegate;
->>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,57 +25,32 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import coordonnee.*;
 import java.awt.Desktop;
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Map;
+import java.util.Optional;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-<<<<<<< HEAD
-import static meteo.Model.ConstructChart;
-=======
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-//import static meteo.Downloader.getIdFromNameVille;
->>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  *
@@ -91,185 +60,56 @@ public class FXMLDocumentController implements Initializable {
 
     private List<VilleTemp> dataList;
     private MyModel model;
-    @FXML
-    ImageView imgview;
-    @FXML
-    StackPane stackPane;
-    @FXML
-    Text text, text2;
-    @FXML
-    VBox v, VboxPrincipal;
-    @FXML
-    GridPane gridPane;
     static int Interface = 0;
-    @FXML
-    MenuBar menuBar;
-    @FXML
-    AnchorPane anchorSeting;
-    @FXML
-    RadioButton kelvin, celcius, online, offline;
     static String kelvin_celcius = "celcius";
-    //static String onLine_offLine = "onLine";
-
     static boolean onlineMode = true;
-    @FXML
-    VBox v1, v2, VboxComparaison;
-    @FXML
-    ImageView imgviewTempsActuel;
-    @FXML
-    HBox HboxLocation;
-    // @FXMLE
     static ChoiceBox LocationDefault;
+
+    @FXML
+    AnchorPane anchorSeting, AnchorVisu, anchorComp;
+    AreaChart<Number, Number> AfficheTemp, AfficheNebul, AfficheHum;
+    @FXML
+    Button rightVisu, leftVisu, rightComp, leftComp;
     @FXML
     ChoiceBox Station, StationComparaison;
     @FXML
+    GridPane gridPane;
+    @FXML
+    HBox HboxLocation;
+    @FXML
+    ImageView imgview, imgviewTempsActuel;
+    @FXML
     LineChart LineChartTemp;
-
-    AreaChart<Number, Number> AfficheTemp;
-    AreaChart<Number, Number> AfficheHum;
-    AreaChart<Number, Number> AfficheNebul;
-
-    LineChart<Number, Number> lineCharttemp;
-    LineChart<Number, Number> lineCharthum;
-    LineChart<Number, Number> lineChartnebul;
-
-    ToggleGroup groupeChart, groupeRadioAffichage;
+    LineChart<Number, Number> lineCharttemp, lineCharthum, lineChartnebul;
     @FXML
-    StackPane stack3;
+    MenuBar menuBar;
     @FXML
-    TextField year, month, day;
+    ProgressIndicator progressComparaison;
+    @FXML
+    RadioButton kelvin, celcius, online, offline;
     @FXML
     RadioButton RadioBtnTemp, RadioBtnHum, RadioBtnNebul, radioBtnCourbes, radioBtnTableur;
+    @FXML
+    StackPane stackPane, stack3;
+    @FXML
+    SplitPane splitPane;
     @FXML
     Tab tabVisualisation, tabComparaison;
     @FXML
     TableView<DataBean> tableView;
     @FXML
-    TableColumn<DataBean, String> columnName;
+    TableColumn<DataBean, String> columnName, columnNebul, columnHum, columnTemp, columnDate;
     @FXML
-    TableColumn<DataBean, String> columnDate;
-    @FXML
-    TableColumn<DataBean, String> columnTemp;
-    @FXML
-    TableColumn<DataBean, String> columnHum;
-    @FXML
-    TableColumn<DataBean, String> columnNebul;
-    @FXML
-    TextField Year1Comparaison, Year2Comparaison, MonthComparaison, DayComparaison;
+    TextField Year1Comparaison, Year2Comparaison, MonthComparaison, DayComparaison, year, month, day;
     @FXML
     TabPane tabPane;
     @FXML
-    SplitPane splitPane;
-    @FXML
-    Button rightVisu, leftVisu, rightComp, leftComp;
-    @FXML
-    AnchorPane AnchorVisu, anchorComp;
-    @FXML
-    ProgressIndicator progressComparaison;
-    @FXML
-    Text etatConnexion;
+    Text text, text2, etatConnexion;
     @FXML
     TreeView treeView;
-
-<<<<<<< HEAD
-    
+    ToggleGroup groupeChart, groupeRadioAffichage;
     @FXML
-    private void handleButtonActionChngTemp() {
-        if (kelvin.isArmed()) {
-            kelvin_celcius = "kelvin";
-
-        }
-        if (celcius.isArmed()) {
-            kelvin_celcius = "celcius";
-        }
-    }
-
-    @FXML
-    private void handleButtonActionChngOnline() {
-        if (online.isSelected()) {
-            if (Downloader.netIsAvailable() != -1) {
-                onLine_offLine = "onLine";
-            } else {
-                System.out.println("jj");
-                offline.setSelected(true);
-            }
-
-        }
-        if (offline.isSelected()) {
-            onLine_offLine = "offLine";
-        }
-    }
-
-    @FXML
-    private void handleButtonActionAfficher() {
-
-        /*
-        Test si le formulaire est bien rempli
-         */
-        Map errors = Model.validateDate(year.getText(), month.getText(), day.getText());
-        /*
-        test si la année n'est pas vide (champs obligatoire)
-         */
-        if (!errors.get("Year").toString().equals("")) {
-            year.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-            year.setPromptText(errors.get("Year").toString());
-            /*
-            si année pas vide et correcte on test le mois et le jour (peuvent etre vide
-             */
-        } else if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
-            if (!errors.get("Month").equals("")) {
-                month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-                month.setPromptText(errors.get("Month").toString());
-            }
-            if (!errors.get("Day").equals("")) {
-                day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-                day.setPromptText(errors.get("Day").toString());
-            }
-        } else {
-            /*
-                Chart
-             */
-            progressComparaison.setVisible(true);
-
-            AfficheTemp.setTitle("Températures");
-            AfficheHum.setTitle("Humidité");
-            AfficheNebul.setTitle("Nébulosité");
-
-            // Model.chargerListe(year.getText()
-            // + month.getText() + day.getText(), Station.getValue().toString(), onLine_offLine);
-            ArrayList<XYChart.Series> S = ConstructChart(year.getText()
-                    + month.getText() + day.getText(), Station.getValue().toString());
-
-            AfficheTemp.getData().setAll(S.get(0));
-            AfficheHum.getData().setAll(S.get(1));
-            AfficheNebul.getData().setAll(S.get(2));
-            /*
-                TableView
-             */
-
-            columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
-            columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
-            columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
-            columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
-            columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
-            tableView.getItems().setAll(parseDataList(year.getText() + month.getText() + day.getText(),
-                    Station.getValue().toString()
-            ));
-        }
-    }
-
-=======
->>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
-    private List<DataBean> parseDataList(String date, String station) {
-        ArrayList<VilleTemp> listDonnee = model.getListForChart(date, station);
-        ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
-        if (listDonnee != null) {
-            for (VilleTemp villeTemp : listDonnee) {
-                listDataBean.add(villeTemp.toDataBean());
-            }
-        }
-        return listDataBean;
-    }
+    VBox v, VboxPrincipal, v1, v2, VboxComparaison;
 
     @FXML
     private void handleButtonActionComparer() throws IOException {
@@ -280,26 +120,36 @@ public class FXMLDocumentController implements Initializable {
         verifier si donnée existe sinon les telecharger
         verifier si ville selectionné
          */
+        Year1Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+        Year1Comparaison.setText("");
+        Year2Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+        Year2Comparaison.setText("");
+        MonthComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+        MonthComparaison.setText("");
+        DayComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+        DayComparaison.setText("");
+        
         Map errors = model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
         Map errors2 = model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
 
         if (!errors.get("Year").toString().equals("") & !errors2.get("Year").toString().equals("")) {
             if (!errors.get("Year").toString().equals("")) {
-                Year1Comparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                Year1Comparaison.setStyle("-fx-background-color: #333333, red , #333333;");
+
                 Year1Comparaison.setPromptText(errors.get("Year").toString());
             }
             if (!errors2.get("Year").toString().equals("")) {
-                Year2Comparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                Year2Comparaison.setStyle("-fx-background-color: #333333, red , #333333;");
                 Year2Comparaison.setPromptText(errors.get("Year").toString());
             }
 
         } else if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
             if (!errors.get("Month").equals("")) {
-                MonthComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                MonthComparaison.setStyle("-fx-background-color: #333333, red , #333333;");
                 MonthComparaison.setPromptText(errors.get("Month").toString());
             }
             if (!errors.get("Day").equals("")) {
-                DayComparaison.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                DayComparaison.setStyle("-fx-background-color: #333333, red , #333333;");
                 DayComparaison.setPromptText(errors.get("Day").toString());
             }
         } else {
@@ -319,64 +169,13 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleButtonActionChangerDroite() {
-        if (tabComparaison.isSelected()) {
 
-            if (lineCharttemp.isVisible()) {
-                lineCharttemp.setVisible(false);
-                lineCharthum.setVisible(true);
-                lineChartnebul.setVisible(false);
-                RadioBtnHum.setSelected(true);
-            } else if (lineCharthum.isVisible()) {
-                lineCharttemp.setVisible(false);
-                lineCharthum.setVisible(false);
-                lineChartnebul.setVisible(true);
-                RadioBtnNebul.setSelected(true);
-            } else if (lineChartnebul.isVisible()) {
-                lineCharttemp.setVisible(true);
-                lineCharthum.setVisible(false);
-                lineChartnebul.setVisible(false);
-                RadioBtnTemp.setSelected(true);
-            }
-        } else if (VboxComparaison.isVisible()) {
-            tableView.setVisible(true);
-            VboxComparaison.setVisible(false);
-            radioBtnTableur.setSelected(true);
-        } else {
-            tableView.setVisible(false);
-            VboxComparaison.setVisible(true);
-            radioBtnCourbes.setSelected(true);
-        }
-
+        ChangeDirection(false);
     }
 
     @FXML
     private void handleButtonActionChangerGauche() {
-        if (tabComparaison.isSelected()) {
-            if (lineCharttemp.isVisible()) {
-                lineCharttemp.setVisible(false);
-                lineCharthum.setVisible(false);
-                lineChartnebul.setVisible(true);
-                RadioBtnNebul.setSelected(true);
-            } else if (lineCharthum.isVisible()) {
-                lineCharttemp.setVisible(true);
-                lineCharthum.setVisible(false);
-                lineChartnebul.setVisible(false);
-                RadioBtnTemp.setSelected(true);
-            } else if (lineChartnebul.isVisible()) {
-                lineCharttemp.setVisible(false);
-                lineCharthum.setVisible(true);
-                lineChartnebul.setVisible(false);
-                RadioBtnHum.setSelected(true);
-            }
-        } else if (VboxComparaison.isVisible()) {
-            tableView.setVisible(true);
-            VboxComparaison.setVisible(false);
-            radioBtnTableur.setSelected(true);
-        } else {
-            tableView.setVisible(false);
-            VboxComparaison.setVisible(true);
-            radioBtnCourbes.setSelected(true);
-        }
+        ChangeDirection(true);
 
     }
 
@@ -393,16 +192,16 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleButtonActionChngOnline() {
-        if (online.isArmed()) {
-            if (model.netIsAvailable()!=-1) {
+        if (online.isSelected()) {
+            if (model.netIsAvailable() != -1) {
                 //onLine_offLine = "onLine";
                 onlineMode = true;
             } else {
-                offline.arm();
+                offline.setSelected(true);
             }
 
         }
-        if (offline.isArmed()) {
+        if (offline.isSelected()) {
             //onLine_offLine = "offLine";
             onlineMode = false;
         }
@@ -414,24 +213,31 @@ public class FXMLDocumentController implements Initializable {
         /*
         Test si le formulaire est bien rempli
          */
+         year.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+//        year.setText("");
+        month.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+//        month.setText("");
+        day.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+//        day.setText("");
+      
         Map errors = model.validateDate(year.getText(), month.getText(), day.getText());
 
         /*
         test si la année n'est pas vide (champs obligatoire)
          */
         if (!errors.get("Year").toString().equals("")) {
-            year.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+            year.setStyle("-fx-background-color: #333333, red , #333333;");
             year.setPromptText(errors.get("Year").toString());
             /*
             si année pas vide et correcte on test le mois et le jour (peuvent etre vide
              */
         } else if (!errors.get("Month").equals("") || !errors.get("Day").equals("")) {
             if (!errors.get("Month").equals("")) {
-                month.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                month.setStyle("-fx-background-color: #333333, red , #333333;");
                 month.setPromptText(errors.get("Month").toString());
             }
             if (!errors.get("Day").equals("")) {
-                day.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                day.setStyle("-fx-background-color: #333333, red , #333333;");
                 day.setPromptText(errors.get("Day").toString());
             }
         } else {
@@ -448,11 +254,8 @@ public class FXMLDocumentController implements Initializable {
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
-                if (month.getText().length() > 0) {
-                    yearMode = false;
-                } else {
-                    yearMode = true;
-                }
+
+                yearMode = month.getText().length() > 0;
                 // Model.chargerListe(year.getText()
                 // + month.getText() + day.getText(), Station.getValue().toString(), onLine_offLine);
                 ArrayList<XYChart.Series> S = model.constructChart(year.getText()
@@ -538,322 +341,30 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    @Override
-<<<<<<< HEAD
-    public void initialize(URL url, ResourceBundle rb) {
-=======
     public void initialize(URL url, ResourceBundle rb
     ) {
         model = new MyModel();
->>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
 
-        /*Commun a toutes les interface */
- /*creation d'un menu dynamiquement commun a toutes les interfaces*/
-        menuBar = new MenuBar();
-
-        Menu file = new Menu("_File");
-        MenuItem VisiteWebSite = new MenuItem("Visit Web Site");
-
-        VisiteWebSite.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                String url = "https://donneespubliques.meteofrance.fr/";
-
-                //how to open default browser and visit url defined below
-                if (Desktop.isDesktopSupported()) {
-                    try {
-                        Desktop.getDesktop().browse(new URI(url));
-                    } catch (IOException ex) {
-                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (URISyntaxException ex) {
-                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-
-        }
-        );
-        MenuItem Information = new MenuItem("Informations sur les données");
-
-        Information.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-
-                Parent root;
-                try {
-                    Interface = 3;
-                    root = FXMLLoader.load(getClass().getResource("InterfaceDataInformation.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        }
-        );
-        MenuItem EtatServeur = new MenuItem("Etat du serveur MeteoFrance");
-
-        EtatServeur.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-
-                Parent root;
-                try {
-                    Interface = 4;
-                    root = FXMLLoader.load(getClass().getResource("InterfaceInformations.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        });
-        MenuItem Close = new MenuItem("Close");
-
-        Close.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                if (Interface == 0) {
-                    System.exit(0);
-
-                } else {
-                    Stage s = (Stage) menuBar.getScene().getWindow();
-                    s.close();
-                }
-
-            }
-
-        }
-        );
-        file.getItems()
-                .addAll(VisiteWebSite, Information, EtatServeur, Close);
-
-        Menu window = new Menu("_Window");
-        MenuItem maximize = new MenuItem("Full Screen");
-
-        maximize.setOnAction(
-                new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event
-            ) {
-//                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
-                Stage s = (Stage) menuBar.getScene().getWindow();
-                s.setMaximized(true);
-
-            }
-        }
-        );
-
-        MenuItem minimize = new MenuItem("Windowed Screen");
-
-        minimize.setOnAction(
-                new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event
-            ) {
-//                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
-                Stage s = (Stage) menuBar.getScene().getWindow();
-                s.setMaximized(false);
-
-            }
-        }
-        );
-        window.getItems()
-                .addAll(maximize, minimize);
-        Menu statistic = new Menu("_Statistic");
-        MenuItem view = new MenuItem("View");
-
-        view.setOnAction(
-                new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event
-            ) {
-                Interface = 2;
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("interfaceComparaison.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        );
-        statistic.getItems().add(view);
-        Menu seting = new Menu("_Seting");
-        MenuItem preference = new MenuItem("Preférence");
-
-        preference.setOnAction(
-                new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event
-            ) {
-                Interface = 1;
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("fxmlSetting.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        }
-        );
-        seting.getItems()
-                .add(preference);
-        Menu help = new Menu("_Help");
-        MenuItem aide = new MenuItem("Aide");
-        MenuItem aPropos = new MenuItem("A Propos");
-
-        aPropos.setOnAction(
-                new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event
-            ) {
-                Interface = 1;
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("APropos.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        }
-        );
-
-        help.getItems().addAll(aide, aPropos);
-        menuBar.getMenus().addAll(file, window, statistic, seting, help);
-
+        CreateMenu();
         if (Interface == 0) {
-<<<<<<< HEAD
-
             InitInterfacePrincipal();
-=======
-            VboxPrincipal.getChildren().add(0, menuBar);
-            menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
-
-            InitInterfacePrincipal();
-
-            Timer timer = new Timer();
-            TimerTask t = new TimerTask() {
-                @Override
-                public void run() {
-                    // some code
-//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            /*
-                            si il y a une connexion internet 
-                            si temps % 3 = 0 alors telecharger
-                            
-                             */
-                            //verifier continuellement si il y a une connexion internet
-
-                            AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius, model);
-                        }
-                    });
-                }
-            };
-
-            timer.schedule(t, 01, 1000);
-
-            //Enlever le droit du full screen
->>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
-            maximize.setDisable(true);
-            minimize.setDisable(true);
-
         } else if (Interface == 1) {
-
             initInterfaceSetting();
         } else if (Interface == 2) {
-
             InitInterfaceComparaison();
         } else if (Interface == 3) {//informations sur les donnée
-
-<<<<<<< HEAD
             initInterfaceInformation();
-
         } else if (Interface == 4) {//etat serveur
-=======
-            final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
-            treeRoot.setExpanded(true);
-            ArrayList<String> list = model.getYearExists();
-
-            for (int i = 0; i < list.size(); i++) {
-                final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
-                ArrayList<String> liste = model.getMonthsExistsForYear(list.get(i));
-
-                for (int j = 0; j < liste.size(); j++) {
-                    fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
-                }
-
-                fruitItem.setExpanded(true);
-                treeRoot.getChildren().add(i, fruitItem);
-
-            }
-
-////            treeRoot.getChildren().setAll(fruitItem, vegetableItem);
-//            final TreeItem<String> fruitItem = new TreeItem<>("Fruits");
-//            fruitItem.getChildren().setAll(
-//                    new TreeItem("Fraise"),
-//                    new TreeItem("Pomme"),
-//                    new TreeItem("Poire")
-//            );
-//            fruitItem.setExpanded(true);
-//            final TreeItem<String> vegetableItem = new TreeItem<>("Légumes");
-//            vegetableItem.getChildren().setAll(
-//                    new TreeItem("Artichaut"),
-//                    new TreeItem("Laitue"),
-//                    new TreeItem("Radis")
-//            );
-//            vegetableItem.setExpanded(true);
-            treeView.setRoot(treeRoot);
-
-        } else if (Interface == 4) {//etat serveur
-            double time = model.netIsAvailable();
-            if (time != -1) {
-                etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
-            } else {
-                etatConnexion.setText("Hors service ");
-            }
->>>>>>> 170201dd9c51392391a5c1c47bdd03bf79376bae
-
             initInterfaceEtatServeur();
         }
 
     }
+
     /**
-     * permet d'initialiser l'interface principale 
+     * *****************Private Methode***************************************************************
+     */
+    /**
+     * permet d'initialiser l'interface principale
      */
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
@@ -866,7 +377,7 @@ public class FXMLDocumentController implements Initializable {
         }
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
-        Coordonne.ConstructTabVille();
+        //Coordonne.ConstructTabVille();
 
         Timer timer = new Timer();
         TimerTask t = new TimerTask() {
@@ -884,7 +395,7 @@ public class FXMLDocumentController implements Initializable {
                          */
                         //verifier continuellement si il y a une connexion internet
 
-                        AfficheInterfacePrincipal.Afficher(VboxPrincipal, v1, v2, imgviewTempsActuel, LocationDefault, kelvin_celcius);
+                        AfficherCarte();
 
                     }
                 });
@@ -893,8 +404,8 @@ public class FXMLDocumentController implements Initializable {
 
         timer.schedule(t, 01, 1000);
 
-        //Enlever le droit du full screen
     }
+
     /**
      * permet d'initialiser l'interface setting
      */
@@ -941,8 +452,10 @@ public class FXMLDocumentController implements Initializable {
         HboxLocation.getChildren().add(1, LocationDefault);
         //Interface=0;
     }
+
     /**
-     * permet d'initialiser l'interface d'affichage et de comparaison des données
+     * permet d'initialiser l'interface d'affichage et de comparaison des
+     * données
      */
     public void InitInterfaceComparaison() {
         VboxPrincipal.getChildren().add(0, menuBar);
@@ -1044,17 +557,19 @@ public class FXMLDocumentController implements Initializable {
         leftComp.setGraphic(image_view_btn_left);
         progressComparaison.setVisible(false);
     }
+
     /**
-     * permet d'initialiser l'interface permettant de savoir quelles données l'utilisateur a sur sa machine 
+     * permet d'initialiser l'interface permettant de savoir quelles données
+     * l'utilisateur a sur sa machine
      */
     public void initInterfaceInformation() {
         final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
         treeRoot.setExpanded(true);
-        ArrayList<String> list = Downloader.getYearExists();
+        ArrayList<String> list = model.getYearExists();
 
         for (int i = 0; i < list.size(); i++) {
             final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
-            ArrayList<String> liste = Downloader.getMonthsExistsForYear(list.get(i));
+            ArrayList<String> liste = model.getMonthsExistsForYear(list.get(i));
 
             for (int j = 0; j < liste.size(); j++) {
                 fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
@@ -1066,16 +581,494 @@ public class FXMLDocumentController implements Initializable {
         }
         treeView.setRoot(treeRoot);
     }
+
     /**
-     * permet d'initialiser l'interface permettant de savoir si le serveur de meteo france 
-     * contenant les données nécessaires est bien en marche est combien de temps a fallut pour faire un ping
+     * permet d'initialiser l'interface permettant de savoir si le serveur de
+     * meteo france contenant les données nécessaires est bien en marche est
+     * combien de temps a fallut pour faire un ping
      */
     public void initInterfaceEtatServeur() {
-        double time = Downloader.netIsAvailable();
+        double time = model.netIsAvailable();
         if (time != -1) {
             etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
         } else {
             etatConnexion.setText("Hors service ");
         }
+    }
+
+    /**
+     * Permet de crée le menu commun aux trois interface (principale, setting,
+     * comparaison)
+     */
+    private void CreateMenu() {
+        /*Commun a toutes les interface */
+ /*creation d'un menu dynamiquement commun a toutes les interfaces*/
+        menuBar = new MenuBar();
+
+        Menu file = new Menu("_File");
+        MenuItem ImportData = new MenuItem("Import Data");
+
+        ImportData.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Import Dialog");
+                alert.setHeaderText("Les données souhaitées sont malheureusement indisponibles ");
+                alert.setContentText("Clickez sur Import pour importer des données téléchargé manuellement");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    // ... user chose OK
+
+                    //Open new dialog for import data and display it 
+                    FileChooser chooser = new FileChooser();
+                    chooser.setTitle("Open File");
+                    chooser.getExtensionFilters().addAll(new ExtensionFilter(".txt", ".csv"));
+
+                    List<File> recupp = chooser.showOpenMultipleDialog(new Stage());
+                    if (recupp != null) {
+
+                        /*
+                        what can we do??
+                        2 case 
+                        first user select a csv.zip file then we call function who decompress and read file and save data into arraylist
+                        or user select only a csv file, in this case we read file and add data into a arrayList
+                        Question: do we display this alert when user click into afficher or comparer 
+                        or let user click into import from menu ???
+                         */
+                    }
+                } else {
+                    // ... user chose CANCEL or closed the dialog
+                }
+            }
+
+        }
+        );
+        MenuItem VisiteWebSite = new MenuItem("Visit Web Site");
+
+        VisiteWebSite.setOnAction(
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e
+            ) {
+                String url = "https://donneespubliques.meteofrance.fr/";
+
+                //how to open default browser and visit url defined below
+                if (Desktop.isDesktopSupported()) {
+                    try {
+                        Desktop.getDesktop().browse(new URI(url));
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (URISyntaxException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        }
+        );
+        MenuItem Information = new MenuItem("Informations sur les données");
+
+        Information.setOnAction(
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e
+            ) {
+
+                Parent root;
+                try {
+                    Interface = 3;
+                    root = FXMLLoader.load(getClass().getResource("InterfaceDataInformation.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+        );
+        MenuItem EtatServeur = new MenuItem("Etat du serveur MeteoFrance");
+
+        EtatServeur.setOnAction(
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e
+            ) {
+
+                Parent root;
+                try {
+                    Interface = 4;
+                    root = FXMLLoader.load(getClass().getResource("InterfaceInformations.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+        );
+        MenuItem Close = new MenuItem("Close");
+
+        Close.setOnAction(
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e
+            ) {
+                if (Interface == 0) {
+                    System.exit(0);
+
+                } else {
+                    Stage s = (Stage) menuBar.getScene().getWindow();
+                    s.close();
+                }
+
+            }
+
+        }
+        );
+        file.getItems()
+                .addAll(ImportData, VisiteWebSite, Information, EtatServeur, Close);
+
+        Menu window = new Menu("_Window");
+        MenuItem maximize = new MenuItem("Full Screen");
+
+        maximize.setOnAction(
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event
+            ) {
+//                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
+                Stage s = (Stage) menuBar.getScene().getWindow();
+                s.setMaximized(true);
+
+            }
+        }
+        );
+
+        MenuItem minimize = new MenuItem("Windowed Screen");
+
+        minimize.setOnAction(
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event
+            ) {
+//                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
+                Stage s = (Stage) menuBar.getScene().getWindow();
+                s.setMaximized(false);
+
+            }
+        }
+        );
+        window.getItems()
+                .addAll(maximize, minimize);
+        Menu statistic = new Menu("_Statistic");
+        MenuItem view = new MenuItem("View");
+
+        view.setOnAction(
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event
+            ) {
+                Interface = 2;
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("interfaceComparaison.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        );
+        statistic.getItems()
+                .add(view);
+        Menu seting = new Menu("_Seting");
+        MenuItem preference = new MenuItem("Preférence");
+
+        preference.setOnAction(
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event
+            ) {
+                Interface = 1;
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("fxmlSetting.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+        );
+        seting.getItems()
+                .add(preference);
+        Menu help = new Menu("_Help");
+        MenuItem aide = new MenuItem("Aide");
+        MenuItem aPropos = new MenuItem("A Propos");
+
+        aPropos.setOnAction(
+                new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event
+            ) {
+                Interface = 1;
+                Parent root;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("APropos.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage s = new Stage();
+                    s.setScene(scene);
+                    s.show();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+        );
+
+        help.getItems()
+                .addAll(aide, aPropos);
+        menuBar.getMenus()
+                .addAll(file, window, statistic, seting, help);
+
+        if (Interface == 0) {
+
+            //Enlever le droit du full screen
+            maximize.setDisable(true);
+            minimize.setDisable(true);
+        }
+    }
+
+    /**
+     * Permet de changer la direction du changement de slide (chart/Tableview )
+     *
+     * @param val boolean
+     */
+    private void ChangeDirection(boolean val) {
+        if (tabComparaison.isSelected()) {
+            if (lineCharttemp.isVisible()) {
+                lineCharttemp.setVisible(false);
+                lineCharthum.setVisible(!val);//true
+                lineChartnebul.setVisible(val);//false
+                RadioBtnNebul.setSelected(true);
+            } else if (lineCharthum.isVisible()) {
+                lineCharttemp.setVisible(val);//false
+                lineCharthum.setVisible(false);
+                lineChartnebul.setVisible(!val);//true
+                RadioBtnTemp.setSelected(true);
+            } else if (lineChartnebul.isVisible()) {
+                lineCharttemp.setVisible(!val);//true
+                lineCharthum.setVisible(val);//false
+                lineChartnebul.setVisible(false);
+                RadioBtnHum.setSelected(true);
+            }
+        } else if (VboxComparaison.isVisible()) {
+            tableView.setVisible(true);
+            VboxComparaison.setVisible(false);
+            radioBtnTableur.setSelected(true);
+        } else {
+            tableView.setVisible(false);
+            VboxComparaison.setVisible(true);
+            radioBtnCourbes.setSelected(true);
+        }
+    }
+
+    /**
+     * Permet d'afficher l'interface principal
+     */
+    private void AfficherCarte() {
+        /*recuperation de la l'image de la carte de france*/
+        int t;
+        /*Constrution de la table des villes avec leurs données*/
+
+        ArrayList<VilleTemp> tabVille = null;
+        String X = "°C";
+
+        StackPane stack = new StackPane();
+
+        Text nomVille = new Text();
+        nomVille.setFill(Color.CHOCOLATE);
+
+        String nomVillle;
+        /*C is a choiceBox who contain the name of all station*/
+
+        nomVillle = (LocationDefault != null) ? LocationDefault.getValue().toString() : "BREST-GUIPAVAS";
+        tabVille = model.getLatestAvailableData();
+
+        /*Affichage sur l'interface principal le nom de la ville selectionnée par défaut et la derniere date connu
+        avec les temératures,humidité et nébulosité adéquat +image representatif de la nébulosité*/
+        nomVille.setText(nomVillle);
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+//        LocalDate localDate = LocalDate.now();
+        Text DateActuelle = new Text();
+        DateActuelle.setFill(Color.CHOCOLATE);
+
+//        DateActuelle.setText(dtf.format(localDate));
+        String date = tabVille.get(0).getDate().toString().substring(0, 4) + "/"
+                + tabVille.get(0).getDate().toString().substring(4, 6) + "/"
+                + tabVille.get(0).getDate().toString().substring(6, 8);
+
+        DateActuelle.setText(date);
+        Text Temp = new Text("temperature: ");
+        Temp.setFill(Color.CHOCOLATE);
+        Text Humidite = new Text("humidité: ");
+        Humidite.setFill(Color.CHOCOLATE);
+        Text nebulosite = new Text("nébulosité: ");
+        nebulosite.setFill(Color.CHOCOLATE);
+
+        for (int i = 0; i < tabVille.size(); i++) {
+            //faux : on accede jamais comme sa , getters et setter -_-
+            //System.out.println("nom ville:"+nomVillle+ "tabVille:"+tabVille.get(i).getCity().getNom());
+            if (tabVille.get(i).getCity().getNom().equals(nomVillle)) {
+                if (tabVille.get(i).getTemperature() != 101) {
+                    Temp.setText("Température: " + Integer.toString((int) Math.ceil(tabVille.get(i).getTemperature())));
+                } else {
+                    Temp.setText("Température: " + "N/A");
+                }
+
+                if (tabVille.get(i).getHumidite() <= 100) {
+                    Humidite.setText("Humidité: " + Integer.toString(tabVille.get(i).getHumidite()) + "%");
+                } else {
+                    Humidite.setText("Humidité: " + "N/A");
+                }
+                if (tabVille.get(i).getNebulosite() <= 100) {
+                    nebulosite.setText("Nébulosité: " + Float.toString(tabVille.get(i).getNebulosite()) + "%");
+                } else {
+                    nebulosite.setText("Nébulosité: " + "N/A");
+                }
+                /*Affichage de l'image representatif de la nébulosité*/
+
+                String s = "Image/".concat(getTempsActuel(tabVille.get(i).getNebulosite())).concat(".png");
+
+                Image tempactuel = new Image(Meteo.class.getResourceAsStream(s));
+                imgviewTempsActuel.setImage(tempactuel);
+
+            }
+
+        }
+
+        v1.getChildren().setAll(nomVille, DateActuelle);
+        v2.getChildren().setAll(Temp, Humidite, nebulosite);
+
+        Image image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
+
+        /*appel de la methode qui recupére les donnée du fichier configuration.txt
+          et les mets dans la liste instancier précédement   
+         */
+        ImageView imgview = new ImageView();
+        imgview.setImage(image);
+        imgview.setFitHeight(508);//508
+        imgview.setFitWidth(553);//553f
+        imgview.pickOnBoundsProperty().set(true);
+        imgview.preserveRatioProperty().set(true);
+
+        /*Affichage des temperature une par une sur la carte */
+        GridPane gridPane = new GridPane();
+        gridPane.getChildren().clear();
+
+        gridPane.setMaxSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        gridPane.setMinSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        gridPane.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+        // gridPane.gridLinesVisibleProperty().set(true);
+
+        for (int i = 0; i < 20; i++) {
+            ColumnConstraints column1 = new ColumnConstraints(10.0, 496.0, 496.0, Priority.SOMETIMES, HPos.CENTER, false);
+            gridPane.getColumnConstraints().add(i, column1);
+            RowConstraints row1 = new RowConstraints(10.0, 30.0, 30.0, Priority.ALWAYS, VPos.CENTER, false);/*(10.0,30.0,30.0);*/
+            gridPane.getRowConstraints().add(i, row1);
+        }
+
+        for (int i = 0; i < tabVille.size(); i++) {
+            if (tabVille.get(i).getCity().getPoint().getX() == 0 & tabVille.get(i).getCity().getPoint().getY() == 0) {
+                continue;
+            }
+
+            double temp;
+
+            temp = tabVille.get(i).getTemperature();
+            if (kelvin_celcius.equals("kelvin")) {
+                temp = tabVille.get(i).getTemperature() + 237.15;
+                X = "k";
+            }
+
+            t = (int) Math.ceil(temp);
+            Text text;
+            if (t != 101) {
+                text = new Text(Integer.toString(t) + X);
+            } else {
+                text = new Text("N/A");
+            }
+
+            text.setFill(Color.CHOCOLATE);
+            gridPane.add(text, tabVille.get(i).getCity().getPoint().getY(), tabVille.get(i).getCity().getPoint().getX());// colonne-ligne
+        }
+
+        stack.getChildren().addAll(imgview, gridPane);
+//        V.getChildren().set(1,H);
+        VboxPrincipal.getChildren().set(2, stack);
+    }
+
+    /**
+     *
+     * @param date
+     * @param station
+     * @return Liste of DataBean
+     */
+    private List<DataBean> parseDataList(String date, String station) {
+        ArrayList<VilleTemp> listDonnee = model.getListForChart(date, station);
+        ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
+        if (listDonnee != null) {
+            for (VilleTemp villeTemp : listDonnee) {
+                listDataBean.add(villeTemp.toDataBean());
+            }
+        }
+        return listDataBean;
+    }
+
+    /**
+     *
+     * @param nebul
+     * @return une chaine de caractére qui represente le nom de l'image associé
+     * a la nébulosité d'une station donnée
+     */
+    private String getTempsActuel(float nebul) {
+
+        if (nebul < 33) {
+            return "ensoleille";
+        } else if (nebul < 66) {
+            return "nuageux";
+        } else if (nebul <= 100) {
+            return "pluvieux";
+        } else {
+            return "NA";
+        }
+
     }
 }
