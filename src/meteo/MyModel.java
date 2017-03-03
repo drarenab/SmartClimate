@@ -199,59 +199,7 @@ public class MyModel {
         }
     }
 
-    /**
-     * Cette methode retourne la date des donner la plus recente inclut dans un
-     * fichier
-     *
-     * @param date sous la forme de yyyymm correspond au nom du fichier qu'on
-     * veux chercher dedans
-     * @return la date la plus recente dans le fichier qui correspond a @date
-     */
-    private String getLatestAvailableDateOnFile(String date) {
-        File f;
-        FileReader fr;
-        BufferedReader br;
-        String line;
-        int latestDate = 0;
-        String dateLine;
-        String filePath;
-
-        try {
-            filePath = getCsvFilePathFromDate(date);
-            if (!checkIfFileExists(filePath)) {
-                return null;
-            }
-
-            f = new File(filePath);
-            fr = new FileReader(f);
-            br = new BufferedReader(fr);
-            line = br.readLine();
-
-            if (line.startsWith("numer_sta")) {
-                line = br.readLine();
-            }
-
-            while (line != null) {
-                dateLine = line.split(";")[1].substring(0, 10);
-
-                if (Integer.parseInt(dateLine) > latestDate) {
-                    latestDate = Integer.parseInt(dateLine);
-                }
-
-                line = br.readLine();
-            }
-
-            fr.close();
-            br.close();
-            return String.valueOf(latestDate);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
+    
     /**
      * Cette methode determine si un fichier existe ou pas
      *
@@ -680,7 +628,7 @@ public class MyModel {
         
         currentYear = localTime.getYear();
         
-     System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
+     //System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
         
         if (String.valueOf(currentYear).equals(year) &&       //si le fichier contient les donnees de l'année courante
                 String.valueOf(currentMonth).equals(month) && //et si le fichier contient les donnees mois courant
@@ -689,7 +637,7 @@ public class MyModel {
                 return true;
         else {
             int nbDays = getNumberDaysOfMonth(currentYear,Integer.parseInt(currentMonth));
-            System.out.println("nbDays:"+nbDays);
+            //System.out.println("nbDays:"+nbDays);
             if(String.valueOf(nbDays).equals(lastDay)) {
                 return true;
             }
@@ -702,6 +650,60 @@ public class MyModel {
         
         
     }
+    
+    /**
+     * Cette methode retourne la date des donner la plus recente inclut dans un
+     * fichier
+     *
+     * @param date sous la forme de yyyymm correspond au nom du fichier qu'on
+     * veux chercher dedans
+     * @return la date la plus recente dans le fichier qui correspond a @date
+     */
+    public String getLatestAvailableDateOnFile(String date) {
+        File f;
+        FileReader fr;
+        BufferedReader br;
+        String line;
+        int latestDate = 0;
+        String dateLine;
+        String filePath;
+
+        try {
+            filePath = getCsvFilePathFromDate(date);
+            if (!checkIfFileExists(filePath)) {
+                return null;
+            }
+
+            f = new File(filePath);
+            fr = new FileReader(f);
+            br = new BufferedReader(fr);
+            line = br.readLine();
+
+            if (line.startsWith("numer_sta")) {
+                line = br.readLine();
+            }
+
+            while (line != null) {
+                dateLine = line.split(";")[1].substring(0, 10);
+
+                if (Integer.parseInt(dateLine) > latestDate) {
+                    latestDate = Integer.parseInt(dateLine);
+                }
+
+                line = br.readLine();
+            }
+
+            fr.close();
+            br.close();
+            return String.valueOf(latestDate);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
    
     /**
      * *******************KARIM*************************
