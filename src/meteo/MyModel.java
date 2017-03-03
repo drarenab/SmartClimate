@@ -7,7 +7,11 @@ package meteo;
 
 /**
  * TODO
- * getMissedMonthsFiles : retourne les mois qui manque
+
+ *  yearMode,MonthMode,DayMode
+ * 
+ *  if data doesn't exist or not updated we download it , and it depends if it is only a month , or a whole year ! 
+ * 
  */
 import coordonnee.Point;
 import coordonnee.Ville;
@@ -25,7 +29,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,303 +51,249 @@ public class MyModel {
 
     //private ArrayList<VilleTemp> listDonnée;
     private Map<Integer, Ville> villes;
-
+        
     public MyModel() {
         constructMapVilles();
+        
     }
 
     //*********************************PRIVATE SECTION ********************************************************// 
-    
     /**
      * COnstruire la map qui contient la correspondance idVille => nomVille
      *
      * @return true if succesfully charged false if not
      */
-            private boolean constructMapVilles() {
-                FileReader fr = null;
-                String line;
-                try {
-                    File file = new File(Configuration.CITY_FILE_NAME);
-                    fr = new FileReader(file);
-                    BufferedReader br = new BufferedReader(fr);
-                    line = br.readLine();
-                    line = br.readLine();
+    private boolean constructMapVilles() {
+        FileReader fr = null;
+        String line;
+        try {
+            File file = new File(Configuration.CITY_FILE_NAME);
+            fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            line = br.readLine();
+            line = br.readLine();
 
-                    villes = new HashMap<Integer, Ville>();
+            villes = new HashMap<Integer, Ville>();
 
-                    while (line != null) {
-                        villes.put(Integer.parseInt(line.split(";")[0]),
-                                new Ville(line.split(";")[1],
-                                        Integer.parseInt(line.split(";")[0]),
-                                        new Point(Integer.parseInt(line.split(";")[2]), Integer.parseInt(line.split(";")[3]))
-                                ));
-                        line = br.readLine();
-                    }
-
-                    br.close();
-                    return true;
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    try {
-                        fr.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                return false;
+            while (line != null) {
+                villes.put(Integer.parseInt(line.split(";")[0]),
+                        new Ville(line.split(";")[1],
+                                Integer.parseInt(line.split(";")[0]),
+                                new Point(Integer.parseInt(line.split(";")[2]), Integer.parseInt(line.split(";")[3]))
+                        ));
+                line = br.readLine();
             }
 
-            private int getIdFromNameVille(String name) {
-                Integer key = null;
-
-                for (Map.Entry<Integer, Ville> entry : villes.entrySet()) {
-
-                    Ville value = entry.getValue();
-
-                    if (value.getNom().compareTo(name) == 0) {
-                        key = entry.getKey();
-                    }
-                }
-                return key;
-
+            br.close();
+            return true;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        return false;
+    }
+    
+    private int getIdFromNameVille(String name) {
+        Integer key = null;
 
-            private Ville getVilleFromId(int id) {
-                return (villes.get(id));
+        for (Map.Entry<Integer, Ville> entry : villes.entrySet()) {
+
+            Ville value = entry.getValue();
+
+            if (value.getNom().compareTo(name) == 0) {
+                key = entry.getKey();
             }
+        }
+        return key;
 
-            private boolean createDirectory(String directory) {
-                File theDir = new File(directory);
-                boolean result = false;
-                // if the directory does not exist, create it
-                if (!theDir.exists()) {
-                    //System.out.println("creating directory: " + directory);
-                    try {
-                        theDir.mkdir();
-                        result = true;
-                    } catch (SecurityException se) {
-                        //handle it
-                    }
-                    if (result) {
-                        //System.out.println("DIR created");
-                    }
-                }
-                return result;
+    }
+
+    private Ville getVilleFromId(int id) {
+        return (villes.get(id));
+    }
+
+    private boolean createDirectory(String directory) {
+        File theDir = new File(directory);
+        boolean result = false;
+        // if the directory does not exist, create it
+        if (!theDir.exists()) {
+            //System.out.println("creating directory: " + directory);
+            try {
+                theDir.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                //handle it
             }
-
-            /**
-             * Cette mthode donne apartir une date de la forme yyymmjjhh.. , le chemin
-             * vers le fichier csv qui contient cette date
-             *
-             * @param date
-             * @return
-             */
-            private String getCsvFilePathFromDate(String date) {
-                return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
+            if (result) {
+                //System.out.println("DIR created");
             }
+        }
+        return result;
+    }
 
-            /**
-             * Cette mthode donne apartir une date de la forme yyymmjjhh.. , le chemin
-             * vers le fichier csv.gz qui contient cette date
-             *
-             * @param date
-             * @return
-             */
-            private String getGzipFilePathFromDate(String date) {
-                return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv.gz";
-            }
+    /**
+     * Cette mthode donne apartir une date de la forme yyymmjjhh.. , le chemin
+     * vers le fichier csv qui contient cette date
+     *
+     * @param date
+     * @return
+     */
+    private String getCsvFilePathFromDate(String date) {
+        return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
+    }
 
-            /**
-             * Cette methode cherche le fichier le plus recent (qui contient les données
-             * les plus recentes)
-             *
-             * @return le chemin du fichier le plus recent
-             */
-            private String getLatesttAvailableFile() {
-                int maxYearTemp = 0, maxYear=0,maxFileName = 0;
-                File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
-                File file2 = new File(Configuration.DATA_DIRECTORY_NAME);
-                
-                for (File file : file1.listFiles()) {
-                    
-                    if (Integer.parseInt(file.getName()) > maxYear) {
-                        maxYearTemp = Integer.parseInt(file.getName());
-                        file2 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + maxYearTemp);
-                        
-                        //avant d'accepter la nouvelle annee on doit d'abord verifier que'elle contient des fichier! 
-                        if(file2.listFiles().length>0) {
-                            maxYear = maxYearTemp;
-                            file1 = file2;
-                        }
-                    }
-                }
+    /**
+     * Cette mthode donne apartir une date de la forme yyymmjjhh.. , le chemin
+     * vers le fichier csv.gz qui contient cette date
+     *
+     * @param date
+     * @return
+     */
+    private String getGzipFilePathFromDate(String date) {
+        return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv.gz";
+    }
 
-                
-                for (File file : file1.listFiles()) {
-                   // //System.out.println("name:" + file.getName());
-                    if (Integer.parseInt(file.getName().substring(0, 6)) > maxFileName) {
-                        maxFileName = Integer.parseInt(file.getName().substring(0, 6));
-                    }
-                }
-                //System.out.println("pathDate:" + maxFileName);
-                if (maxFileName == 0) {
-                    return null;
-                } else {
-                    return String.valueOf(maxFileName);
+    /**
+     * Cette methode cherche le fichier le plus recent (qui contient les données
+     * les plus recentes)
+     *
+     * @return le chemin du fichier le plus recent
+     */
+    private String getLatesttAvailableFile() {
+        int maxYearTemp = 0, maxYear = 0, maxFileName = 0;
+        File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
+        File file2 = new File(Configuration.DATA_DIRECTORY_NAME);
+
+        for (File file : file1.listFiles()) {
+
+            if (Integer.parseInt(file.getName()) > maxYear) {
+                maxYearTemp = Integer.parseInt(file.getName());
+                file2 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + maxYearTemp);
+
+                //avant d'accepter la nouvelle annee on doit d'abord verifier que'elle contient des fichier! 
+                if (file2.listFiles().length > 0) {
+                    maxYear = maxYearTemp;
+                    file1 = file2;
                 }
             }
+        }
 
-            /**
-             * Cette methode retourne la date des donner la plus recente inclut dans un
-             * fichier
-             *
-             * @param date sous la forme de yyyymm correspond au nom du fichier qu'on
-             * veux chercher dedans
-             * @return la date la plus recente dans le fichier qui correspond a @date
-             */
-            private String getLatestAvailableDateOnFile(String date) {
-                File f;
-                FileReader fr;
-                BufferedReader br;
-                String line;
-                int latestDate = 0;
-                String dateLine;
-                String filePath;
+        for (File file : file1.listFiles()) {
+            // //System.out.println("name:" + file.getName());
+            if (Integer.parseInt(file.getName().substring(0, 6)) > maxFileName) {
+                maxFileName = Integer.parseInt(file.getName().substring(0, 6));
+            }
+        }
+        //System.out.println("pathDate:" + maxFileName);
+        if (maxFileName == 0) {
+            return null;
+        } else {
+            return String.valueOf(maxFileName);
+        }
+    }
 
-                try {
-                    filePath = getCsvFilePathFromDate(date);
-                    if (!checkIfFileExists(filePath)) {
-                        return null;
-                    }
+    
+    /**
+     * Cette methode determine si un fichier existe ou pas
+     *
+     * @param file le fichier qu'on va chercher
+     * @return TRUE si le fichier existe, FALSE sinon
+     */
+    private boolean checkIfFileExists(String file) {
+        return (new File(file).exists());
+    }
 
-                    f = new File(filePath);
-                    fr = new FileReader(f);
-                    br = new BufferedReader(fr);
-                    line = br.readLine();
+    /**
+     * Methode static qui telecharger et sauvegarde un fichier depuis un URL
+     *
+     * @param date la date de telechargement (yyyymm)
+     * @param outputfile le nom de fichier apres le telechargement(*.csv.gz)
+     */
+    private boolean downLoadCsvByDate(String date) throws IOException {
+        try {
+            File saveFile;
+            URL url;
+            String newUrl;
+            String directory;
+            String path;
 
-                    if (line.startsWith("numer_sta")) {
-                        line = br.readLine();
-                    }
+            //avoir l'année depuis la date , pour telecharger le fichier dans le dossier qui correspond a l'année
+            directory = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4);
+            createDirectory(directory);
 
-                    while (line != null) {
-                        dateLine = line.split(";")[1].substring(0, 10);
+            //Creation d'un obj url qui pointe vers l'url qui se trouve dans la classe Configuration
+            newUrl = Configuration.DATA_GZIP_URL.replace("#", date);
+            //System.out.println("url:" + newUrl);
+            url = new URL(newUrl);
 
-                        if (Integer.parseInt(dateLine) > latestDate) {
-                            latestDate = Integer.parseInt(dateLine);
-                        }
+            //le chemin de fichier ou on va telecharger les donnés
+            path = Configuration.getApplicationPath() + "/" + directory + "/" + date + ".csv.gz";
+            //Creation d'un fichier ou on va sauvegarder le fichier telecharger
+            saveFile = new File(path);
 
-                        line = br.readLine();
-                    }
+            //utilisation de la methode copyURLToFile de apache , qui telecharger et sauvegarde un fichier
+            FileUtils.copyURLToFile(url, saveFile);
 
-                    fr.close();
-                    br.close();
-                    return String.valueOf(latestDate);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return null;
+            return true;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    /**
+     *
+     * Methode static qui fait la decompression d'un fichier Gzip et sauvegarde
+     * le fichier decompressé
+     *
+     * @param inputFile le nom de fichier qui va etre decompresser
+     * @param outputFile le nom de fichier resultat apres la decompression
+     */
+    private boolean decompresserGzip(String inputFile) {
+        byte[] buffer = new byte[1024];
+        //on garde le meme nom pour le fichier decompresser sauf .gz
+        String outputFile = inputFile.substring(0, inputFile.length() - 3);
+
+        //System.out.println("output file : " + outputFile);
+        try {
+            //initialiser notre flux d'entrer par le fichier gzip déja telecharger
+            FileInputStream fileIn = new FileInputStream(inputFile);
+            //initialiser un flux d'entrer de type gzip
+            GZIPInputStream gZIPInputStream = new GZIPInputStream(fileIn);
+            //creation d'un flux de sortie vers un fichier (le fichier ou on va mettre ce qu'on a decompressé) 
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(Configuration.getApplicationPath() + "/" + outputFile));
+            int bytes_read;
+            //on lit des obj byte depuis le flux d'entrer GZIP , et on les mets dans le flux de sortie 
+            while ((bytes_read = gZIPInputStream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, bytes_read);
+            }
+            //fermetures des flux
+            gZIPInputStream.close();
+            fileOutputStream.close();
+            File temp = new File(inputFile);
+            //System.out.println("Le fichier a été decompressé correctement ! ");
+            if (temp.delete()) {
+                //System.out.println("le fichier '" + inputFile + "' a été supprimer");
+                return true;
             }
 
-            /**
-             * Cette methode determine si un fichier existe ou pas
-             *
-             * @param file le fichier qu'on va chercher
-             * @return TRUE si le fichier existe, FALSE sinon
-             */
-            private boolean checkIfFileExists(String file) {
-                return (new File(file).exists());
-            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 
-            /**
-             * Methode static qui telecharger et sauvegarde un fichier depuis un URL
-             *
-             * @param date la date de telechargement (yyyymm)
-             * @param outputfile le nom de fichier apres le telechargement(*.csv.gz)
-             */
-            private boolean downLoadCsvByDate(String date) throws IOException {
-                try {
-                    File saveFile;
-                    URL url;
-                    String newUrl;
-                    String directory;
-                    String path;
-
-                    //avoir l'année depuis la date , pour telecharger le fichier dans le dossier qui correspond a l'année
-                    directory = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4);
-                    createDirectory(directory);
-
-                    //Creation d'un obj url qui pointe vers l'url qui se trouve dans la classe Configuration
-                    newUrl = Configuration.DATA_GZIP_URL.replace("#", date);
-                    //System.out.println("url:" + newUrl);
-                    url = new URL(newUrl);
-
-                    //le chemin de fichier ou on va telecharger les donnés
-                    path = Configuration.getApplicationPath() + "/" + directory + "/" + date + ".csv.gz";
-                    //Creation d'un fichier ou on va sauvegarder le fichier telecharger
-                    saveFile = new File(path);
-
-                    //utilisation de la methode copyURLToFile de apache , qui telecharger et sauvegarde un fichier
-                    FileUtils.copyURLToFile(url, saveFile);
-
-                    return true;
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return false;
-            }
-
-            /**
-             *
-             * Methode static qui fait la decompression d'un fichier Gzip et sauvegarde
-             * le fichier decompressé
-             *
-             * @param inputFile le nom de fichier qui va etre decompresser
-             * @param outputFile le nom de fichier resultat apres la decompression
-             */
-            private boolean decompresserGzip(String inputFile) {
-                byte[] buffer = new byte[1024];
-                //on garde le meme nom pour le fichier decompresser sauf .gz
-                String outputFile = inputFile.substring(0, inputFile.length() - 3);
-
-                //System.out.println("output file : " + outputFile);
-                try {
-                    //initialiser notre flux d'entrer par le fichier gzip déja telecharger
-                    FileInputStream fileIn = new FileInputStream(inputFile);
-                    //initialiser un flux d'entrer de type gzip
-                    GZIPInputStream gZIPInputStream = new GZIPInputStream(fileIn);
-                    //creation d'un flux de sortie vers un fichier (le fichier ou on va mettre ce qu'on a decompressé) 
-                    FileOutputStream fileOutputStream = new FileOutputStream(new File(Configuration.getApplicationPath() + "/" + outputFile));
-                    int bytes_read;
-                    //on lit des obj byte depuis le flux d'entrer GZIP , et on les mets dans le flux de sortie 
-                    while ((bytes_read = gZIPInputStream.read(buffer)) > 0) {
-                        fileOutputStream.write(buffer, 0, bytes_read);
-                    }
-                    //fermetures des flux
-                    gZIPInputStream.close();
-                    fileOutputStream.close();
-                    File temp = new File(inputFile);
-                    //System.out.println("Le fichier a été decompressé correctement ! ");
-                    if (temp.delete()) {
-                        //System.out.println("le fichier '" + inputFile + "' a été supprimer");
-                        return true;
-                    }
-
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                return false;
-            }
-
+    
     //*********************************PUBLIC SECTION ********************************************************// 
-            
-            
     /**
      * this method returns for a given year all month files that doesn't exist
      * EX: inside folder 2014 if we have all months files except 201401.csv,
@@ -353,27 +305,29 @@ public class MyModel {
     public ArrayList<String> getMissedMonthsFiles(String year) {
         int currentDay, currentMonth, currentYear;
         ArrayList<String> missedMonths = new ArrayList<String>();
-        String yearMonth,month;
+        String yearMonth, month;
         ZoneId zoneId = ZoneId.of("Europe/Paris");
         LocalDateTime localTime = LocalDateTime.now(zoneId);
         currentDay = localTime.getDayOfMonth();
         currentMonth = localTime.getMonthValue();
         currentYear = localTime.getYear();
-        boolean stopSearch=false;
-        if(String.valueOf(currentYear).equals(year)) {
+        boolean stopSearch = false;
+        if (String.valueOf(currentYear).equals(year)) {
             //si l'année donner est l'année courante, on met le boolean stopSearch a true pour ne pas
             //mettre les mois qui sont plus grand que le mois courant comme missed ! 
-            stopSearch=true;
+            stopSearch = true;
         }
-        
+
         for (int i = 1; i <= 12; i++) {
             month = ("00" + i).substring(String.valueOf(i).length());
             yearMonth = year + month;
-            if(stopSearch&&Integer.parseInt(month)>currentMonth)
-                //si le mois generer est supperieure au mois courant
+            if (stopSearch && Integer.parseInt(month) > currentMonth) //si le mois generer est supperieure au mois courant
+            {
                 break;
+            }
             
-            if (!checkIfFileExists(getCsvFilePathFromDate(yearMonth))) {
+            //si le fichier de ce moi n'existe pas OU si il est pas a jour alors on l'ajout comme missed
+            if (!checkIfFileExists(getCsvFilePathFromDate(yearMonth))||!isUpdatedMonth(yearMonth)) {
                 missedMonths.add(yearMonth);
             }
 
@@ -505,7 +459,7 @@ public class MyModel {
         if (date != null) {
             liste = this.getDataForDateByCity(date, "all");
         }
-        
+
         return liste;
     }
 
@@ -605,7 +559,7 @@ public class MyModel {
      *
      * @return true if valide , false if not
      */
-    public boolean validateDateLogically(String year, String month, String day) {
+    public boolean validateNotFuture(String year, String month, String day) {
         int currentDay, currentMonth, currentYear;
         ZoneId zoneId = ZoneId.of("Europe/Paris");
         LocalDateTime localTime = LocalDateTime.now(zoneId);
@@ -625,11 +579,136 @@ public class MyModel {
 
     }
     
+      /**
+     * Method classique qui retourne pour un mois donner le dernier jour de ce moi EX: le mois JUIN(06) il contient 30 jours
+     * @return le nombre de jour de ce mois
+     */
+    public int getNumberDaysOfMonth(int year,int month) {
+        int currentDay, currentMonth, currentYear;
+        ZoneId zoneId = ZoneId.of("Europe/Paris");
+        LocalDateTime localTime = LocalDateTime.of(year, Month.of(month), 3, 3, 3);
+        LocalDateTime lastDay = localTime.with(TemporalAdjusters.lastDayOfMonth());        
+        
+        return lastDay.getDayOfMonth();
+    }
+     
+    /**
+     * une methode qui prend en parametre un fichier de donnéer d'un mois sous
+     * forme de yyyymm EX: 201405 et dis si ce fichier est a jour (contient tout
+     * les donnée)
+     *
+     * @param month
+     * @return TRUE si le fichier est a jour FALSE sinon
+     */
+    public boolean isUpdatedMonth(String date) {
+        String lastDate, year, month,lastDay;
+
+        lastDate = getLatestAvailableDateOnFile(date);
+        lastDay = lastDate.substring(6, 8);
+        
+        year = date.substring(0, 4);
+        month = date.substring(4, 6);
+
+        if (date == null) {
+            return false;
+        }
+
+        int currentYear;
+        String currentDay,currentMonth;
+        ZoneId zoneId = ZoneId.of("Europe/Paris");
+        LocalDateTime localTime = LocalDateTime.now(zoneId);
+        
+        currentDay = String.valueOf(localTime.getDayOfMonth());
+        //pour avoir 01 pour le premier jour de moi au lieu de 1
+        currentDay = ("00" + currentDay).substring(currentDay.length());
+        
+        //pour avoir 01 pour janvier au lieu de 1
+        currentMonth = String.valueOf(localTime.getMonthValue());
+        currentMonth = ("00" + currentMonth).substring(currentMonth.length()); 
+        
+        currentYear = localTime.getYear();
+        
+     //System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
+        
+        if (String.valueOf(currentYear).equals(year) &&       //si le fichier contient les donnees de l'année courante
+                String.valueOf(currentMonth).equals(month) && //et si le fichier contient les donnees mois courant
+                lastDay.equals(String.valueOf(currentDay))   //Donc on test si la derniere date de ce fichier est celle d'ajourdhui :D
+            )           
+                return true;
+        else {
+            int nbDays = getNumberDaysOfMonth(currentYear,Integer.parseInt(currentMonth));
+            //System.out.println("nbDays:"+nbDays);
+            if(String.valueOf(nbDays).equals(lastDay)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+            
+           
+        
+        
+    }
     
-    
-    
-    /*********************KARIM**************************/
-     /**
+    /**
+     * Cette methode retourne la date des donner la plus recente inclut dans un
+     * fichier
+     *
+     * @param date sous la forme de yyyymm correspond au nom du fichier qu'on
+     * veux chercher dedans
+     * @return la date la plus recente dans le fichier qui correspond a @date
+     */
+    public String getLatestAvailableDateOnFile(String date) {
+        File f;
+        FileReader fr;
+        BufferedReader br;
+        String line;
+        int latestDate = 0;
+        String dateLine;
+        String filePath;
+
+        try {
+            filePath = getCsvFilePathFromDate(date);
+            if (!checkIfFileExists(filePath)) {
+                return null;
+            }
+
+            f = new File(filePath);
+            fr = new FileReader(f);
+            br = new BufferedReader(fr);
+            line = br.readLine();
+
+            if (line.startsWith("numer_sta")) {
+                line = br.readLine();
+            }
+
+            while (line != null) {
+                dateLine = line.split(";")[1].substring(0, 10);
+
+                if (Integer.parseInt(dateLine) > latestDate) {
+                    latestDate = Integer.parseInt(dateLine);
+                }
+
+                line = br.readLine();
+            }
+
+            fr.close();
+            br.close();
+            return String.valueOf(latestDate);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+   
+    /**
+     * *******************KARIM*************************
+     */
+    /**
      * Cette Methode retourne la date exacte des donnée les plus recents
      * yyyymmjjhh
      *
@@ -655,7 +734,7 @@ public class MyModel {
     }
 
     public ArrayList<String> getYearExists() {
-        ArrayList<String> list=new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
         File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
         for (File file : file1.listFiles()) {
             list.add(file.toString().substring(8));
@@ -663,9 +742,10 @@ public class MyModel {
 
         return list;
     }
-     public ArrayList<String> getMonthsExistsForYear(String year) {
-        ArrayList<String> list=new ArrayList<>();
-        File file1 = new File(Configuration.DATA_DIRECTORY_NAME+"/"+year);
+
+    public ArrayList<String> getMonthsExistsForYear(String year) {
+        ArrayList<String> list = new ArrayList<>();
+        File file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + year);
         for (File file : file1.listFiles()) {
             list.add(file.toString().substring(8));
         }
@@ -673,3 +753,4 @@ public class MyModel {
         return list;
     }
 }
+
