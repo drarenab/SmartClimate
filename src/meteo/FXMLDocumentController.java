@@ -432,7 +432,7 @@ public class FXMLDocumentController implements Initializable {
                 /*
                 TableView
                  */
- /*Attention can be throw an exception if data is null ! */
+                /*Attention can be throw an exception if data is null ! */
                 columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
                 columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
                 columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
