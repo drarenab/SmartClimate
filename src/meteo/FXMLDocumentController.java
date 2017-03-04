@@ -63,7 +63,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
  */
 public class FXMLDocumentController implements Initializable {
 
-    private List<VilleTemp> dataList;
+    private List<DataCity> dataList;
     private MyModel model;
     private String showMode;
     private ArrayList<XYChart.Series> chartList;
@@ -934,7 +934,7 @@ public class FXMLDocumentController implements Initializable {
         int t;
         /*Constrution de la table des villes avec leurs données*/
 
-        ArrayList<VilleTemp> tabVille = null;
+        ArrayList<DataCity> tabVille = null;
         String X = "°C";
 
         StackPane stack = new StackPane();
@@ -1068,10 +1068,10 @@ public class FXMLDocumentController implements Initializable {
      * @return Liste of DataBean
      */
     private List<DataBean> parseDataList(String date, String station) {
-        ArrayList<VilleTemp> listDonnee = model.getListForChart(date, station);
+        ArrayList<DataCity> listDonnee = model.getListForChart(date, station);
         ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
         if (listDonnee != null) {
-            for (VilleTemp villeTemp : listDonnee) {
+            for (DataCity villeTemp : listDonnee) {
                 listDataBean.add(villeTemp.toDataBean());
             }
         }

@@ -15,7 +15,7 @@ package meteo;
  */
 import coordonnee.Point;
 import coordonnee.Ville;
-import coordonnee.VilleTemp;
+import coordonnee.DataCity;
 import coordonnee.aDate;
 import java.io.BufferedReader;
 import java.io.File;
@@ -349,9 +349,9 @@ public class MyModel {
      * les donner du jour jj,
      * @param cityId la ville des donner quand veux recuperer dans la list, si
      * elle contient "all" la mthode retourne les donner de tout les villes
-     * @return une arrayList de type VilleTemp qui contient les donner demander
+     * @return une arrayList de type DataCity qui contient les donner demander
      */
-    public ArrayList<VilleTemp> getDataForDateByCity(String date, String cityId) {
+    public ArrayList<DataCity> getDataForDateByCity(String date, String cityId) {
         // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient 
         //les données de la date demander
         //System.out.println("Recuperation des donnée de la ville => " + cityId + " et la date =>" + date);
@@ -375,7 +375,7 @@ public class MyModel {
             BufferedReader dataBR = new BufferedReader(dataFR);
             String line, dateLine, splitedLine[];
 
-            ArrayList<VilleTemp> listDonnees = new ArrayList<VilleTemp>();
+            ArrayList<DataCity> listDonnees = new ArrayList<DataCity>();
 
             Pattern pattern = Pattern.compile(date + ".*");
             line = dataBR.readLine();
@@ -407,7 +407,7 @@ public class MyModel {
                         adate = new aDate(splitedLine[1].substring(0, 4), splitedLine[1].substring(4, 6), splitedLine[1].substring(6, 8), splitedLine[1].substring(8, 10));
                         //noter j'ai pa mis le nom de la ville a rajouter
                         ville = getVilleFromId(Integer.parseInt(idVille));
-                        listDonnees.add(new VilleTemp(ville, temperature, himudite, nebu, adate));
+                        listDonnees.add(new DataCity(ville, temperature, himudite, nebu, adate));
                     }
 
                 }
@@ -423,10 +423,10 @@ public class MyModel {
         return null;
     }
 
-    public ArrayList<VilleTemp> getDataForYearByCity(String date, String cityId) {
+    public ArrayList<DataCity> getDataForYearByCity(String date, String cityId) {
         String year = date.substring(0, 4);
-        ArrayList<VilleTemp> liste = new ArrayList<VilleTemp>();
-        ArrayList<VilleTemp> tempList = null;
+        ArrayList<DataCity> liste = new ArrayList<DataCity>();
+        ArrayList<DataCity> tempList = null;
         String yearMonth;
         for (int i = 1; i <= 12; i++) {
             if (i < 10) {
@@ -451,8 +451,8 @@ public class MyModel {
      * @return latest available data that we have localy if exists null if no
      * data found localy
      */
-    public ArrayList<VilleTemp> getLatestAvailableData() {
-        ArrayList<VilleTemp> liste = null;
+    public ArrayList<DataCity> getLatestAvailableData() {
+        ArrayList<DataCity> liste = null;
         String file = this.getLatesttAvailableFile();
         //System.out.println("damnFile:"+file);
         String date = this.getLatestAvailableDateOnFile(file);
@@ -469,11 +469,11 @@ public class MyModel {
      * @param stationName
      * @return observableList for Chart
      */
-    public ArrayList<VilleTemp> getListForChart(String date, String stationName) {
+    public ArrayList<DataCity> getListForChart(String date, String stationName) {
         int k = getIdFromNameVille(stationName);
         String t = Integer.toString(k);
 
-        ArrayList<VilleTemp> Resultat = date.length() == 4
+        ArrayList<DataCity> Resultat = date.length() == 4
                 ? this.getDataForYearByCity(date, t.length() == 5 ? t : '0' + t)
                 : this.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
         //MyModel.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
@@ -495,7 +495,7 @@ public class MyModel {
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
 
-        ArrayList<VilleTemp> Resultat = getListForChart(date, stationName);
+        ArrayList<DataCity> Resultat = getListForChart(date, stationName);
 
         if (Resultat == null) {
             return null;

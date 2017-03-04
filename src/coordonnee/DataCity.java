@@ -13,7 +13,7 @@ package coordonnee;
 /*
 
  */
-public class VilleTemp {
+public class DataCity {
 
     /**
      * @param city
@@ -26,7 +26,7 @@ public class VilleTemp {
     private float nebulosite;
     private aDate date;
 
-    public VilleTemp(Ville city, double temperature, int humidite, float nebulosite, aDate date) {
+    public DataCity(Ville city, double temperature, int humidite, float nebulosite, aDate date) {
         this.city = city;
         this.temperature = temperature;
         this.humidite = humidite;
