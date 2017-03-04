@@ -205,6 +205,7 @@ public class FXMLDocumentController implements Initializable {
             if (model.netIsAvailable() != -1) {
                 onlineMode = true;
             } else {
+                onlineMode=false;
                 offline.setSelected(true);
             }
 
@@ -584,23 +585,23 @@ public class FXMLDocumentController implements Initializable {
      * l'utilisateur a sur sa machine
      */
     public void initInterfaceInformation() {
-        final TreeItem<String> treeRoot = new TreeItem<>("Data Disponible");
-        treeRoot.setExpanded(true);
-        ArrayList<String> list = model.getYearExists();
-
-        for (int i = 0; i < list.size(); i++) {
-            final TreeItem<String> fruitItem = new TreeItem<>(list.get(i));
-            ArrayList<String> liste = model.getMonthsExistsForYear(list.get(i));
-
-            for (int j = 0; j < liste.size(); j++) {
-                fruitItem.getChildren().add(i, new TreeItem(liste.get(j).substring(9, 11)));
+        final TreeItem<String> dispoData = new TreeItem<>("Data Disponible");
+        dispoData.setExpanded(true);
+        ArrayList<String> listYear = model.getYearExists();
+        for (int i = 0; i < listYear.size(); i++) {
+            
+             final TreeItem<String> oneYear = new TreeItem<>(listYear.get(i));
+            ArrayList<String> listMonth = model.getMonthsExistsForYear(listYear.get(i));
+           
+            
+            for (int j = 0; j < listMonth.size(); j++) {
+                oneYear.getChildren().add(j, new TreeItem(listMonth.get(j).substring(9, 11)));
             }
 
-            fruitItem.setExpanded(true);
-            treeRoot.getChildren().add(i, fruitItem);
+            dispoData.getChildren().add(i, oneYear);
 
         }
-        treeView.setRoot(treeRoot);
+        treeView.setRoot(dispoData);
     }
 
     /**
@@ -702,7 +703,7 @@ public class FXMLDocumentController implements Initializable {
                 Parent root;
                 try {
                     Interface = 3;
-                    root = FXMLLoader.load(getClass().getResource("InterfaceDataInformation.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("LocalDataView.fxml"));
                     Scene scene = new Scene(root);
                     Stage s = new Stage();
                     s.setScene(scene);
@@ -727,7 +728,7 @@ public class FXMLDocumentController implements Initializable {
                 Parent root;
                 try {
                     Interface = 4;
-                    root = FXMLLoader.load(getClass().getResource("InterfaceInformations.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("ServerStateView.fxml"));
                     Scene scene = new Scene(root);
                     Stage s = new Stage();
                     s.setScene(scene);
@@ -806,7 +807,7 @@ public class FXMLDocumentController implements Initializable {
                 Interface = 2;
                 Parent root;
                 try {
-                    root = FXMLLoader.load(getClass().getResource("interfaceComparaison.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("DataComparView.fxml"));
                     Scene scene = new Scene(root);
                     Stage s = new Stage();
                     s.setScene(scene);
@@ -833,7 +834,7 @@ public class FXMLDocumentController implements Initializable {
                 Interface = 1;
                 Parent root;
                 try {
-                    root = FXMLLoader.load(getClass().getResource("fxmlSetting.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("SettingView.fxml"));
                     Scene scene = new Scene(root);
                     Stage s = new Stage();
                     s.setScene(scene);
@@ -862,7 +863,7 @@ public class FXMLDocumentController implements Initializable {
                 Interface = 1;
                 Parent root;
                 try {
-                    root = FXMLLoader.load(getClass().getResource("APropos.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("AProposView.fxml"));
                     Scene scene = new Scene(root);
                     Stage s = new Stage();
                     s.setScene(scene);
