@@ -84,7 +84,7 @@ import javafx.scene.web.WebView;
  *
  * @author karim
  */
-public class FXMLDocumentController implements Initializable {
+public class FXMLDocumentController implements Controller {
 
     private List<VilleTemp> dataList;
     private MyModel model;
@@ -217,13 +217,14 @@ public class FXMLDocumentController implements Initializable {
 //        downLoadCsvByDate(String date)
             String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
             String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-
-            ArrayList<XYChart.Series> S = model.constructChart(Date1, StationComparaison.getValue().toString());
-            ArrayList<XYChart.Series> S2 = model.constructChart(Date2, StationComparaison.getValue().toString());
-            lineCharttemp.getData().setAll(S.get(0), S2.get(0));
-            lineCharthum.getData().setAll(S.get(1), S2.get(1));
-            lineChartnebul.getData().setAll(S.get(2), S2.get(2));
-
+           
+            model.constructChartComparaison(Date1,Date2,StationComparaison.getValue().toString(),lineCharttemp,lineCharthum,lineChartnebul);
+           
+            
+//            lineCharttemp.getData().setAll(S.get(0), S2.get(0));
+//            lineCharthum.getData().setAll(S.get(1), S2.get(1));
+//            lineChartnebul.getData().setAll(S.get(2), S2.get(2));
+            
         }
     }
 
@@ -324,8 +325,8 @@ public class FXMLDocumentController implements Initializable {
         Test si le formulaire est bien rempli
          */
         Map errors = model.validateDate(year.getText(), month.getText(), day.getText());
-         String latestDate, latest;
-               
+        String latestDate, latest;
+
         /*
         test si la année n'est pas vide (champs obligatoire)
          */
@@ -347,7 +348,7 @@ public class FXMLDocumentController implements Initializable {
         } else {
             /*
                 Chart
-             */            
+             */
             boolean validated;
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
@@ -388,7 +389,7 @@ public class FXMLDocumentController implements Initializable {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                   // si on est sur le month mode
+                    // si on est sur le month mode
                 } else if (showMode.equals("month")) {
                     System.out.println("Month MODE ,looking for data for whole yearMonth=" + yearMonth);
                     //si le mois n'est pas a jour
@@ -401,7 +402,7 @@ public class FXMLDocumentController implements Initializable {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                  // si on est sur le year mode
+                    // si on est sur le year mode
                 } else if (showMode.equals("year")) {
                     System.out.println("Year MODE ,looking for data for whole year=" + year.getText());
                     //retourner la liste des mois qui manques dans le dossier de l'année
@@ -418,9 +419,9 @@ public class FXMLDocumentController implements Initializable {
                 }
                 System.out.println("Everything looks good, Trying to construct the chart");
                 //on lance la construction de chart
-                chartList = model.constructChart(year.getText()
-                        + month.getText() + day.getText(), Station.getValue().toString());
-
+                model.constructChartAffichage(year.getText()
+                        + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
+                /*
                 if (chartList != null) {
                     AfficheTemp.getData().setAll(chartList.get(0));
                     AfficheHum.getData().setAll(chartList.get(1));
@@ -429,10 +430,11 @@ public class FXMLDocumentController implements Initializable {
                 } else {
                     System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
                 }
-                /*
+                 */
+ /*
                 TableView
                  */
-                /*Attention can be throw an exception if data is null ! */
+ /*Attention can be throw an exception if data is null ! */
                 columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
                 columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
                 columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
@@ -452,7 +454,7 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb
     ) {
 
-        model = new MyModel();
+        model = MyModel.getInstance();
 
         /*Commun a toutes les interface */
  /*creation d'un menu dynamiquement commun a toutes les interfaces*/
@@ -759,6 +761,7 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+    @Override
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
         if (model.netIsAvailable() != -1) {
@@ -771,6 +774,7 @@ public class FXMLDocumentController implements Initializable {
         Interface = 1;
     }
 
+    @Override
     public void initInterfaceSetting() {
         Image img = new Image(Meteo.class
                 .getResourceAsStream("Image/BackgroundSetting2.jpg"));
@@ -812,6 +816,7 @@ public class FXMLDocumentController implements Initializable {
         //Interface=0;
     }
 
+    @Override
     public void InitInterfaceComparaison() {
 
         List L = new ArrayList();
