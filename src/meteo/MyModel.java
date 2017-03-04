@@ -6,12 +6,11 @@
 package meteo;
 
 /**
- * TODO
-
- *  yearMode,MonthMode,DayMode
- * 
- *  if data doesn't exist or not updated we download it , and it depends if it is only a month , or a whole year ! 
- * 
+ * TODO yearMode,MonthMode,DayMode
+ *
+ * if data doesn't exist or not updated we download it , and it depends if it is
+ * only a month , or a whole year !
+ *
  */
 import coordonnee.Point;
 import coordonnee.Ville;
@@ -41,6 +40,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import org.apache.commons.io.FileUtils;
 /**
@@ -49,12 +50,25 @@ import org.apache.commons.io.FileUtils;
  */
 public class MyModel {
 
+    //for singelton
+    private static volatile MyModel instance = null;
+
     //private ArrayList<VilleTemp> listDonnée;
     private Map<Integer, Ville> villes;
-        
-    public MyModel() {
+
+    private MyModel() {
         constructMapVilles();
-        
+    }
+
+    public static MyModel getInstance() {
+        if (instance == null) {
+            //premiere demande d'instanciation
+            //synchronized = laisser passer les threads (demandes) un par un
+            synchronized (MyModel.class) {
+                instance = new MyModel();
+            }
+        }
+        return instance;
     }
 
     //*********************************PRIVATE SECTION ********************************************************// 
@@ -99,7 +113,7 @@ public class MyModel {
         }
         return false;
     }
-    
+
     private int getIdFromNameVille(String name) {
         Integer key = null;
 
@@ -199,7 +213,6 @@ public class MyModel {
         }
     }
 
-    
     /**
      * Cette methode determine si un fichier existe ou pas
      *
@@ -292,7 +305,6 @@ public class MyModel {
         return false;
     }
 
-    
     //*********************************PUBLIC SECTION ********************************************************// 
     /**
      * this method returns for a given year all month files that doesn't exist
@@ -325,9 +337,9 @@ public class MyModel {
             {
                 break;
             }
-            
+
             //si le fichier de ce moi n'existe pas OU si il est pas a jour alors on l'ajout comme missed
-            if (!checkIfFileExists(getCsvFilePathFromDate(yearMonth))||!isUpdatedMonth(yearMonth)) {
+            if (!checkIfFileExists(getCsvFilePathFromDate(yearMonth)) || !isUpdatedMonth(yearMonth)) {
                 missedMonths.add(yearMonth);
             }
 
@@ -488,7 +500,10 @@ public class MyModel {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
-    public ArrayList<XYChart.Series> constructChart(String date, String stationName) {
+    public boolean constructChartAffichage(String date, String stationName, AreaChart<Number, Number> AfficheTemp,
+            AreaChart<Number, Number> AfficheHum,
+            AreaChart<Number, Number> AfficheNebul) {
+
         ArrayList<XYChart.Series> S = new ArrayList<>();
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
@@ -498,7 +513,7 @@ public class MyModel {
         ArrayList<DataCity> Resultat = getListForChart(date, stationName);
 
         if (Resultat == null) {
-            return null;
+            return false;
         }
 
         for (int i = 0; i < Resultat.size(); i++) {
@@ -511,7 +526,87 @@ public class MyModel {
         S.add(series);
         S.add(series1);
         S.add(series2);
-        return S;
+
+        if (S != null) {
+            AfficheTemp.getData().setAll(S.get(0));
+            AfficheHum.getData().setAll(S.get(1));
+            AfficheNebul.getData().setAll(S.get(2));
+            System.out.println("Chart constructed succefully ");
+            return true;
+        } else {
+            System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+            return false;
+        }
+        
+        //return false;
+    }
+
+    /**
+     *
+     * @param date
+     * @param stationName
+     * @return ArrayList of series that are parameters to ChartLine
+     *
+     */
+    public boolean constructChartComparaison(String date1, String date2, String stationName,
+            LineChart<Number, Number> lineCharttemp,
+            LineChart<Number, Number> lineCharthum,
+            LineChart<Number, Number> lineChartnebul
+        )
+         {
+        
+        ArrayList<XYChart.Series> S1 = new ArrayList<>();
+        ArrayList<XYChart.Series> S2 = new ArrayList<>();
+
+        XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
+        
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
+        
+        ArrayList<DataCity> Resultat1 = getListForChart(date1, stationName);
+        ArrayList<DataCity> Resultat2 = getListForChart(date2, stationName);
+        if (Resultat1 == null || Resultat2 == null) {
+            return false;
+        }
+
+        for (int i = 0; i < Resultat1.size(); i++) {
+
+            series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
+            series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
+            series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
+
+        }
+
+        S1.add(series0);
+        S1.add(series01);
+        S1.add(series02);
+        
+        for (int i = 0; i < Resultat2.size(); i++) {
+
+            series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
+            series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
+            series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
+
+        }
+
+        S2.add(series1);
+        S2.add(series11);
+        S2.add(series12);
+
+        if (S1 != null&&S2 !=null) {
+            lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
+            lineCharthum.getData().setAll(S1.get(1), S2.get(1));
+            lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
+            System.out.println("Chart constructed succefully ");
+            return true;
+        } else {
+            System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+            return false;
+        }
+        
         //return false;
     }
 
@@ -578,20 +673,22 @@ public class MyModel {
         }
 
     }
-    
-      /**
-     * Method classique qui retourne pour un mois donner le dernier jour de ce moi EX: le mois JUIN(06) il contient 30 jours
+
+    /**
+     * Method classique qui retourne pour un mois donner le dernier jour de ce
+     * moi EX: le mois JUIN(06) il contient 30 jours
+     *
      * @return le nombre de jour de ce mois
      */
-    public int getNumberDaysOfMonth(int year,int month) {
+    public int getNumberDaysOfMonth(int year, int month) {
         int currentDay, currentMonth, currentYear;
         ZoneId zoneId = ZoneId.of("Europe/Paris");
         LocalDateTime localTime = LocalDateTime.of(year, Month.of(month), 3, 3, 3);
-        LocalDateTime lastDay = localTime.with(TemporalAdjusters.lastDayOfMonth());        
-        
+        LocalDateTime lastDay = localTime.with(TemporalAdjusters.lastDayOfMonth());
+
         return lastDay.getDayOfMonth();
     }
-     
+
     /**
      * une methode qui prend en parametre un fichier de donnéer d'un mois sous
      * forme de yyyymm EX: 201405 et dis si ce fichier est a jour (contient tout
@@ -601,11 +698,11 @@ public class MyModel {
      * @return TRUE si le fichier est a jour FALSE sinon
      */
     public boolean isUpdatedMonth(String date) {
-        String lastDate, year, month,lastDay;
+        String lastDate, year, month, lastDay;
 
         lastDate = getLatestAvailableDateOnFile(date);
         lastDay = lastDate.substring(6, 8);
-        
+
         year = date.substring(0, 4);
         month = date.substring(4, 6);
 
@@ -614,43 +711,40 @@ public class MyModel {
         }
 
         int currentYear;
-        String currentDay,currentMonth;
+        String currentDay, currentMonth;
         ZoneId zoneId = ZoneId.of("Europe/Paris");
         LocalDateTime localTime = LocalDateTime.now(zoneId);
-        
+
         currentDay = String.valueOf(localTime.getDayOfMonth());
         //pour avoir 01 pour le premier jour de moi au lieu de 1
         currentDay = ("00" + currentDay).substring(currentDay.length());
-        
+
         //pour avoir 01 pour janvier au lieu de 1
         currentMonth = String.valueOf(localTime.getMonthValue());
-        currentMonth = ("00" + currentMonth).substring(currentMonth.length()); 
-        
+        currentMonth = ("00" + currentMonth).substring(currentMonth.length());
+
         currentYear = localTime.getYear();
-        
-     //System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
-        
-        if (String.valueOf(currentYear).equals(year) &&       //si le fichier contient les donnees de l'année courante
-                String.valueOf(currentMonth).equals(month) && //et si le fichier contient les donnees mois courant
-                lastDay.equals(String.valueOf(currentDay))   //Donc on test si la derniere date de ce fichier est celle d'ajourdhui :D
-            )           
-                return true;
-        else {
-            int nbDays = getNumberDaysOfMonth(currentYear,Integer.parseInt(currentMonth));
+
+        //System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
+        if (String.valueOf(currentYear).equals(year)
+                && //si le fichier contient les donnees de l'année courante
+                String.valueOf(currentMonth).equals(month)
+                && //et si le fichier contient les donnees mois courant
+                lastDay.equals(String.valueOf(currentDay)) //Donc on test si la derniere date de ce fichier est celle d'ajourdhui :D
+                ) {
+            return true;
+        } else {
+            int nbDays = getNumberDaysOfMonth(Integer.parseInt(year), Integer.parseInt(month));
             //System.out.println("nbDays:"+nbDays);
-            if(String.valueOf(nbDays).equals(lastDay)) {
+            if (String.valueOf(nbDays).equals(lastDay)) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
-            
-           
-        
-        
+
     }
-    
+
     /**
      * Cette methode retourne la date des donner la plus recente inclut dans un
      * fichier
@@ -704,7 +798,6 @@ public class MyModel {
         return null;
     }
 
-   
     /**
      * *******************KARIM*************************
      */
