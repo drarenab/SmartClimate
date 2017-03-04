@@ -46,12 +46,12 @@
                            </font></Label>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <RadioButton fx:id="online" mnemonicParsing="false" text="On">
+                              <RadioButton fx:id="online" mnemonicParsing="false" onAction="#handleButtonActionChngOnline" text="On">
                                  <VBox.margin>
                                     <Insets left="21.0" />
                                  </VBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="offline" mnemonicParsing="false" text="Off">
+                              <RadioButton fx:id="offline" mnemonicParsing="false" onAction="#handleButtonActionChngOnline" text="Off">
                                  <VBox.margin>
                                     <Insets left="21.0" top="5.0" />
                                  </VBox.margin>

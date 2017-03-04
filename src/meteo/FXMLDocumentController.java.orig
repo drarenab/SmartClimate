@@ -929,9 +929,6 @@ public class FXMLDocumentController implements Controller {
     }
 
 
-     /**
-     * Permet d'afficher l'interface principal
-     */
     private void AfficherCarte() {
         /*recuperation de la l'image de la carte de france*/
         int t;
@@ -982,6 +979,7 @@ public class FXMLDocumentController implements Controller {
                     Temp.setText("Température: " + "N/A");
                 }
 
+
                 if (tabVille.get(i).getHumidite() <= 100) {
                     Humidite.setText("Humidité: " + Integer.toString(tabVille.get(i).getHumidite()) + "%");
                 } else {
@@ -1000,70 +998,21 @@ public class FXMLDocumentController implements Controller {
                 imgviewTempsActuel.setImage(tempactuel);
 
             }
-
-        }
-
-        v1.getChildren().setAll(nomVille, DateActuelle);
-        v2.getChildren().setAll(Temp, Humidite, nebulosite);
-
-        Image image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
-
-        /*appel de la methode qui recupére les donnée du fichier configuration.txt
-          et les mets dans la liste instancier précédement   
-         */
-        ImageView imgview = new ImageView();
-        imgview.setImage(image);
-        imgview.setFitHeight(508);//508
-        imgview.setFitWidth(553);//553f
-        imgview.pickOnBoundsProperty().set(true);
-        imgview.preserveRatioProperty().set(true);
-
-        /*Affichage des temperature une par une sur la carte */
-        GridPane gridPane = new GridPane();
-        gridPane.getChildren().clear();
-
-        gridPane.setMaxSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        gridPane.setMinSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        gridPane.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        // gridPane.gridLinesVisibleProperty().set(true);
-
-        for (int i = 0; i < 20; i++) {
-            ColumnConstraints column1 = new ColumnConstraints(10.0, 496.0, 496.0, Priority.SOMETIMES, HPos.CENTER, false);
-            gridPane.getColumnConstraints().add(i, column1);
-            RowConstraints row1 = new RowConstraints(10.0, 30.0, 30.0, Priority.ALWAYS, VPos.CENTER, false);/*(10.0,30.0,30.0);*/
-            gridPane.getRowConstraints().add(i, row1);
-        }
-
-        for (int i = 0; i < tabVille.size(); i++) {
-            if (tabVille.get(i).getCity().getPoint().getX() == 0 & tabVille.get(i).getCity().getPoint().getY() == 0) {
-                continue;
-            }
-
-            double temp;
-
-            temp = tabVille.get(i).getTemperature();
-            if (kelvin_celcius.equals("kelvin")) {
-                temp = tabVille.get(i).getTemperature() + 237.15;
-                X = "k";
-            }
-
-            t = (int) Math.ceil(temp);
-            Text text;
-            if (t != 101) {
-                text = new Text(Integer.toString(t) + X);
-            } else {
-                text = new Text("N/A");
-            }
-
-            text.setFill(Color.CHOCOLATE);
-            gridPane.add(text, tabVille.get(i).getCity().getPoint().getY(), tabVille.get(i).getCity().getPoint().getX());// colonne-ligne
-        }
-
-        stack.getChildren().addAll(imgview, gridPane);
-//        V.getChildren().set(1,H);
-        VboxPrincipal.getChildren().set(2, stack);
+<<<<<<< HEAD
+        });
+        LocationDefault.getItems().clear();
+        LocationDefault.setItems(observableList);
+        LocationDefault.setValue(L.get(L.indexOf("BREST-GUIPAVAS")));
+        HboxLocation.getChildren().add(1, LocationDefault);
+        //Interface=0;
     }
-    
+
+    /**
+     *
+     * @param date
+     * @param station
+     * @return Liste of DataBean
+     */
     private List<DataBean> parseDataList(String date, String station) {
         ArrayList<DataCity> listDonnee = model.getListForChart(date, station);
         ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
