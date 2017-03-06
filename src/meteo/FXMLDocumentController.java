@@ -218,7 +218,7 @@ public class FXMLDocumentController implements Controller {
     }
 
     @FXML
-    private void handleButtonActionAfficher() {
+    private void handleButtonActionAfficher() throws IOException {
         /*
         Test si le formulaire est bien rempli
          */
@@ -325,7 +325,7 @@ public class FXMLDocumentController implements Controller {
                 }
                 System.out.println("Everything looks good, Trying to construct the chart");
                 //on lance la construction de chart
-                model.constructChartAffichage(year.getText()
+                model.constructChartAffichage(onlineMode,year.getText()
                         + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
                 /*
                 if (chartList != null) {
@@ -636,37 +636,13 @@ public class FXMLDocumentController implements Controller {
 
             @Override
             public void handle(ActionEvent e) {
-                Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.setTitle("Import Dialog");
-                alert.setHeaderText("Les données souhaitées sont malheureusement indisponibles ");
-                alert.setContentText("Clickez sur Import pour importer des données téléchargé manuellement");
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-                    // ... user chose OK
-
-                    //Open new dialog for import data and display it 
-                    FileChooser chooser = new FileChooser();
-                    chooser.setTitle("Open File");
-                    chooser.getExtensionFilters().addAll(new ExtensionFilter(".txt", ".csv"));
-
-                    List<File> recupp = chooser.showOpenMultipleDialog(new Stage());
-                    if (recupp != null) {
-
-                        /*
-                        what can we do??
-                        2 case 
-                        first user select a csv.zip file then we call function who decompress and read file and save data into arraylist
-                        or user select only a csv file, in this case we read file and add data into a arrayList
-                        Question: do we display this alert when user click into afficher or comparer 
-                        or let user click into import from menu ???
-                         */
-                    }
-                } else {
-                    // ... user chose CANCEL or closed the dialog
+                try {
+                    model.DisplayAlertToImport();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
+            
         }
         );
         MenuItem VisiteWebSite = new MenuItem("Visit Web Site");
@@ -853,7 +829,7 @@ public class FXMLDocumentController implements Controller {
         seting.getItems()
                 .add(preference);
         Menu help = new Menu("_Help");
-        MenuItem aide = new MenuItem("Aide");
+       
         MenuItem aPropos = new MenuItem("A Propos");
 
         aPropos.setOnAction(
@@ -881,7 +857,7 @@ public class FXMLDocumentController implements Controller {
         );
 
         help.getItems()
-                .addAll(aide, aPropos);
+                .addAll(aPropos);
         menuBar.getMenus()
                 .addAll(file, window, statistic, seting, help);
 

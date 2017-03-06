@@ -317,6 +317,53 @@ public class MyModel {
         return false;
     }
 
+    /**
+     *
+     * @param recupp
+     * @return booleen indiquant si le processus d'import a bien été fait sans
+     * erreur cette fonction Copy le fichier du chemin selectionner vers le
+     * dossier local contenant les données le décompresse si c'est un fichier de
+     * type gz et renome le nouveau fichier dans les deux cas
+     */
+    private boolean CopyFileImported(File recupp) {
+        boolean wellDone = true;
+        Path from = Paths.get(recupp.toURI());//chemin du fichier recupéré
+        String[] str = recupp.getPath().split("/");
+        String[] dates = str[str.length - 1].split(Pattern.quote("."));
+        String directory = Configuration.DATA_DIRECTORY_NAME + "/" + dates[1].substring(0, 4);
+
+        wellDone = createDirectory(directory);
+        if (wellDone) {
+            Path to = Paths.get(directory + "/" + str[str.length - 1]);
+            CopyOption[] options = new CopyOption[]{
+                StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES
+            };
+            try {
+                Files.copy(from, to, options);
+            } catch (IOException ex) {
+                wellDone = false;
+                Logger
+                        .getLogger(MyModel.class
+                                .getName()).log(Level.SEVERE, null, ex);
+            }
+            File newName = new File(getCsvFilePathFromDate(dates[1]));
+            File oldName;
+            if (dates.length == 4) { //fichier .gz
+
+                wellDone = decompresserGzip(to.toString());
+                oldName = new File(to.toString().substring(0, to.toString().length() - 3));
+
+            } else {//case file in cvs Format
+                oldName = new File(to.toString().substring(0, to.toString().length()));
+
+            }
+            wellDone = oldName.renameTo(newName);
+        }
+        return wellDone;
+
+    }
+
     //*********************************PUBLIC SECTION ********************************************************// 
     /**
      * this method returns for a given year all month files that doesn't exist
@@ -512,42 +559,59 @@ public class MyModel {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
-    public boolean constructChartAffichage(String date, String stationName, AreaChart<Number, Number> AfficheTemp,
+    public boolean constructChartAffichage(boolean onlineMode, String date, String stationName, AreaChart<Number, Number> AfficheTemp,
             AreaChart<Number, Number> AfficheHum,
-            AreaChart<Number, Number> AfficheNebul) {
+            AreaChart<Number, Number> AfficheNebul) throws IOException {
 
-        ArrayList<XYChart.Series> S = new ArrayList<>();
+        if (onlineMode) {
+            ArrayList<XYChart.Series> S = new ArrayList<>();
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
 
-        ArrayList<DataCity> Resultat = getListForChart(date, stationName);
+            ArrayList<DataCity> Resultat = getListForChart(date, stationName);
 
-        if (Resultat == null) {
-            return false;
-        }
+            if (Resultat == null) {
+                return false;
+            }
 
-        for (int i = 0; i < Resultat.size(); i++) {
+            for (int i = 0; i < Resultat.size(); i++) {
 
-            series.getData().add(new XYChart.Data<>(i, Resultat.get(i).getTemperature()));
-            series1.getData().add(new XYChart.Data<>(i, Resultat.get(i).getHumidite()));
-            series2.getData().add(new XYChart.Data<>(i, Resultat.get(i).getNebulosite()));
+                series.getData().add(new XYChart.Data<>(i, Resultat.get(i).getTemperature()));
+                series1.getData().add(new XYChart.Data<>(i, Resultat.get(i).getHumidite()));
+                series2.getData().add(new XYChart.Data<>(i, Resultat.get(i).getNebulosite()));
 
-        }
-        S.add(series);
-        S.add(series1);
-        S.add(series2);
+            }
+            S.add(series);
+            S.add(series1);
+            S.add(series2);
 
-        if (S != null) {
-            AfficheTemp.getData().setAll(S.get(0));
-            AfficheHum.getData().setAll(S.get(1));
-            AfficheNebul.getData().setAll(S.get(2));
-            System.out.println("Chart constructed succefully ");
-            return true;
+            if (S != null) {
+                AfficheTemp.getData().setAll(S.get(0));
+                AfficheHum.getData().setAll(S.get(1));
+                AfficheNebul.getData().setAll(S.get(2));
+                System.out.println("Chart constructed succefully ");
+                return true;
+            } else {
+                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+                return false;
+            }
+
         } else {
-            System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-            return false;
+            /*
+            tester si le fichier existe 
+            si oui l'afficher 
+            si non verifier si onligne
+                si oui telecharger
+                si non importer
+             */
+            DisplayAlertToImport();
+
+            constructChartAffichage(true, date, stationName, AfficheTemp,
+                    AfficheHum,
+                    AfficheNebul);
+            return true;
         }
 
         //return false;
@@ -566,6 +630,13 @@ public class MyModel {
             LineChart<Number, Number> lineChartnebul
     ) throws IOException {
 
+        /*
+            tester si le fichier existe 
+            si oui l'afficher 
+            si non verifier si onligne
+                si oui telecharger
+                si non importer
+         */
         if (onlineMode) {
             ArrayList<XYChart.Series> S1 = new ArrayList<>();
             ArrayList<XYChart.Series> S2 = new ArrayList<>();
@@ -621,14 +692,7 @@ public class MyModel {
 
             //return false;
         } else {
-            /*
-            tester si le fichier existe 
-            si oui l'afficher 
-            si non verifier si onligne
-                si oui telecharger
-                si non importer
-            */
-            
+
             DisplayAlertToImport();
 
             constructChartComparaison(true, date1, date2, stationName,
@@ -641,11 +705,19 @@ public class MyModel {
 
     }
 
-    private void DisplayAlertToImport() throws IOException {
+    /**
+     * Afficher une alert permettant d'importer un fichier
+     *
+     * @throws IOException
+     */
+    public void DisplayAlertToImport() throws IOException {
+        /*
+        Affichage de l'alert
+         */
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Import Dialog");
-        alert.setHeaderText("Les données souhaitées sont malheureusement indisponibles ");
-        alert.setContentText("Clickez sur Import pour importer des données téléchargé manuellement");
+        alert.setHeaderText("On va imported un ou plusieurs fichiers");
+        alert.setContentText("Clickez sur Import pour importer les données téléchargées");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
@@ -654,7 +726,6 @@ public class MyModel {
             //Open new dialog for import data and display it 
             FileChooser chooser = new FileChooser();
             chooser.setTitle("Open File");
-//            chooser.getExtensionFilters().setAll(new FileChooser.ExtensionFilter(".csv.gz", ".csv"));
 
             List<File> recupp = chooser.showOpenMultipleDialog(new Stage());
             if (recupp != null) {
@@ -664,66 +735,28 @@ public class MyModel {
                      */
                     String pathOfFile = recupp.get(i).getPath();
                     System.out.println(pathOfFile);
-
-                    CopyFileImported(recupp.get(i));
+                    if (CopyFileImported(recupp.get(i))) {
+                        System.out.println("File correctly Imported !");
+                    } else {
+                        System.out.println("Error when try to import File selected !");
+                    }
 
                 }
 
-                /*
-                        what can we do??
-                        2 case 
-                        first user select a csv.zip file then we call function who decompress and read file and save data into arraylist
-                        or user select only a csv file, in this case we read file and add data into a arrayList
-                        Question: do we display this alert when user click into afficher or comparer 
-                        or let user click into import from menu ???
-                 */
- /*
-                2 cas le fichier est en .csv ou le fichier est en ".csv.gz"
-                copy the file into local (données)
-                
-                 */
-//                if()
+            } else {
+                System.out.println("File selected not in correct Format !");
             }
         } else {
             // ... user chose CANCEL or closed the dialog
-        }
+            /*
+            Que faire dans ce cas la ????
+            
+             */
 
-    }
-
-    private void CopyFileImported(File recupp) {
-
-        Path from = Paths.get(recupp.toURI());//chemin du fichier recupéré
-        String[] str = recupp.getPath().split("/");
-        String[] dates = str[str.length - 1].split(Pattern.quote("."));
-        String directory = Configuration.DATA_DIRECTORY_NAME + "/" + dates[1].substring(0, 4);
-
-        boolean createDirectory = createDirectory(directory);
-        Path to = Paths.get(directory + "/" + str[str.length - 1]);
-        CopyOption[] options = new CopyOption[]{
-            StandardCopyOption.REPLACE_EXISTING,
-            StandardCopyOption.COPY_ATTRIBUTES
-        };
-        try {
-            Files.copy(from, to, options);
-        } catch (IOException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        /*
-        decompresser le .gzip
-         */
-        File newName = new File(getCsvFilePathFromDate(dates[1]));
-        File oldName;
-        if (dates.length == 4) { //fichier .gz
-
-            boolean decompresserGzip = decompresserGzip(to.toString());
-            oldName = new File(to.toString().substring(0, to.toString().length() - 3));
-
-        } else {
-            oldName = new File(to.toString().substring(0, to.toString().length()));
+            System.out.println("user select cancel ! ");
 
         }
-        boolean success = oldName.renameTo(newName);
-//        return true;
+
     }
 
     /**
@@ -906,17 +939,18 @@ public class MyModel {
             fr.close();
             br.close();
             return String.valueOf(latestDate);
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (IOException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    /**
-     * *******************KARIM*************************
-     */
     /**
      * Cette Methode retourne la date exacte des donnée les plus recents
      * yyyymmjjhh
@@ -942,6 +976,10 @@ public class MyModel {
         }
     }
 
+    /**
+     *
+     * @return ArrayList contenant les dates existantes en local
+     */
     public ArrayList<String> getYearExists() {
         ArrayList<String> list = new ArrayList<>();
         File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
@@ -952,6 +990,12 @@ public class MyModel {
         return list;
     }
 
+    /**
+     *
+     * @param year
+     * @return arrayList contenant les mois existants en local pour une année
+     * mise en paramétre
+     */
     public ArrayList<String> getMonthsExistsForYear(String year) {
         ArrayList<String> list = new ArrayList<>();
         File file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + year);
