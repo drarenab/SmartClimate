@@ -129,13 +129,13 @@ public class FXMLDocumentController implements Controller {
         verifier si ville selectionné
          */
         Year1Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-        Year1Comparaison.setText("");
+//        Year1Comparaison.setText("");
         Year2Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-        Year2Comparaison.setText("");
+//        Year2Comparaison.setText("");
         MonthComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-        MonthComparaison.setText("");
+//        MonthComparaison.setText("");
         DayComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-        DayComparaison.setText("");
+//        DayComparaison.setText("");
         
         Map errors = model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
         Map errors2 = model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
@@ -166,7 +166,7 @@ public class FXMLDocumentController implements Controller {
             String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
             String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
            
-            model.constructChartComparaison(Date1,Date2,StationComparaison.getValue().toString(),lineCharttemp,lineCharthum,lineChartnebul);
+            model.constructChartComparaison(onlineMode,Date1,Date2,StationComparaison.getValue().toString(),lineCharttemp,lineCharthum,lineChartnebul);
            
             
 //            lineCharttemp.getData().setAll(S.get(0), S2.get(0));

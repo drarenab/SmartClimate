@@ -26,15 +26,22 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -43,7 +50,12 @@ import java.util.zip.GZIPInputStream;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
+
 /**
  *
  * @author karim
@@ -537,7 +549,7 @@ public class MyModel {
             System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
             return false;
         }
-        
+
         //return false;
     }
 
@@ -548,66 +560,170 @@ public class MyModel {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
-    public boolean constructChartComparaison(String date1, String date2, String stationName,
+    public boolean constructChartComparaison(boolean onlineMode, String date1, String date2, String stationName,
             LineChart<Number, Number> lineCharttemp,
             LineChart<Number, Number> lineCharthum,
             LineChart<Number, Number> lineChartnebul
-        )
-         {
-        
-        ArrayList<XYChart.Series> S1 = new ArrayList<>();
-        ArrayList<XYChart.Series> S2 = new ArrayList<>();
+    ) throws IOException {
 
-        XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
-        
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
-        
-        ArrayList<DataCity> Resultat1 = getListForChart(date1, stationName);
-        ArrayList<DataCity> Resultat2 = getListForChart(date2, stationName);
-        if (Resultat1 == null || Resultat2 == null) {
-            return false;
-        }
+        if (onlineMode) {
+            ArrayList<XYChart.Series> S1 = new ArrayList<>();
+            ArrayList<XYChart.Series> S2 = new ArrayList<>();
 
-        for (int i = 0; i < Resultat1.size(); i++) {
+            XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
 
-            series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
-            series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
-            series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
+            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
 
-        }
+            ArrayList<DataCity> Resultat1 = getListForChart(date1, stationName);
+            ArrayList<DataCity> Resultat2 = getListForChart(date2, stationName);
+            if (Resultat1 == null || Resultat2 == null) {
+                return false;
+            }
 
-        S1.add(series0);
-        S1.add(series01);
-        S1.add(series02);
-        
-        for (int i = 0; i < Resultat2.size(); i++) {
+            for (int i = 0; i < Resultat1.size(); i++) {
 
-            series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
-            series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
-            series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
+                series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
+                series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
+                series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
 
-        }
+            }
 
-        S2.add(series1);
-        S2.add(series11);
-        S2.add(series12);
+            S1.add(series0);
+            S1.add(series01);
+            S1.add(series02);
 
-        if (S1 != null&&S2 !=null) {
-            lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
-            lineCharthum.getData().setAll(S1.get(1), S2.get(1));
-            lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
-            System.out.println("Chart constructed succefully ");
-            return true;
+            for (int i = 0; i < Resultat2.size(); i++) {
+
+                series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
+                series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
+                series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
+
+            }
+
+            S2.add(series1);
+            S2.add(series11);
+            S2.add(series12);
+
+            if (S1 != null && S2 != null) {
+                lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
+                lineCharthum.getData().setAll(S1.get(1), S2.get(1));
+                lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
+                System.out.println("Chart constructed succefully ");
+                return true;
+            } else {
+                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+                return false;
+            }
+
+            //return false;
         } else {
-            System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-            return false;
+            /*
+            tester si le fichier existe 
+            si oui l'afficher 
+            si non verifier si onligne
+                si oui telecharger
+                si non importer
+            */
+            
+            DisplayAlertToImport();
+
+            constructChartComparaison(true, date1, date2, stationName,
+                    lineCharttemp,
+                    lineCharthum,
+                    lineChartnebul
+            );
+            return true;
         }
-        
-        //return false;
+
+    }
+
+    private void DisplayAlertToImport() throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Import Dialog");
+        alert.setHeaderText("Les données souhaitées sont malheureusement indisponibles ");
+        alert.setContentText("Clickez sur Import pour importer des données téléchargé manuellement");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // ... user chose OK
+
+            //Open new dialog for import data and display it 
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Open File");
+//            chooser.getExtensionFilters().setAll(new FileChooser.ExtensionFilter(".csv.gz", ".csv"));
+
+            List<File> recupp = chooser.showOpenMultipleDialog(new Stage());
+            if (recupp != null) {
+                for (int i = 0; i < recupp.size(); i++) {
+                    /*
+                    get path of file selected
+                     */
+                    String pathOfFile = recupp.get(i).getPath();
+                    System.out.println(pathOfFile);
+
+                    CopyFileImported(recupp.get(i));
+
+                }
+
+                /*
+                        what can we do??
+                        2 case 
+                        first user select a csv.zip file then we call function who decompress and read file and save data into arraylist
+                        or user select only a csv file, in this case we read file and add data into a arrayList
+                        Question: do we display this alert when user click into afficher or comparer 
+                        or let user click into import from menu ???
+                 */
+ /*
+                2 cas le fichier est en .csv ou le fichier est en ".csv.gz"
+                copy the file into local (données)
+                
+                 */
+//                if()
+            }
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
+
+    }
+
+    private void CopyFileImported(File recupp) {
+
+        Path from = Paths.get(recupp.toURI());//chemin du fichier recupéré
+        String[] str = recupp.getPath().split("/");
+        String[] dates = str[str.length - 1].split(Pattern.quote("."));
+        String directory = Configuration.DATA_DIRECTORY_NAME + "/" + dates[1].substring(0, 4);
+
+        boolean createDirectory = createDirectory(directory);
+        Path to = Paths.get(directory + "/" + str[str.length - 1]);
+        CopyOption[] options = new CopyOption[]{
+            StandardCopyOption.REPLACE_EXISTING,
+            StandardCopyOption.COPY_ATTRIBUTES
+        };
+        try {
+            Files.copy(from, to, options);
+        } catch (IOException ex) {
+            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        /*
+        decompresser le .gzip
+         */
+        File newName = new File(getCsvFilePathFromDate(dates[1]));
+        File oldName;
+        if (dates.length == 4) { //fichier .gz
+
+            boolean decompresserGzip = decompresserGzip(to.toString());
+            oldName = new File(to.toString().substring(0, to.toString().length() - 3));
+
+        } else {
+            oldName = new File(to.toString().substring(0, to.toString().length()));
+
+        }
+        boolean success = oldName.renameTo(newName);
+//        return true;
     }
 
     /**
@@ -846,4 +962,3 @@ public class MyModel {
         return list;
     }
 }
-
