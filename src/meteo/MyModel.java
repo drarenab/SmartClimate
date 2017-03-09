@@ -31,13 +31,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +50,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
@@ -241,8 +240,20 @@ public class MyModel {
      * @param date la date de telechargement (yyyymm)
      * @param outputfile le nom de fichier apres le telechargement(*.csv.gz)
      */
-    private boolean downLoadCsvByDate(String date) throws IOException {
+    private boolean downLoadCsvByDate(String date, ProgressBar ProgressComparaison) throws IOException {
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("ProgressBar");
+//        alert.setHeaderText("Progression du téléchargement");
+//        alert.setContentText(date);
+//
+//        Optional<ButtonType> result = alert.showAndWait();
+//        if (result.get() == ButtonType.OK) {
+//        }
+
         try {
+
+            long startTime = System.nanoTime();
+
             File saveFile;
             URL url;
             String newUrl;
@@ -265,6 +276,11 @@ public class MyModel {
 
             //utilisation de la methode copyURLToFile de apache , qui telecharger et sauvegarde un fichier
             FileUtils.copyURLToFile(url, saveFile);
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1000000;  //divide by 1000000 to get milliseconds.
+            if (ProgressComparaison != null) {
+                ProgressComparaison.setProgress(duration);
+            }
 
             return true;
         } catch (MalformedURLException ex) {
@@ -406,8 +422,8 @@ public class MyModel {
         return missedMonths;
     }
 
-    public boolean downloadAndUncompress(String date) throws IOException {
-        return (downLoadCsvByDate(date)
+    public boolean downloadAndUncompress(String date, ProgressBar ProgressComparaison) throws IOException {
+        return (downLoadCsvByDate(date, ProgressComparaison)
                 && decompresserGzip(getGzipFilePathFromDate(date)));
     }
 
@@ -552,6 +568,42 @@ public class MyModel {
         return Resultat;
     }
 
+    private String getDateMode(String date) {
+        switch (date.length()) {
+            case 4:
+                return "year";
+            case 6:
+                return "month";
+            default:
+                return "day";
+        }
+
+    }
+
+    private void toMediane(ArrayList<DataCity> oldList, String dateMode) {
+        ArrayList<DataCity> newList = null;
+        newList.addAll(oldList);
+        for (DataCity dataCity : oldList) {
+            switch (dateMode) {
+                case "year": {
+
+                }
+
+                case "month": {
+
+                }
+
+                case "day": {
+//                    if (dataCity.getDate().getDay()) {
+                        
+//                    }
+                }
+
+            }
+
+        }
+    }
+
     /**
      *
      * @param date
@@ -575,6 +627,11 @@ public class MyModel {
             if (Resultat == null) {
                 return false;
             }
+            /*
+            a partir de date : si c une année alors afficher la moyenne de chaque mois 
+                                si c un mois alors afficher les 30 jours 
+                                si c un jours afficher les 8 valeurs
+             */
 
             for (int i = 0; i < Resultat.size(); i++) {
 

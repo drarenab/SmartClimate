@@ -22,7 +22,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -33,28 +32,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import coordonnee.*;
 import java.awt.Desktop;
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -76,6 +65,7 @@ public class FXMLDocumentController implements Controller {
     static int Interface = 0;
     static String kelvin_celcius = "celcius";
     static boolean onlineMode = true;
+    static boolean userSelectOffline=false;
     static ChoiceBox LocationDefault;
 
     @FXML
@@ -96,8 +86,7 @@ public class FXMLDocumentController implements Controller {
     LineChart<Number, Number> lineCharttemp, lineCharthum, lineChartnebul;
     @FXML
     MenuBar menuBar;
-    @FXML
-    ProgressIndicator progressComparaison;
+    
     @FXML
     RadioButton kelvin, celcius, online, offline;
     @FXML
@@ -123,7 +112,8 @@ public class FXMLDocumentController implements Controller {
     ToggleGroup groupeChart, groupeRadioAffichage;
     @FXML
     VBox v, VboxPrincipal, v1, v2, VboxComparaison;
-
+    @FXML
+    ProgressBar ProgressComparaison;
     @FXML
     private void handleButtonActionComparer() throws IOException {
 
@@ -208,6 +198,7 @@ public class FXMLDocumentController implements Controller {
 
             if (model.netIsAvailable() != -1) {
                 onlineMode = true;
+                userSelectOffline=false;
             } else {
                 onlineMode = false;
                 offline.setSelected(true);
@@ -217,6 +208,7 @@ public class FXMLDocumentController implements Controller {
         if (offline.isSelected()) {
             //onLine_offLine = "offLine";
             onlineMode = false;
+            userSelectOffline=true;
         }
     }
 
@@ -261,7 +253,6 @@ public class FXMLDocumentController implements Controller {
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-                progressComparaison.setVisible(true);
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
@@ -293,7 +284,7 @@ public class FXMLDocumentController implements Controller {
                             || Integer.parseInt(latestDate.substring(6, 8)) < Integer.parseInt(day.getText())) {
                         System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth + " ...");
                         try {
-                            model.downloadAndUncompress(year.getText() + month.getText());
+                            model.downloadAndUncompress(year.getText() + month.getText(),ProgressComparaison);
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -306,7 +297,7 @@ public class FXMLDocumentController implements Controller {
                         System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth + " ...");
                         try {
                             //on lance le télechargement
-                            model.downloadAndUncompress(year.getText() + month.getText());
+                            model.downloadAndUncompress(year.getText() + month.getText(),ProgressComparaison);
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -320,7 +311,7 @@ public class FXMLDocumentController implements Controller {
                         try {
                             System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
                             //on lance le telechargement des mois qui ne sont pas a jour
-                            model.downloadAndUncompress(month);
+                            model.downloadAndUncompress(month,ProgressComparaison);
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -414,7 +405,7 @@ public class FXMLDocumentController implements Controller {
                         String[] laDate = (dateFormat.format(date)).split("/");
         if (onlineMode) {
             try {
-                model.downloadAndUncompress(laDate[0] + laDate[1]);
+                model.downloadAndUncompress(laDate[0] + laDate[1],null);
             } catch (IOException ex) {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -454,7 +445,7 @@ public class FXMLDocumentController implements Controller {
                             if (onlineMode) {
                                 try{
                                     System.out.println("telechargement des dernieres données"); 
-                                    model.downloadAndUncompress(laDate[0] + laDate[1]);
+                                    model.downloadAndUncompress(laDate[0] + laDate[1],null);
                                 } catch (IOException ex) {
                                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -506,7 +497,7 @@ public class FXMLDocumentController implements Controller {
                     @Override
                     public void run() {
                         onlineMode = model.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
-                        if (online != null) {
+                        if (online != null & userSelectOffline==false) {
                             if (onlineMode) {
                                 System.out.println("online");
                                 online.setSelected(true);
@@ -657,7 +648,6 @@ public class FXMLDocumentController implements Controller {
                 new Image(getClass().getResourceAsStream("Image/left1.png"),
                         35, 35, true, false));
         leftComp.setGraphic(image_view_btn_left);
-        progressComparaison.setVisible(false);
     }
 
     /**
