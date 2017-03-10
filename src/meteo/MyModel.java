@@ -48,7 +48,7 @@ import org.apache.commons.io.FileUtils;
  *
  * @author karim
  */
-public class MyModel {
+public class MyModel implements Model {
 
     //for singelton
     private static volatile MyModel instance = null;
@@ -314,6 +314,7 @@ public class MyModel {
      * @param year corresponds to the year folder we'll look at
      * @return a list of missed months
      */
+    @Override
     public ArrayList<String> getMissedMonthsFiles(String year) {
         int currentDay, currentMonth, currentYear;
         ArrayList<String> missedMonths = new ArrayList<String>();
@@ -347,6 +348,7 @@ public class MyModel {
         return missedMonths;
     }
 
+    @Override
     public boolean downloadAndUncompress(String date) throws IOException {
         return (downLoadCsvByDate(date)
                 && decompresserGzip(getGzipFilePathFromDate(date)));
@@ -363,6 +365,7 @@ public class MyModel {
      * elle contient "all" la mthode retourne les donner de tout les villes
      * @return une arrayList de type DataCity qui contient les donner demander
      */
+    @Override
     public ArrayList<DataCity> getDataForDateByCity(String date, String cityId) {
         // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient 
         //les données de la date demander
@@ -435,6 +438,7 @@ public class MyModel {
         return null;
     }
 
+    @Override
     public ArrayList<DataCity> getDataForYearByCity(String date, String cityId) {
         String year = date.substring(0, 4);
         ArrayList<DataCity> liste = new ArrayList<DataCity>();
@@ -463,6 +467,7 @@ public class MyModel {
      * @return latest available data that we have localy if exists null if no
      * data found localy
      */
+    @Override
     public ArrayList<DataCity> getLatestAvailableData() {
         ArrayList<DataCity> liste = null;
         String file = this.getLatesttAvailableFile();
@@ -481,6 +486,7 @@ public class MyModel {
      * @param stationName
      * @return observableList for Chart
      */
+    @Override
     public ArrayList<DataCity> getListForChart(String date, String stationName) {
         int k = getIdFromNameVille(stationName);
         String t = Integer.toString(k);
@@ -500,6 +506,7 @@ public class MyModel {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
+    @Override
     public boolean constructChartAffichage(String date, String stationName, AreaChart<Number, Number> AfficheTemp,
             AreaChart<Number, Number> AfficheHum,
             AreaChart<Number, Number> AfficheNebul) {
@@ -548,6 +555,7 @@ public class MyModel {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
+    @Override
     public boolean constructChartComparaison(String date1, String date2, String stationName,
             LineChart<Number, Number> lineCharttemp,
             LineChart<Number, Number> lineCharthum,
@@ -618,6 +626,7 @@ public class MyModel {
      * @param day
      * @return Tableau d'erreur or null if any errors
      */
+    @Override
     public Map validateDate(String year, String month, String day) {
         /*
         si année vide retourner null
@@ -654,6 +663,7 @@ public class MyModel {
      *
      * @return true if valide , false if not
      */
+    @Override
     public boolean validateNotFuture(String year, String month, String day) {
         int currentDay, currentMonth, currentYear;
         ZoneId zoneId = ZoneId.of("Europe/Paris");
@@ -680,6 +690,7 @@ public class MyModel {
      *
      * @return le nombre de jour de ce mois
      */
+    @Override
     public int getNumberDaysOfMonth(int year, int month) {
         int currentDay, currentMonth, currentYear;
         ZoneId zoneId = ZoneId.of("Europe/Paris");
@@ -697,10 +708,15 @@ public class MyModel {
      * @param month
      * @return TRUE si le fichier est a jour FALSE sinon
      */
+    @Override
     public boolean isUpdatedMonth(String date) {
         String lastDate, year, month, lastDay;
-
+        //fichier n'existe pas
+        if(!checkIfFileExists(getCsvFilePathFromDate(date)))
+            return false;
+        
         lastDate = getLatestAvailableDateOnFile(date);
+        System.out.println("lastDate="+lastDate);
         lastDay = lastDate.substring(6, 8);
 
         year = date.substring(0, 4);
@@ -753,6 +769,7 @@ public class MyModel {
      * veux chercher dedans
      * @return la date la plus recente dans le fichier qui correspond a @date
      */
+    @Override
     public String getLatestAvailableDateOnFile(String date) {
         File f;
         FileReader fr;
@@ -808,6 +825,7 @@ public class MyModel {
      * @param date sous la forme de yyyymm
      * @return date sous form yyyymmjjhh
      */
+    @Override
     public double netIsAvailable() {
         try {
             final URL url = new URL("http://donneespubliques.meteofrance.fr");
@@ -826,6 +844,7 @@ public class MyModel {
         }
     }
 
+    @Override
     public ArrayList<String> getYearExists() {
         ArrayList<String> list = new ArrayList<>();
         File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
@@ -836,6 +855,7 @@ public class MyModel {
         return list;
     }
 
+    @Override
     public ArrayList<String> getMonthsExistsForYear(String year) {
         ArrayList<String> list = new ArrayList<>();
         File file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + year);
