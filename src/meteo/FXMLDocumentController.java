@@ -38,6 +38,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.chart.AreaChart;
@@ -65,7 +67,7 @@ public class FXMLDocumentController implements Controller {
     static int Interface = 0;
     static String kelvin_celcius = "celcius";
     static boolean onlineMode = true;
-    static boolean userSelectOffline=false;
+    static boolean userSelectOffline = false;
     static ChoiceBox LocationDefault;
 
     @FXML
@@ -86,7 +88,7 @@ public class FXMLDocumentController implements Controller {
     LineChart<Number, Number> lineCharttemp, lineCharthum, lineChartnebul;
     @FXML
     MenuBar menuBar;
-    
+
     @FXML
     RadioButton kelvin, celcius, online, offline;
     @FXML
@@ -114,6 +116,7 @@ public class FXMLDocumentController implements Controller {
     VBox v, VboxPrincipal, v1, v2, VboxComparaison;
     @FXML
     ProgressBar ProgressComparaison;
+
     @FXML
     private void handleButtonActionComparer() throws IOException {
 
@@ -198,7 +201,7 @@ public class FXMLDocumentController implements Controller {
 
             if (model.netIsAvailable() != -1) {
                 onlineMode = true;
-                userSelectOffline=false;
+                userSelectOffline = false;
             } else {
                 onlineMode = false;
                 offline.setSelected(true);
@@ -208,7 +211,7 @@ public class FXMLDocumentController implements Controller {
         if (offline.isSelected()) {
             //onLine_offLine = "offLine";
             onlineMode = false;
-            userSelectOffline=true;
+            userSelectOffline = true;
         }
     }
 
@@ -284,7 +287,7 @@ public class FXMLDocumentController implements Controller {
                             || Integer.parseInt(latestDate.substring(6, 8)) < Integer.parseInt(day.getText())) {
                         System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth + " ...");
                         try {
-                            model.downloadAndUncompress(year.getText() + month.getText(),ProgressComparaison);
+                            model.downloadAndUncompress(year.getText() + month.getText(), ProgressComparaison);
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -297,7 +300,7 @@ public class FXMLDocumentController implements Controller {
                         System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth + " ...");
                         try {
                             //on lance le télechargement
-                            model.downloadAndUncompress(year.getText() + month.getText(),ProgressComparaison);
+                            model.downloadAndUncompress(year.getText() + month.getText(), ProgressComparaison);
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -311,7 +314,7 @@ public class FXMLDocumentController implements Controller {
                         try {
                             System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
                             //on lance le telechargement des mois qui ne sont pas a jour
-                            model.downloadAndUncompress(month,ProgressComparaison);
+                            model.downloadAndUncompress(month, ProgressComparaison);
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -394,18 +397,18 @@ public class FXMLDocumentController implements Controller {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
         //Coordonne.ConstructTabVille();
-        
+
         /*
         on telecharger si possible le dernier fichier a chaque execution du programme
-        */
+         */
         onlineMode = model.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
 
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                        Date date = new Date();
-                        String[] laDate = (dateFormat.format(date)).split("/");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        String[] laDate = (dateFormat.format(date)).split("/");
         if (onlineMode) {
             try {
-                model.downloadAndUncompress(laDate[0] + laDate[1],null);
+                model.downloadAndUncompress(laDate[0] + laDate[1], null);
             } catch (IOException ex) {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -414,7 +417,7 @@ public class FXMLDocumentController implements Controller {
         }
         /*
         Dans le timer on telecharger si possible a chaque 3 heurs
-        */
+         */
         RunTimer();
 
     }
@@ -443,9 +446,9 @@ public class FXMLDocumentController implements Controller {
                         if (date.getHours() % 3 == 1 && date.getMinutes() == 0 && date.getSeconds() == 0) {
 
                             if (onlineMode) {
-                                try{
-                                    System.out.println("telechargement des dernieres données"); 
-                                    model.downloadAndUncompress(laDate[0] + laDate[1],null);
+                                try {
+                                    System.out.println("telechargement des dernieres données");
+                                    model.downloadAndUncompress(laDate[0] + laDate[1], null);
                                 } catch (IOException ex) {
                                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -497,7 +500,7 @@ public class FXMLDocumentController implements Controller {
                     @Override
                     public void run() {
                         onlineMode = model.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
-                        if (online != null & userSelectOffline==false) {
+                        if (online != null & userSelectOffline == false) {
                             if (onlineMode) {
                                 System.out.println("online");
                                 online.setSelected(true);
@@ -655,22 +658,106 @@ public class FXMLDocumentController implements Controller {
      * l'utilisateur a sur sa machine
      */
     public void initInterfaceInformation() {
-        final TreeItem<String> dispoData = new TreeItem<>("Data Disponible");
+
+        HBox hboxDataDispo = new HBox();
+        Text textDataDispo = new Text("Data Dispo");
+        ImageView deleteimg = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/delete.png"),
+                        20, 20, true, false));
+        Button buttonDeleteAll = new Button();
+        buttonDeleteAll.setStyle("-fx-background-color:transparent;");
+        buttonDeleteAll.setGraphic(deleteimg);
+        buttonDeleteAll.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                System.out.println("Accepted");
+            }
+        });
+
+        hboxDataDispo.getChildren().addAll(textDataDispo, buttonDeleteAll);
+        final TreeItem<HBox> dispoData = new TreeItem<>(hboxDataDispo);
         dispoData.setExpanded(true);
         ArrayList<String> listYear = model.getYearExists();
         for (int i = 0; i < listYear.size(); i++) {
+            String s=listYear.get(i);
+            HBox hboxYear = new HBox();
+            Text textYear = new Text(listYear.get(i));
+            Button buttonDelete = new Button();
+            ImageView deleteimg1 = new ImageView(
+                    new Image(getClass().getResourceAsStream("Image/delete.png"),
+                            20, 20, true, false));
+            buttonDelete.setGraphic(deleteimg1);
+            buttonDelete.setStyle("-fx-background-color:transparent;");
+            
+            buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    System.out.println("supprimer le mois "+s);
+                    
+                    model.deleteCSVFile(s);
+                    
+                }
+            });
 
-            final TreeItem<String> oneYear = new TreeItem<>(listYear.get(i));
+            hboxYear.getChildren().addAll(textYear, buttonDelete);
+            final TreeItem<HBox> oneYear = new TreeItem<>(hboxYear);
+
             ArrayList<String> listMonth = model.getMonthsExistsForYear(listYear.get(i));
 
             for (int j = 0; j < listMonth.size(); j++) {
-                oneYear.getChildren().add(j, new TreeItem(listMonth.get(j).substring(9, 11)));
+                HBox hboxMonth = new HBox();
+                Text textMonth = new Text(listMonth.get(j).substring(9, 11));
+                Button buttonDeleteMonth = new Button();
+                ImageView deleteimg2 = new ImageView(
+                        new Image(getClass().getResourceAsStream("Image/delete.png"),
+                                20, 20, true, false));
+                buttonDeleteMonth.setGraphic(deleteimg2);
+                buttonDeleteMonth.setStyle("-fx-background-color:transparent;");
+                hboxMonth.getChildren().addAll(textMonth, buttonDeleteMonth);
+                oneYear.getChildren().add(j, new TreeItem(hboxMonth));
             }
 
             dispoData.getChildren().add(i, oneYear);
 
         }
+
+//        final TreeItem<String> dispoData = new TreeItem<>("Data Disponible");
+//        dispoData.setExpanded(true);
+//        ArrayList<String> listYear = model.getYearExists();
+//        for (int i = 0; i < listYear.size(); i++) {
+//
+//            final TreeItem<String> oneYear = new TreeItem<>(listYear.get(i));
+//            
+//            ArrayList<String> listMonth = model.getMonthsExistsForYear(listYear.get(i));
+//            
+//            for (int j = 0; j < listMonth.size(); j++) {
+//                oneYear.getChildren().add(j, new TreeItem(listMonth.get(j).substring(9, 11)));
+//            }
+//
+//            dispoData.getChildren().add(i, oneYear);
+//
+//        }
+//        ContextMenu menucontext
+//                    = ContextMenuBuilder.create()
+//                            .items(
+//                                    MenuItemBuilder.create()
+//                                            .text("Supprimer")
+//                                            .onAction(new EventHandler<ActionEvent>() {
+//                                                @Override
+//                                                public void handle(ActionEvent arg0) {
+//                                                    System.out.println("Menu Item Clicked!");
+//                                                    
+//                                                    
+//                                                }
+//                                            }
+//                                                    
+//                                            )
+//                                            .build()
+//                            )
+//                            .build();
+//            
         treeView.setRoot(dispoData);
+//        treeView.setContextMenu(menucontext);
     }
 
     /**

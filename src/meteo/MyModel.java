@@ -173,6 +173,9 @@ public class MyModel {
     private String getCsvFilePathFromDate(String date) {
         return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
     }
+     private String getYearFilePathFromDate(String date) {
+        return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4);
+    }
 
     /**
      * Cette mthode donne apartir une date de la forme yyymmjjhh.. , le chemin
@@ -595,7 +598,7 @@ public class MyModel {
 
                 case "day": {
 //                    if (dataCity.getDate().getDay()) {
-                        
+
 //                    }
                 }
 
@@ -858,6 +861,9 @@ public class MyModel {
     /**
      * Verification que la date donner ne doit pas depasser la date courante
      *
+     * @param year
+     * @param month
+     * @param day
      * @return true if valide , false if not
      */
     public boolean validateNotFuture(String year, String month, String day) {
@@ -884,6 +890,8 @@ public class MyModel {
      * Method classique qui retourne pour un mois donner le dernier jour de ce
      * moi EX: le mois JUIN(06) il contient 30 jours
      *
+     * @param year
+     * @param month
      * @return le nombre de jour de ce mois
      */
     public int getNumberDaysOfMonth(int year, int month) {
@@ -900,6 +908,7 @@ public class MyModel {
      * forme de yyyymm EX: 201405 et dis si ce fichier est a jour (contient tout
      * les donnée)
      *
+     * @param date
      * @param month
      * @return TRUE si le fichier est a jour FALSE sinon
      */
@@ -1062,4 +1071,37 @@ public class MyModel {
 
         return list;
     }
+
+    /**
+     * supprimer le fichier de la date selectionner par l'utilisateur
+     *
+     * @param date sous format yyyymm 
+     * @return boolean
+     */
+    public boolean deleteCSVFile(String date) {
+        
+//        if(date.equals("donnes")){
+//            //vider le dossier données
+//        }
+        String path=(date.length()==4)?getYearFilePathFromDate(date) :this.getCsvFilePathFromDate(date) ;
+        File file = new File(path);
+
+        if (file.isDirectory()) {//on va supprimer le dossier complet
+            try {
+                FileUtils.cleanDirectory(file);
+            } catch (IOException ex) {
+                Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //suppression du dossier vide 
+        }
+        return (file.delete());
+    }
 }
+
+/*
+TODO: 
+toMediane(date)
+toMoyenne(date)
+DeleteCVSFile(date) 
+
+ */
