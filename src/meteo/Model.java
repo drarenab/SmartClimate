@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.control.ProgressBar;
 
 /**
  *
@@ -18,6 +19,11 @@ import javafx.scene.chart.LineChart;
  */
 public interface Model {
 
+    
+    public ArrayList<String> getYearExists();
+            
+    public ArrayList<String> getMonthsExistsForYear(String year);
+    
     /**
      *
      * @param date
@@ -25,7 +31,12 @@ public interface Model {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
-    boolean constructChartAffichage(String date, String stationName, AreaChart<Number, Number> AfficheTemp, AreaChart<Number, Number> AfficheHum, AreaChart<Number, Number> AfficheNebul);
+    boolean constructChartAffichage(boolean onlineMode,String date, String stationName, 
+                AreaChart<Number, Number> AfficheTemp, 
+                AreaChart<Number, Number> AfficheHum, 
+                AreaChart<Number, Number> AfficheNebul
+                
+    );
 
     /**
      *
@@ -34,9 +45,10 @@ public interface Model {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
-    boolean constructChartComparaison(String date1, String date2, String stationName, LineChart<Number, Number> lineCharttemp, LineChart<Number, Number> lineCharthum, LineChart<Number, Number> lineChartnebul);
-
-    boolean downloadAndUncompress(String date) throws IOException;
+    boolean constructChartComparaison(boolean onlineMode,String date1, String date2, String stationName, 
+            LineChart<Number, Number> lineCharttemp,
+            LineChart<Number, Number> lineCharthum, 
+            LineChart<Number, Number> lineChartnebul);
 
     /**
      * Cette methode Donne les donnée qui correspond a une date dans une liste,
@@ -89,9 +101,11 @@ public interface Model {
      * @return a list of missed months
      */
     ArrayList<String> getMissedMonthsFiles(String year);
-
-    ArrayList<String> getMonthsExistsForYear(String year);
-
+    
+    public void DisplayAlertToImport() throws IOException;
+    
+    public boolean downloadAndUncompress(String date) throws IOException;
+            
     /**
      * Method classique qui retourne pour un mois donner le dernier jour de ce
      * moi EX: le mois JUIN(06) il contient 30 jours
@@ -99,8 +113,6 @@ public interface Model {
      * @return le nombre de jour de ce mois
      */
     int getNumberDaysOfMonth(int year, int month);
-
-    ArrayList<String> getYearExists();
 
     /**
      * une methode qui prend en parametre un fichier de donnéer d'un mois sous

@@ -26,7 +26,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.time.DayOfWeek;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
@@ -35,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -43,7 +48,13 @@ import java.util.zip.GZIPInputStream;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressBar;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
+
 /**
  *
  * @author karim
@@ -230,7 +241,19 @@ public class MyModel implements Model {
      * @param outputfile le nom de fichier apres le telechargement(*.csv.gz)
      */
     private boolean downLoadCsvByDate(String date) throws IOException {
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("ProgressBar");
+//        alert.setHeaderText("Progression du téléchargement");
+//        alert.setContentText(date);
+//
+//        Optional<ButtonType> result = alert.showAndWait();
+//        if (result.get() == ButtonType.OK) {
+//        }
+
         try {
+
+            long startTime = System.nanoTime();
+
             File saveFile;
             URL url;
             String newUrl;
@@ -253,7 +276,13 @@ public class MyModel implements Model {
 
             //utilisation de la methode copyURLToFile de apache , qui telecharger et sauvegarde un fichier
             FileUtils.copyURLToFile(url, saveFile);
-
+            /*
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1000000;  //divide by 1000000 to get milliseconds.
+            if (ProgressComparaison != null) {
+                ProgressComparaison.setProgress(duration);
+            }
+            */
             return true;
         } catch (MalformedURLException ex) {
             Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -305,6 +334,53 @@ public class MyModel implements Model {
         return false;
     }
 
+    /**
+     *
+     * @param recupp
+     * @return booleen indiquant si le processus d'import a bien été fait sans
+     * erreur cette fonction Copy le fichier du chemin selectionner vers le
+     * dossier local contenant les données le décompresse si c'est un fichier de
+     * type gz et renome le nouveau fichier dans les deux cas
+     */
+    private boolean CopyFileImported(File recupp) {
+        boolean wellDone = true;
+        Path from = Paths.get(recupp.toURI());//chemin du fichier recupéré
+        String[] str = recupp.getPath().split("/");
+        String[] dates = str[str.length - 1].split(Pattern.quote("."));
+        String directory = Configuration.DATA_DIRECTORY_NAME + "/" + dates[1].substring(0, 4);
+
+        wellDone = createDirectory(directory);
+        if (wellDone) {
+            Path to = Paths.get(directory + "/" + str[str.length - 1]);
+            CopyOption[] options = new CopyOption[]{
+                StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES
+            };
+            try {
+                Files.copy(from, to, options);
+            } catch (IOException ex) {
+                wellDone = false;
+                Logger
+                        .getLogger(MyModel.class
+                                .getName()).log(Level.SEVERE, null, ex);
+            }
+            File newName = new File(getCsvFilePathFromDate(dates[1]));
+            File oldName;
+            if (dates.length == 4) { //fichier .gz
+
+                wellDone = decompresserGzip(to.toString());
+                oldName = new File(to.toString().substring(0, to.toString().length() - 3));
+
+            } else {//case file in cvs Format
+                oldName = new File(to.toString().substring(0, to.toString().length()));
+
+            }
+            wellDone = oldName.renameTo(newName);
+        }
+        return wellDone;
+
+    }
+
     //*********************************PUBLIC SECTION ********************************************************// 
     /**
      * this method returns for a given year all month files that doesn't exist
@@ -348,12 +424,6 @@ public class MyModel implements Model {
         return missedMonths;
     }
 
-    @Override
-    public boolean downloadAndUncompress(String date) throws IOException {
-        return (downLoadCsvByDate(date)
-                && decompresserGzip(getGzipFilePathFromDate(date)));
-    }
-
     /**
      * Cette methode Donne les donnée qui correspond a une date dans une liste,
      * ,n
@@ -367,76 +437,76 @@ public class MyModel implements Model {
      */
     @Override
     public ArrayList<DataCity> getDataForDateByCity(String date, String cityId) {
-        // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient 
-        //les données de la date demander
-        //System.out.println("Recuperation des donnée de la ville => " + cityId + " et la date =>" + date);
-        String fileName = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
-        String idVille;
-        float nebu;
-        double temperature;
-        int himudite;
-        aDate adate;
-        //si le fichier de donnée correspondant n'existe pas 
-        //System.out.println("file exist" + fileName);
-        if (!checkIfFileExists(fileName)) {
-            //System.out.println("file doens't exist");
-            return null;
-        }
-
-        try {
-            //parcourir le fichier correspondant et chercher si la date demander jour et heure
-            File dateFile = new File(fileName);
-            FileReader dataFR = new FileReader(dateFile);
-            BufferedReader dataBR = new BufferedReader(dataFR);
-            String line, dateLine, splitedLine[];
-
-            ArrayList<DataCity> listDonnees = new ArrayList<DataCity>();
-
-            Pattern pattern = Pattern.compile(date + ".*");
-            line = dataBR.readLine();
-            Ville ville;
-            //sauter la premiere ligne si elle contient un string , pour éviter les erreurs
-            if (line.startsWith("numer_sta")) {
-                line = dataBR.readLine();
-            }
-
-            while (line != null) {
-
-                //diviser la line qu'on a lu selon la regex ";" en un tableau de string
-                splitedLine = line.split(";");
-                //recuperer l'id de la ville (premier champ)
-                idVille = splitedLine[0];
-                //si c'est la ville qu'on cherche
-                if (idVille.equals(cityId) || cityId.equals("all")) {
-                    dateLine = splitedLine[1];
-                    Matcher match = pattern.matcher(dateLine);
-                    //si on a trouver la date qu'on cherche
-                    if (match.find()) {
-                        ////System.out.println("match date=>"+dateLine);
-                        // si on a bien matcher une date 
-                        //recuperation des données apartir du fichier 
-                        temperature = !splitedLine[7].equals("mq") ? Double.parseDouble(splitedLine[7]) - 273.15 : 101;
-                        nebu = !splitedLine[14].equals("mq") ? Float.parseFloat(splitedLine[14]) : 101;
-                        himudite = !splitedLine[9].equals("mq") ? Integer.parseInt(splitedLine[9]) : 101;
-                        //                                 annéé                           mois                            jour                            heure
-                        adate = new aDate(splitedLine[1].substring(0, 4), splitedLine[1].substring(4, 6), splitedLine[1].substring(6, 8), splitedLine[1].substring(8, 10));
-                        //noter j'ai pa mis le nom de la ville a rajouter
-                        ville = getVilleFromId(Integer.parseInt(idVille));
-                        listDonnees.add(new DataCity(ville, temperature, himudite, nebu, adate));
-                    }
-
-                }
-                line = dataBR.readLine();
-            }
-            dataBR.close();
-            return listDonnees;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient 
+    //les données de la date demander
+    //System.out.println("Recuperation des donnée de la ville => " + cityId + " et la date =>" + date);
+    String fileName = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
+    String idVille;
+    float nebu;
+    double temperature;
+    int himudite;
+    aDate adate;
+    //si le fichier de donnée correspondant n'existe pas 
+    //System.out.println("file exist" + fileName);
+    if (!checkIfFileExists(fileName)) {
+        //System.out.println("file doens't exist");
         return null;
     }
+
+    try {
+        //parcourir le fichier correspondant et chercher si la date demander jour et heure
+        File dateFile = new File(fileName);
+        FileReader dataFR = new FileReader(dateFile);
+        BufferedReader dataBR = new BufferedReader(dataFR);
+        String line, dateLine, splitedLine[];
+
+        ArrayList<DataCity> listDonnees = new ArrayList<DataCity>();
+
+        Pattern pattern = Pattern.compile(date + ".*");
+        line = dataBR.readLine();
+        Ville ville;
+        //sauter la premiere ligne si elle contient un string , pour éviter les erreurs
+        if (line.startsWith("numer_sta")) {
+            line = dataBR.readLine();
+        }
+
+        while (line != null) {
+
+            //diviser la line qu'on a lu selon la regex ";" en un tableau de string
+            splitedLine = line.split(";");
+            //recuperer l'id de la ville (premier champ)
+            idVille = splitedLine[0];
+            //si c'est la ville qu'on cherche
+            if (idVille.equals(cityId) || cityId.equals("all")) {
+                dateLine = splitedLine[1];
+                Matcher match = pattern.matcher(dateLine);
+                //si on a trouver la date qu'on cherche
+                if (match.find()) {
+                    ////System.out.println("match date=>"+dateLine);
+                    // si on a bien matcher une date 
+                    //recuperation des données apartir du fichier 
+                    temperature = !splitedLine[7].equals("mq") ? Double.parseDouble(splitedLine[7]) - 273.15 : 101;
+                    nebu = !splitedLine[14].equals("mq") ? Float.parseFloat(splitedLine[14]) : 101;
+                    himudite = !splitedLine[9].equals("mq") ? Integer.parseInt(splitedLine[9]) : 101;
+                    //                                 annéé                           mois                            jour                            heure
+                    adate = new aDate(splitedLine[1].substring(0, 4), splitedLine[1].substring(4, 6), splitedLine[1].substring(6, 8), splitedLine[1].substring(8, 10));
+                    //noter j'ai pa mis le nom de la ville a rajouter
+                    ville = getVilleFromId(Integer.parseInt(idVille));
+                    listDonnees.add(new DataCity(ville, temperature, himudite, nebu, adate));
+                }
+
+            }
+            line = dataBR.readLine();
+        }
+        dataBR.close();
+        return listDonnees;
+    } catch (FileNotFoundException ex) {
+        Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (IOException ex) {
+        Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+}
 
     @Override
     public ArrayList<DataCity> getDataForYearByCity(String date, String cityId) {
@@ -499,6 +569,42 @@ public class MyModel implements Model {
         return Resultat;
     }
 
+    private String getDateMode(String date) {
+        switch (date.length()) {
+            case 4:
+                return "year";
+            case 6:
+                return "month";
+            default:
+                return "day";
+        }
+
+    }
+
+    private void toMediane(ArrayList<DataCity> oldList, String dateMode) {
+        ArrayList<DataCity> newList = null;
+        newList.addAll(oldList);
+        for (DataCity dataCity : oldList) {
+            switch (dateMode) {
+                case "year": {
+
+                }
+
+                case "month": {
+
+                }
+
+                case "day": {
+//                    if (dataCity.getDate().getDay()) {
+                        
+//                    }
+                }
+
+            }
+
+        }
+    }
+    
     /**
      *
      * @param date
@@ -507,47 +613,81 @@ public class MyModel implements Model {
      *
      */
     @Override
-    public boolean constructChartAffichage(String date, String stationName, AreaChart<Number, Number> AfficheTemp,
-            AreaChart<Number, Number> AfficheHum,
-            AreaChart<Number, Number> AfficheNebul) {
+    public boolean constructChartAffichage(boolean onlineMode,String date, String stationName, 
+                AreaChart<Number, Number> AfficheTemp, 
+                AreaChart<Number, Number> AfficheHum, 
+                AreaChart<Number, Number> AfficheNebul
+                
+    ){
+        if (onlineMode) {
+            ArrayList<XYChart.Series> S = new ArrayList<>();
 
-        ArrayList<XYChart.Series> S = new ArrayList<>();
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
+            ArrayList<DataCity> Resultat = getListForChart(date, stationName);
 
-        ArrayList<DataCity> Resultat = getListForChart(date, stationName);
+            if (Resultat == null) {
+                return false;
+            }
+            /*
+            a partir de date : si c une année alors afficher la moyenne de chaque mois 
+                                si c un mois alors afficher les 30 jours 
+                                si c un jours afficher les 8 valeurs
+             */
 
-        if (Resultat == null) {
-            return false;
-        }
+            for (int i = 0; i < Resultat.size(); i++) {
 
-        for (int i = 0; i < Resultat.size(); i++) {
+                series.getData().add(new XYChart.Data<>(i, Resultat.get(i).getTemperature()));
+                series1.getData().add(new XYChart.Data<>(i, Resultat.get(i).getHumidite()));
+                series2.getData().add(new XYChart.Data<>(i, Resultat.get(i).getNebulosite()));
 
-            series.getData().add(new XYChart.Data<>(i, Resultat.get(i).getTemperature()));
-            series1.getData().add(new XYChart.Data<>(i, Resultat.get(i).getHumidite()));
-            series2.getData().add(new XYChart.Data<>(i, Resultat.get(i).getNebulosite()));
+            }
+            S.add(series);
+            S.add(series1);
+            S.add(series2);
 
-        }
-        S.add(series);
-        S.add(series1);
-        S.add(series2);
+            if (S != null) {
+                AfficheTemp.getData().setAll(S.get(0));
+                AfficheHum.getData().setAll(S.get(1));
+                AfficheNebul.getData().setAll(S.get(2));
+                System.out.println("Chart constructed succefully ");
+                return true;
+            } else {
+                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+                return false;
+            }
 
-        if (S != null) {
-            AfficheTemp.getData().setAll(S.get(0));
-            AfficheHum.getData().setAll(S.get(1));
-            AfficheNebul.getData().setAll(S.get(2));
-            System.out.println("Chart constructed succefully ");
-            return true;
         } else {
-            System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-            return false;
+             /*
+                tester si le fichier existe
+                si oui l'afficher
+                si non verifier si onligne
+                si oui telecharger
+                si non importer
+                */
+            try {
+               DisplayAlertToImport();
+            } catch (IOException ex) {
+                Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            constructChartAffichage(true, date, stationName, 
+                    AfficheTemp,
+                    AfficheHum,
+                    AfficheNebul);
+            return true;
         }
-        
+
         //return false;
     }
 
+    @Override
+    public boolean downloadAndUncompress(String date) throws IOException {
+        return (downLoadCsvByDate(date)
+                && decompresserGzip(getGzipFilePathFromDate(date)));
+    }
+    
     /**
      *
      * @param date
@@ -556,66 +696,144 @@ public class MyModel implements Model {
      *
      */
     @Override
-    public boolean constructChartComparaison(String date1, String date2, String stationName,
+    public boolean constructChartComparaison(boolean onlineMode, String date1, String date2, String stationName,
             LineChart<Number, Number> lineCharttemp,
             LineChart<Number, Number> lineCharthum,
             LineChart<Number, Number> lineChartnebul
-        )
-         {
-        
-        ArrayList<XYChart.Series> S1 = new ArrayList<>();
-        ArrayList<XYChart.Series> S2 = new ArrayList<>();
+    ){
 
-        XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
-        
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
-        XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
-        
-        ArrayList<DataCity> Resultat1 = getListForChart(date1, stationName);
-        ArrayList<DataCity> Resultat2 = getListForChart(date2, stationName);
-        if (Resultat1 == null || Resultat2 == null) {
-            return false;
-        }
+        /*
+            tester si le fichier existe 
+            si oui l'afficher 
+            si non verifier si onligne
+                si oui telecharger
+                si non importer
+         */
+        if (onlineMode) {
+            ArrayList<XYChart.Series> S1 = new ArrayList<>();
+            ArrayList<XYChart.Series> S2 = new ArrayList<>();
 
-        for (int i = 0; i < Resultat1.size(); i++) {
+            XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
 
-            series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
-            series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
-            series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
+            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
+            XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
 
-        }
+            ArrayList<DataCity> Resultat1 = getListForChart(date1, stationName);
+            ArrayList<DataCity> Resultat2 = getListForChart(date2, stationName);
+            if (Resultat1 == null || Resultat2 == null) {
+                return false;
+            }
 
-        S1.add(series0);
-        S1.add(series01);
-        S1.add(series02);
-        
-        for (int i = 0; i < Resultat2.size(); i++) {
+            for (int i = 0; i < Resultat1.size(); i++) {
 
-            series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
-            series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
-            series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
+                series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
+                series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
+                series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
 
-        }
+            }
 
-        S2.add(series1);
-        S2.add(series11);
-        S2.add(series12);
+            S1.add(series0);
+            S1.add(series01);
+            S1.add(series02);
 
-        if (S1 != null&&S2 !=null) {
-            lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
-            lineCharthum.getData().setAll(S1.get(1), S2.get(1));
-            lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
-            System.out.println("Chart constructed succefully ");
-            return true;
+            for (int i = 0; i < Resultat2.size(); i++) {
+
+                series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
+                series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
+                series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
+
+            }
+
+            S2.add(series1);
+            S2.add(series11);
+            S2.add(series12);
+
+            if (S1 != null && S2 != null) {
+                lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
+                lineCharthum.getData().setAll(S1.get(1), S2.get(1));
+                lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
+                System.out.println("Chart constructed succefully ");
+                return true;
+            } else {
+                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+                return false;
+            }
+
+            //return false;
         } else {
-            System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-            return false;
+
+            try {
+                DisplayAlertToImport();
+            } catch (IOException ex) {
+                Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            constructChartComparaison(true, date1, date2, stationName,
+                    lineCharttemp,
+                    lineCharthum,
+                    lineChartnebul
+            );
+            return true;
         }
-        
-        //return false;
+
+    }
+
+    /**
+     * Afficher une alert permettant d'importer un fichier
+     *
+     * @throws IOException
+     */
+    @Override
+    public void DisplayAlertToImport() throws IOException {
+        /*
+        Affichage de l'alert
+         */
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Import Dialog");
+        alert.setHeaderText("On va imported un ou plusieurs fichiers");
+        alert.setContentText("Clickez sur Import pour importer les données téléchargées");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // ... user chose OK
+
+            //Open new dialog for import data and display it 
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Open File");
+
+            List<File> recupp = chooser.showOpenMultipleDialog(new Stage());
+            if (recupp != null) {
+                for (int i = 0; i < recupp.size(); i++) {
+                    /*
+                    get path of file selected
+                     */
+                    String pathOfFile = recupp.get(i).getPath();
+                    System.out.println(pathOfFile);
+                    if (CopyFileImported(recupp.get(i))) {
+                        System.out.println("File correctly Imported !");
+                    } else {
+                        System.out.println("Error when try to import File selected !");
+                    }
+
+                }
+
+            } else {
+                System.out.println("File selected not in correct Format !");
+            }
+        } else {
+            // ... user chose CANCEL or closed the dialog
+            /*
+            Que faire dans ce cas la ????
+            
+             */
+
+            System.out.println("user select cancel ! ");
+
+        }
+
     }
 
     /**
@@ -807,17 +1025,18 @@ public class MyModel implements Model {
             fr.close();
             br.close();
             return String.valueOf(latestDate);
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (IOException ex) {
-            Logger.getLogger(MyModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    /**
-     * *******************KARIM*************************
-     */
     /**
      * Cette Methode retourne la date exacte des donnée les plus recents
      * yyyymmjjhh
@@ -843,7 +1062,12 @@ public class MyModel implements Model {
             return -1;
         }
     }
+    
 
+    /**
+     *
+     * @return ArrayList contenant les dates existantes en local
+     */
     @Override
     public ArrayList<String> getYearExists() {
         ArrayList<String> list = new ArrayList<>();
@@ -855,6 +1079,12 @@ public class MyModel implements Model {
         return list;
     }
 
+    /**
+     *
+     * @param year
+     * @return arrayList contenant les mois existants en local pour une année
+     * mise en paramétre
+     */
     @Override
     public ArrayList<String> getMonthsExistsForYear(String year) {
         ArrayList<String> list = new ArrayList<>();
@@ -866,4 +1096,3 @@ public class MyModel implements Model {
         return list;
     }
 }
-

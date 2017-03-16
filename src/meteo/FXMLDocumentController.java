@@ -22,7 +22,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -33,23 +32,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import coordonnee.*;
 import java.awt.Desktop;
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -66,9 +60,11 @@ public class FXMLDocumentController implements Controller {
     private List<DataCity> dataList;
     private MyModel model;
     private String showMode;
+    private ArrayList<XYChart.Series> chartList;
     static int Interface = 0;
     static String kelvin_celcius = "celcius";
     static boolean onlineMode = true;
+    static boolean userSelectOffline=false;
     static ChoiceBox LocationDefault;
 
     @FXML
@@ -89,8 +85,7 @@ public class FXMLDocumentController implements Controller {
     LineChart<Number, Number> lineCharttemp, lineCharthum, lineChartnebul;
     @FXML
     MenuBar menuBar;
-    @FXML
-    ProgressIndicator progressComparaison;
+    
     @FXML
     RadioButton kelvin, celcius, online, offline;
     @FXML
@@ -117,6 +112,8 @@ public class FXMLDocumentController implements Controller {
     @FXML
     VBox v, VboxPrincipal, v1, v2, VboxComparaison;
 
+//    @FXML
+//    ProgressBar ProgressComparaison;
     @FXML
     private void handleButtonActionComparer() throws IOException {
         String latestDate1 = "",latestDate2 = "";
@@ -127,13 +124,13 @@ public class FXMLDocumentController implements Controller {
         verifier si ville selectionné
          */
         Year1Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-       // Year1Comparaison.setText("");
+
         Year2Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-       // Year2Comparaison.setText("");
+
+
         MonthComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-       // MonthComparaison.setText("");
+
         DayComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-        //DayComparaison.setText("");
 
         Map errors = model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
         Map errors2 = model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
@@ -166,7 +163,7 @@ public class FXMLDocumentController implements Controller {
             validated2 = model.validateNotFuture(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
             String yearMonth1 = "",yearMonth2="",yearMonthDay1 = "",yearMonthDay2 = "";
             if (validated1 && validated2) {
-                progressComparaison.setVisible(true);
+               // progressComparaison.setVisible(true);
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
@@ -277,7 +274,12 @@ public class FXMLDocumentController implements Controller {
                 String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
                 String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
 
-                model.constructChartComparaison(Date1, Date2, StationComparaison.getValue().toString(), lineCharttemp, lineCharthum, lineChartnebul);
+                model.constructChartComparaison(onlineMode,Date1, Date2, 
+                        StationComparaison.getValue().toString(), 
+                        lineCharttemp, 
+                        lineCharthum, 
+                        lineChartnebul
+                );
 
             } else {
                 //not logicaly valid date!
@@ -286,6 +288,7 @@ public class FXMLDocumentController implements Controller {
             /*
             
              */
+
         }
     }
 
@@ -318,6 +321,7 @@ public class FXMLDocumentController implements Controller {
 
             if (model.netIsAvailable() != -1) {
                 onlineMode = true;
+                userSelectOffline=false;
             } else {
                 onlineMode = false;
                 offline.setSelected(true);
@@ -327,11 +331,12 @@ public class FXMLDocumentController implements Controller {
         if (offline.isSelected()) {
             //onLine_offLine = "offLine";
             onlineMode = false;
+            userSelectOffline=true;
         }
     }
 
     @FXML
-    private void handleButtonActionAfficher() {
+    private void handleButtonActionAfficher() throws IOException {
         /*
         Test si le formulaire est bien rempli
          */
@@ -371,7 +376,6 @@ public class FXMLDocumentController implements Controller {
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-                progressComparaison.setVisible(true);
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
@@ -438,7 +442,7 @@ public class FXMLDocumentController implements Controller {
                 }
                 System.out.println("Everything looks good, Trying to construct the chart");
                 //on lance la construction de chart
-                model.constructChartAffichage(year.getText()
+                model.constructChartAffichage(onlineMode, year.getText()
                         + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
                 /*
                 if (chartList != null) {
@@ -453,7 +457,7 @@ public class FXMLDocumentController implements Controller {
  /*
                 TableView
                  */
- /*Attention can be throw an exception if data is null ! */
+                /*Attention can be throw an exception if data is null ! */
                 columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
                 columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
                 columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
@@ -510,12 +514,35 @@ public class FXMLDocumentController implements Controller {
     @Override
     public void InitInterfacePrincipal() {
         //au debut on verifie si il y a une connexion et on initialise online_offline
-        onlineMode = model.netIsAvailable() != -1; // onLine_offLine = "onLine";
         //onLine_offLine = "offLine";
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
         //Coordonne.ConstructTabVille();
+        
+        /*
+        on telecharger si possible le dernier fichier a chaque execution du programme
+        */
+        onlineMode = model.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
 
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date date = new Date();
+                        String[] laDate = (dateFormat.format(date)).split("/");
+        if (onlineMode) {
+            try {
+                model.downloadAndUncompress(laDate[0] + laDate[1]);
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            System.out.println("no connection ! users must import by her self data if he want !");
+        }
+        /*
+        Dans le timer on telecharger si possible a chaque 3 heurs
+        */
+        RunTimer();
+    }
+
+    private void RunTimer() {
         Timer timer = new Timer();
         TimerTask t = new TimerTask() {
             @Override
@@ -525,13 +552,35 @@ public class FXMLDocumentController implements Controller {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        onlineMode = model.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
+
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date date = new Date();
+                        String[] laDate = (dateFormat.format(date)).split("/");
+
                         /*
-                            si il y a une connexion internet 
-                            si temps % 3 = 0 alors telecharger
-                            
-                         */
-                        //verifier continuellement si il y a une connexion internet
+                        1-verifier que la date est %3 
+                        2-verifier qu'on est en mode en ligne
                         
+                         */
+
+                        //verifier continuellement si il y a une connexion internet
+
+
+                        if (date.getHours() % 3 == 1 && date.getMinutes() == 0 && date.getSeconds() == 0) {
+
+                            if (onlineMode) {
+                                try{
+                                    System.out.println("telechargement des dernieres données"); 
+                                    model.downloadAndUncompress(laDate[0] + laDate[1]);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            } else {
+                                System.out.println("no connection ! users must import by her self data if he want !");
+                            }
+                        }
+
                         AfficherCarte();
 
                     }
@@ -566,27 +615,62 @@ public class FXMLDocumentController implements Controller {
         online.setSelected(true);
         offline.setToggleGroup(onOffLine);
 
+        Timer timer = new Timer();
+        TimerTask t = new TimerTask() {
+            @Override
+            public void run() {
+                // some code
+//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        onlineMode = model.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
+                        if (online != null & userSelectOffline==false) {
+                            if (onlineMode) {
+                                System.out.println("online");
+                                online.setSelected(true);
+                            } else {
+                                System.out.println("offline");
+                                offline.setSelected(true);
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        timer.schedule(t, 01, 1000);
+
         //au debut on verifie si il y a une connexion et on initialise online_offline
         LocationDefault = new ChoiceBox();
 
-        LocationDefault.setStyle("-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
+        LocationDefault.setStyle(
+                "-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
         List L = new ArrayList();
         dataList = model.getLatestAvailableData();
-        for (int i = 0; i < dataList.size(); i++) {
+        for (int i = 0;
+                i < dataList.size();
+                i++) {
             L.add(i, dataList.get(i).getCity().getNom());
         }
         ObservableList<String> observableList = FXCollections.observableList(L);
-        observableList.addListener(new ListChangeListener() {
+
+        observableList.addListener(
+                new ListChangeListener() {
 
             @Override
-            public void onChanged(ListChangeListener.Change change) {
+            public void onChanged(ListChangeListener.Change change
+            ) {
 
             }
         });
-        LocationDefault.getItems().clear();
+        LocationDefault.getItems()
+                .clear();
         LocationDefault.setItems(observableList);
+
         LocationDefault.setValue(L.get(L.indexOf("BREST-GUIPAVAS")));
-        HboxLocation.getChildren().add(1, LocationDefault);
+        HboxLocation.getChildren()
+                .add(1, LocationDefault);
         //Interface=0;
     }
 
@@ -693,7 +777,6 @@ public class FXMLDocumentController implements Controller {
                 new Image(getClass().getResourceAsStream("Image/left1.png"),
                         35, 35, true, false));
         leftComp.setGraphic(image_view_btn_left);
-        progressComparaison.setVisible(false);
     }
 
     /**
@@ -751,34 +834,12 @@ public class FXMLDocumentController implements Controller {
 
             @Override
             public void handle(ActionEvent e) {
-                Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.setTitle("Import Dialog");
-                alert.setHeaderText("Les données souhaitées sont malheureusement indisponibles ");
-                alert.setContentText("Clickez sur Import pour importer des données téléchargé manuellement");
+                try {
+                    model.DisplayAlertToImport();
 
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-                    // ... user chose OK
-
-                    //Open new dialog for import data and display it 
-                    FileChooser chooser = new FileChooser();
-                    chooser.setTitle("Open File");
-                    chooser.getExtensionFilters().addAll(new ExtensionFilter(".txt", ".csv"));
-
-                    List<File> recupp = chooser.showOpenMultipleDialog(new Stage());
-                    if (recupp != null) {
-
-                        /*
-                        what can we do??
-                        2 case 
-                        first user select a csv.zip file then we call function who decompress and read file and save data into arraylist
-                        or user select only a csv file, in this case we read file and add data into a arrayList
-                        Question: do we display this alert when user click into afficher or comparer 
-                        or let user click into import from menu ???
-                         */
-                    }
-                } else {
-                    // ... user chose CANCEL or closed the dialog
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -798,10 +859,14 @@ public class FXMLDocumentController implements Controller {
                 if (Desktop.isDesktopSupported()) {
                     try {
                         Desktop.getDesktop().browse(new URI(url));
+
                     } catch (IOException ex) {
-                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FXMLDocumentController.class
+                                .getName()).log(Level.SEVERE, null, ex);
+
                     } catch (URISyntaxException ex) {
-                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FXMLDocumentController.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -827,7 +892,8 @@ public class FXMLDocumentController implements Controller {
                     s.show();
 
                 } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FXMLDocumentController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -852,7 +918,8 @@ public class FXMLDocumentController implements Controller {
                     s.show();
 
                 } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FXMLDocumentController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -968,7 +1035,7 @@ public class FXMLDocumentController implements Controller {
         seting.getItems()
                 .add(preference);
         Menu help = new Menu("_Help");
-        MenuItem aide = new MenuItem("Aide");
+
         MenuItem aPropos = new MenuItem("A Propos");
 
         aPropos.setOnAction(
@@ -996,7 +1063,7 @@ public class FXMLDocumentController implements Controller {
         );
 
         help.getItems()
-                .addAll(aide, aPropos);
+                .addAll(aPropos);
         menuBar.getMenus()
                 .addAll(file, window, statistic, seting, help);
 
@@ -1067,12 +1134,8 @@ public class FXMLDocumentController implements Controller {
         /*Affichage sur l'interface principal le nom de la ville selectionnée par défaut et la derniere date connu
         avec les temératures,humidité et nébulosité adéquat +image representatif de la nébulosité*/
         nomVille.setText(nomVillle);
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-//        LocalDate localDate = LocalDate.now();
         Text DateActuelle = new Text();
         DateActuelle.setFill(Color.CHOCOLATE);
-
-//        DateActuelle.setText(dtf.format(localDate));
         String date = tabVille.get(0).getDate().toString().substring(0, 4) + "/"
                 + tabVille.get(0).getDate().toString().substring(4, 6) + "/"
                 + tabVille.get(0).getDate().toString().substring(6, 8);
@@ -1086,8 +1149,7 @@ public class FXMLDocumentController implements Controller {
         nebulosite.setFill(Color.CHOCOLATE);
 
         for (int i = 0; i < tabVille.size(); i++) {
-            //faux : on accede jamais comme sa , getters et setter -_-
-            //System.out.println("nom ville:"+nomVillle+ "tabVille:"+tabVille.get(i).getCity().getNom());
+
             if (tabVille.get(i).getCity().getNom().equals(nomVillle)) {
                 if (tabVille.get(i).getTemperature() != 101) {
                     Temp.setText("Température: " + Integer.toString((int) Math.ceil(tabVille.get(i).getTemperature())));
@@ -1109,7 +1171,8 @@ public class FXMLDocumentController implements Controller {
 
                 String s = "Image/".concat(getTempsActuel(tabVille.get(i).getNebulosite())).concat(".png");
 
-                Image tempactuel = new Image(Meteo.class.getResourceAsStream(s));
+                Image tempactuel = new Image(Meteo.class
+                        .getResourceAsStream(s));
                 imgviewTempsActuel.setImage(tempactuel);
 
             }
@@ -1119,7 +1182,8 @@ public class FXMLDocumentController implements Controller {
         v1.getChildren().setAll(nomVille, DateActuelle);
         v2.getChildren().setAll(Temp, Humidite, nebulosite);
 
-        Image image = new Image(Meteo.class.getResourceAsStream("Image/country-fra.png"));
+        Image image = new Image(Meteo.class
+                .getResourceAsStream("Image/country-fra.png"));
 
         /*appel de la methode qui recupére les donnée du fichier configuration.txt
           et les mets dans la liste instancier précédement   
