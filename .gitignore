@@ -6,3 +6,4 @@ mylibs/**
 *.csv.gz
 *.csv
 donnees/**
+test/**
