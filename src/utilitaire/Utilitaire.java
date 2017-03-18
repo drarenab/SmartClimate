@@ -56,6 +56,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
+        
 /**
  *
  * @author karim
@@ -391,14 +392,14 @@ public class Utilitaire {
         String path=(date.length()==4)?getYearFilePathFromDate(date) :Utilitaire.getCsvFilePathFromDate(date) ;
         File file = new File(path);
 
-        if (file.isDirectory()) {//on va supprimer le dossier complet
+        if (file.isDirectory()) {
             try {
+                //suppression du dossier vide
+                //suppression du dossier vide
                 FileUtils.cleanDirectory(file);
             } catch (IOException ex) {
                 Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //suppression du dossier vide 
-            //suppression du dossier vide 
         }
         return (file.delete());
     }
