@@ -1,0 +1,112 @@
+*   [33m2b909cb[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m MyModel devided into MyModel and utilitaire plus adding formal classes from jeremy's uml
+[31m|[m[32m\[m  
+[31m|[m * [33mec6e90e[m ajout de la fonction supprimer
+* [32m|[m   [33mf4730e4[m just before pulling up
+[33m|[m[32m\[m [32m\[m  
+[33m|[m [32m|[m[32m/[m  
+[33m|[m * [33m11e6412[m et un autre commit de plus =D
+[33m|[m * [33m4d2cba0[m l'interface principal téléchargement done
+[33m|[m * [33m1dc63f9[m 6 mars
+[33m|[m * [33m0603959[m Import methodes done
+[33m|[m *   [33m96eaa01[m Merge branch 'master' of https://github.com/tifouboy/SmartClimate
+[33m|[m [35m|[m[36m\[m  
+[33m|[m * [36m|[m [33m81bf891[m modif CSS
+* [36m|[m [36m|[m [33me9dbf46[m comparaison logic added in controller
+[36m|[m [36m|[m[36m/[m  
+[36m|[m[36m/[m[36m|[m   
+* [36m|[m   [33m14b9cbe[m no more merges conflicts
+[1;31m|[m[36m\[m [36m\[m  
+[1;31m|[m [36m|[m[36m/[m  
+[1;31m|[m * [33m540f9fc[m refactor of villeTemp
+[1;31m|[m * [33m2945315[m Regler exception dans affiche data disponible + rename all FXML file
+[1;31m|[m * [33m5987bbd[m  optimisation et réorganisation de code
+[1;31m|[m * [33m391512f[m 1
+[1;31m|[m *   [33m30245df[m 000
+[1;31m|[m [1;33m|[m[1;34m\[m  
+[1;31m|[m * [1;34m|[m [33mb4ed23f[m Reorganisation de code
+[1;31m|[m * [1;34m|[m   [33mf802bba[m 1 mars
+[1;31m|[m [1;35m|[m[1;36m\[m [1;34m\[m  
+[1;31m|[m * [1;36m|[m [1;34m|[m [33md4b7dcc[m 1er mars
+* [1;36m|[m [1;36m|[m [1;34m|[m [33m29b2b59[m modified model, now model is the one who refreshes the views not controller
+[1;34m|[m [1;36m|[m[1;34m_[m[1;36m|[m[1;34m/[m  
+[1;34m|[m[1;34m/[m[1;36m|[m [1;36m|[m   
+* [1;36m|[m [1;36m|[m [33ma594988[m same as previous commit
+* [1;36m|[m [1;36m|[m [33m3a69bb8[m Done working on 'handleButtonActionAfficher' everything works , except few form validation reports example: when not selecting a city
+* [1;36m|[m [1;36m|[m [33m4f85b32[m added and tested methods in model, still working on controller
+[1;36m|[m [1;36m|[m[1;36m/[m  
+[1;36m|[m[1;36m/[m[1;36m|[m   
+* [1;36m|[m   [33m170201d[m fixed merging issues
+[31m|[m[1;36m\[m [1;36m\[m  
+[31m|[m [1;36m|[m[1;36m/[m  
+[31m|[m * [33mf3fb7fd[m  fin interface donné existantes et informations sur le serveur
+[31m|[m *   [33m64168ff[m Merge branch 'master' of https://github.com/tifouboy/SmartClimate
+[31m|[m [33m|[m[34m\[m  
+[31m|[m * [34m|[m [33mf2e6101[m 27 fevrier
+* [34m|[m [34m|[m [33m27367f4[m starting to work on controller
+[34m|[m [34m|[m[34m/[m  
+[34m|[m[34m/[m[34m|[m   
+* [34m|[m [33m33a3638[m visit website functionality added
+[34m|[m[34m/[m  
+* [33m55001f0[m 24 fevrier
+* [33m9783c5e[m modification du menu et ajout de progressBar
+* [33m5dd3bb4[m fin design avec fichier CSS
+*   [33m00338b0[m Merge branch 'master' of https://github.com/tifouboy/SmartClimate
+[35m|[m[36m\[m  
+[35m|[m * [33m3adadea[m tableVue successfully populated !
+[35m|[m * [33m72ed07f[m bug de Null pointer exception regler : la ville manquate a ete ajouter
+[35m|[m *   [33mb5f5602[m Merge branch 'master' of https://github.com/tifouboy/SmartClimate
+[35m|[m [1;31m|[m[1;32m\[m  
+[35m|[m * [1;32m|[m [33mf76580c[m allright Â
+[35m|[m * [1;32m|[m [33m2b734be[m damn
+* [1;32m|[m [1;32m|[m [33madfd608[m recup de tabView
+[1;32m|[m [1;32m|[m[1;32m/[m  
+[1;32m|[m[1;32m/[m[1;32m|[m   
+* [1;32m|[m [33m8759039[m 14 fevrier
+[1;32m|[m[1;32m/[m  
+[1;32m|[m *   [33mad6bfd2[m[33m ([m[1;35mrefs/stash[m[33m)[m WIP on master: 7d17fef création d'un model
+[1;32m|[m [1;32m|[m[1;34m\[m  
+[1;32m|[m[1;32m/[m [1;34m/[m  
+[1;32m|[m * [33m30867d0[m index on master: 7d17fef création d'un model
+[1;32m|[m[1;32m/[m  
+* [33m7d17fef[m création d'un model
+*   [33m45cf996[m merge between karim and seif
+[1;35m|[m[1;36m\[m  
+[1;35m|[m * [33mfb4bb81[m Downloader et controller marchent
+[1;35m|[m * [33mf1e847a[m classe downloader prete
+[1;35m|[m *   [33mbdfa240[m oupps deleted my controller so i can merge
+[1;35m|[m [31m|[m[32m\[m  
+[1;35m|[m [31m|[m * [33mdb5a277[m fin interface principal + debut interface comparaison et affichage veleurs
+[1;35m|[m [31m|[m *   [33mda29dfb[m fin de l'interface principal design et relation avec l'interface setting
+[1;35m|[m [31m|[m [33m|[m[34m\[m  
+[1;35m|[m [31m|[m [33m|[m *   [33m3eaf5dc[m 29 janvier
+[1;35m|[m [31m|[m [33m|[m [35m|[m[36m\[m  
+[1;35m|[m [31m|[m [33m|[m * [36m|[m [33m88e5d96[m 29 janvier
+[1;35m|[m [31m|[m * [36m|[m [36m|[m [33m26a1548[m premier commit
+[1;35m|[m [31m|[m  [36m/[m [36m/[m  
+[1;35m|[m * [36m|[m [36m|[m [33m330be2b[m still working on downloader class
+[1;35m|[m * [36m|[m [36m|[m [33mad43735[m still working on Downloader class oeufff
+[1;35m|[m [36m|[m [36m|[m[36m/[m  
+[1;35m|[m [36m|[m[36m/[m[36m|[m   
+[1;35m|[m * [36m|[m   [33mc1222c9[m merge between karim version and seif's
+[1;35m|[m [1;31m|[m[36m\[m [36m\[m  
+[1;35m|[m [1;31m|[m [36m|[m[36m/[m  
+[1;35m|[m [1;31m|[m * [33m12d7598[m modification de .gitignore
+[1;35m|[m [1;31m|[m * [33m1702af0[m Controlleur commun a plusieurs interface + interface Siting
+[1;35m|[m [1;31m|[m * [33m44484bf[m modification de Configuration.java et de coordonnee.java, methode ConstructTabVille
+[1;35m|[m * [1;32m|[m [33med1f7a6[m deleted csv's
+[1;35m|[m * [1;32m|[m [33me7865ff[m classe Downloader + methodes (telechargement decompression et concaténation)
+[1;35m|[m [1;32m|[m[1;32m/[m  
+[1;35m|[m *   [33m590196d[m[33m ([m[1;32morigin/master[m[33m)[m telechargement données + decompression + lecture fichier d'essai et affichage sur map
+[1;35m|[m [1;33m|[m[1;34m\[m  
+[1;35m|[m [1;33m|[m * [33m84bfa78[m Ajout de commentaire javaDoc
+[1;35m|[m [1;33m|[m * [33m49864f4[m Affichage des temperatures sur la carte dynamiquement a partir d'un fichier CSV
+[1;35m|[m [1;33m|[m * [33md81136e[m finalisation de l'affichage des temperature sur la carte de l'interface principale
+[1;35m|[m * [1;34m|[m [33m3af07fe[m telechargement et decompression des donnees+commentaires
+[1;35m|[m * [1;34m|[m   [33m3b4846b[m premiere recuperation du projet
+[1;35m|[m [1;35m|[m[1;34m\[m [1;34m\[m  
+[1;35m|[m [1;35m|[m [1;34m|[m[1;34m/[m  
+[1;35m|[m [1;35m|[m * [33m8b54455[m Premier Commit:Interface Principal
+[1;35m|[m [1;35m|[m * [33ma13527e[m nothing
+[1;35m|[m [1;35m|[m * [33m4942ac6[m Initial commit
+[1;35m|[m * [33mfb2d939[m initial commit
+* [33mb108be7[m re
