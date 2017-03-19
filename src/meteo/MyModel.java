@@ -54,6 +54,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import smart.Station;
 import utilitaire.Utilitaire;
 
 /**
@@ -61,22 +62,67 @@ import utilitaire.Utilitaire;
  * @author karim
  */
 public class MyModel {
-
+    private Map<Integer,Station> stationList;
     //for singelton
     private static volatile MyModel instance = null;
-    private Map<Integer, Ville> villes;
+    //private Map<Integer, Ville> villes;
 
     private MyModel() {
         constructMapVilles();
     }
-
-    
-    
-     /**
+  
+  /**
      * COnstruire la map qui contient la correspondance idVille => nomVille
      *
      * @return true if succesfully charged false if not
-     */
+   */
+   private boolean constructMapVilles() {
+        FileReader fr = null;
+        String line;
+        Station station;
+        int id,x,y;
+        String city;
+        
+        try {
+            File file = new File(Configuration.CITY_FILE_NAME);
+            fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            line = br.readLine();
+            line = br.readLine();
+
+            stationList = new HashMap();
+
+            while (line != null) {
+                id = Integer.parseInt(line.split(";")[0]);
+                city = line.split(";")[1];
+                x = Integer.parseInt(line.split(";")[2]);
+                y = Integer.parseInt(line.split(";")[3]);
+                station = new Station(
+                        id,
+                        city,
+                        new Point(x, y)
+                );
+                stationList.put(id,station);
+                line = br.readLine();
+            }
+
+            br.close();
+            return true;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+   
+    /*
     private boolean constructMapVilles() {
         FileReader fr = null;
         String line;
@@ -113,7 +159,9 @@ public class MyModel {
         }
         return false;
     }
-
+*/
+   
+   /*
     private int getIdFromNameVille(String name) {
         Integer key = null;
 
@@ -132,7 +180,7 @@ public class MyModel {
     private Ville getVilleFromId(int id) {
         return (villes.get(id));
     }
-
+*/
     
     public static MyModel getInstance() {
         if (instance == null) {
@@ -182,6 +230,7 @@ public class MyModel {
         return null;
         }
         
+    
     /**
      * Cette methode Donne les donnée qui correspond a une date dans une liste,
      * ,n
@@ -199,10 +248,10 @@ public class MyModel {
     //System.out.println("Recuperation des donnée de la ville => " + cityId + " et la date =>" + date);
     String fileName = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
     String idVille;
-    float nebu;
-    double temperature;
-    int himudite;
+    float nebu,temperature,himudite;
     aDate adate;
+    int jour,mois,annee,ordre;
+    
     //si le fichier de donnée correspondant n'existe pas 
     //System.out.println("file exist" + fileName);
     if (!Utilitaire.checkIfFileExists(fileName)) {
@@ -242,14 +291,23 @@ public class MyModel {
                     ////System.out.println("match date=>"+dateLine);
                     // si on a bien matcher une date 
                     //recuperation des données apartir du fichier 
-                    temperature = !splitedLine[7].equals("mq") ? Double.parseDouble(splitedLine[7]) - 273.15 : 101;
+                    temperature = (float) (!splitedLine[7].equals("mq") ? Float.parseFloat(splitedLine[7]) - 273.15 : 101.0);
                     nebu = !splitedLine[14].equals("mq") ? Float.parseFloat(splitedLine[14]) : 101;
-                    himudite = !splitedLine[9].equals("mq") ? Integer.parseInt(splitedLine[9]) : 101;
+                    himudite = !splitedLine[9].equals("mq") ? Float.parseFloat(splitedLine[9]) : 101;
                     //                                 annéé                           mois                            jour                            heure
-                    adate = new aDate(splitedLine[1].substring(0, 4), splitedLine[1].substring(4, 6), splitedLine[1].substring(6, 8), splitedLine[1].substring(8, 10));
+                    //adate = new aDate(splitedLine[1].substring(0, 4), splitedLine[1].substring(4, 6), splitedLine[1].substring(6, 8), splitedLine[1].substring(8, 10));
+                    
+                    annee = Integer.parseInt(splitedLine[1].substring(0, 4));
+                    mois = Integer.parseInt(splitedLine[1].substring(4, 6));
+                    jour = Integer.parseInt(splitedLine[1].substring(6, 8));
+                    ordre = Integer.parseInt(splitedLine[1].substring(8, 10));
+                    
+                    
                     //noter j'ai pa mis le nom de la ville a rajouter
-                    ville = getVilleFromId(Integer.parseInt(idVille));
-                    listDonnees.add(new DataCity(ville, temperature, himudite, nebu, adate));
+                    //ville = getVilleFromId(Integer.parseInt(idVille));
+                    stationList.get(idVille);
+                    
+                    //listDonnees.add(new DataCity(ville, temperature, himudite, nebu, adate));
                 }
 
             }
@@ -266,27 +324,27 @@ public class MyModel {
 }
 
     
-    public ArrayList<DataCity> getDataForYearByCity(String date, String cityId) {
-        String year = date.substring(0, 4);
-        ArrayList<DataCity> liste = new ArrayList<DataCity>();
-        ArrayList<DataCity> tempList = null;
-        String yearMonth;
-        for (int i = 1; i <= 12; i++) {
-            if (i < 10) {
-                yearMonth = year + ("00" + i).substring("i".length());
-            } else {
-                yearMonth = year + String.valueOf(i);
-            }
-
-            tempList = getDataForDateByCity(yearMonth, cityId);
-            if (tempList != null) {
-                liste.addAll(tempList);
-                //System.out.println("list is null");
-            }
-            ////System.out.println("tour:"+i);
-        }
-        return liste;
-    }
+//    public ArrayList<DataCity> getDataForYearByCity(String date, String cityId) {
+//        String year = date.substring(0, 4);
+//        ArrayList<DataCity> liste = new ArrayList<DataCity>();
+//        ArrayList<DataCity> tempList = null;
+//        String yearMonth;
+//        for (int i = 1; i <= 12; i++) {
+//            if (i < 10) {
+//                yearMonth = year + ("00" + i).substring("i".length());
+//            } else {
+//                yearMonth = year + String.valueOf(i);
+//            }
+//
+//            tempList = getDataForDateByCity(yearMonth, cityId);
+//            if (tempList != null) {
+//                liste.addAll(tempList);
+//                //System.out.println("list is null");
+//            }
+//            ////System.out.println("tour:"+i);
+//        }
+//        return liste;
+//    }
 
     /**
      * This method returns the latest available data localy
@@ -295,17 +353,17 @@ public class MyModel {
      * data found localy
      */
     
-    public ArrayList<DataCity> getLatestAvailableData() {
-        ArrayList<DataCity> liste = null;
-        String file = Utilitaire.getLatesttAvailableFile();
-        //System.out.println("damnFile:"+file);
-        String date = this.getLatestAvailableDateOnFile(file);
-        if (date != null) {
-            liste = this.getDataForDateByCity(date, "all");
-        }
-
-        return liste;
-    }
+//    public ArrayList<DataCity> getLatestAvailableData() {
+//        ArrayList<DataCity> liste = null;
+//        String file = Utilitaire.getLatesttAvailableFile();
+//        //System.out.println("damnFile:"+file);
+//        String date = this.getLatestAvailableDateOnFile(file);
+//        if (date != null) {
+//            liste = this.getDataForDateByCity(date, "all");
+//        }
+//
+//        return liste;
+//    }
 
     /**
      *
@@ -313,131 +371,131 @@ public class MyModel {
      * @param stationName
      * @return observableList for Chart
      */
-    
-    public ArrayList<DataCity> getListForChart(String date, String stationName) {
-        int k = getIdFromNameVille(stationName);
-        String t = Integer.toString(k);
-
-        ArrayList<DataCity> Resultat = date.length() == 4
-                ? this.getDataForYearByCity(date, t.length() == 5 ? t : '0' + t)
-                : this.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
-        //MyModel.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
-
-        return Resultat;
-    }
-
-    private String getDateMode(String date) {
-        switch (date.length()) {
-            case 4:
-                return "year";
-            case 6:
-                return "month";
-            default:
-                return "day";
-        }
-
-    }
-
-    private void toMediane(ArrayList<DataCity> oldList, String dateMode) {
-        ArrayList<DataCity> newList = null;
-        newList.addAll(oldList);
-        for (DataCity dataCity : oldList) {
-            switch (dateMode) {
-                case "year": {
-
-                }
-
-                case "month": {
-
-                }
-
-                case "day": {
-//                    if (dataCity.getDate().getDay()) {
-
-//                    }
-                }
-
-            }
-
-        }
-    }
-    
-    /**
-     *
-     * @param date
-     * @param stationName
-     * @return ArrayList of series that are parameters to ChartLine
-     *
-     */
-    
-    public boolean constructChartAffichage(boolean onlineMode,String date, String stationName, 
-                AreaChart<Number, Number> AfficheTemp, 
-                AreaChart<Number, Number> AfficheHum, 
-                AreaChart<Number, Number> AfficheNebul
-                
-    ){
-        if (onlineMode) {
-            ArrayList<XYChart.Series> S = new ArrayList<>();
-
-            XYChart.Series<Number, Number> series = new XYChart.Series<>();
-            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-            XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
-
-            ArrayList<DataCity> Resultat = getListForChart(date, stationName);
-
-            if (Resultat == null) {
-                return false;
-            }
-            /*
-            a partir de date : si c une année alors afficher la moyenne de chaque mois 
-                                si c un mois alors afficher les 30 jours 
-                                si c un jours afficher les 8 valeurs
-             */
-
-            for (int i = 0; i < Resultat.size(); i++) {
-
-                series.getData().add(new XYChart.Data<>(i, Resultat.get(i).getTemperature()));
-                series1.getData().add(new XYChart.Data<>(i, Resultat.get(i).getHumidite()));
-                series2.getData().add(new XYChart.Data<>(i, Resultat.get(i).getNebulosite()));
-
-            }
-            S.add(series);
-            S.add(series1);
-            S.add(series2);
-
-            if (S != null) {
-                AfficheTemp.getData().setAll(S.get(0));
-                AfficheHum.getData().setAll(S.get(1));
-                AfficheNebul.getData().setAll(S.get(2));
-                System.out.println("Chart constructed succefully ");
-                return true;
-            } else {
-                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-                return false;
-            }
-
-        } else {
-             /*
-                tester si le fichier existe
-                si oui l'afficher
-                si non verifier si onligne
-                si oui telecharger
-                si non importer
-                */
-            try {
-               DisplayAlertToImport();
-            } catch (IOException ex) {
-                Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            constructChartAffichage(true, date, stationName, 
-                    AfficheTemp,
-                    AfficheHum,
-                    AfficheNebul);
-            return true;
-        }
-
-        //return false;
-    }
+//    /*
+//    public ArrayList<DataCity> getListForChart(String date, String stationName) {
+//        int k = getIdFromNameVille(stationName);
+//        String t = Integer.toString(k);
+//
+//        ArrayList<DataCity> Resultat = date.length() == 4
+//                ? this.getDataForYearByCity(date, t.length() == 5 ? t : '0' + t)
+//                : this.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
+//        //MyModel.getDataForDateByCity(date, t.length() == 5 ? t : '0' + t);
+//
+//        return Resultat;
+//    }
+//*/
+//    private String getDateMode(String date) {
+//        switch (date.length()) {
+//            case 4:
+//                return "year";
+//            case 6:
+//                return "month";
+//            default:
+//                return "day";
+//        }
+//
+//    }
+//
+//    private void toMediane(ArrayList<DataCity> oldList, String dateMode) {
+//        ArrayList<DataCity> newList = null;
+//        newList.addAll(oldList);
+//        for (DataCity dataCity : oldList) {
+//            switch (dateMode) {
+//                case "year": {
+//
+//                }
+//
+//                case "month": {
+//
+//                }
+//
+//                case "day": {
+////                    if (dataCity.getDate().getDay()) {
+//
+////                    }
+//                }
+//
+//            }
+//
+//        }
+//    }
+//    
+//    /**
+//     *
+//     * @param date
+//     * @param stationName
+//     * @return ArrayList of series that are parameters to ChartLine
+//     *
+//     */
+//    /*
+//    public boolean constructChartAffichage(boolean onlineMode,String date, String stationName, 
+//                AreaChart<Number, Number> AfficheTemp, 
+//                AreaChart<Number, Number> AfficheHum, 
+//                AreaChart<Number, Number> AfficheNebul
+//                
+//    ){
+//        if (onlineMode) {
+//            ArrayList<XYChart.Series> S = new ArrayList<>();
+//
+//            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+//            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+//            XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
+//
+//            ArrayList<DataCity> Resultat = getListForChart(date, stationName);
+//
+//            if (Resultat == null) {
+//                return false;
+//            }
+//            /*
+//            a partir de date : si c une année alors afficher la moyenne de chaque mois 
+//                                si c un mois alors afficher les 30 jours 
+//                                si c un jours afficher les 8 valeurs
+//             */
+//
+//            for (int i = 0; i < Resultat.size(); i++) {
+//
+//                series.getData().add(new XYChart.Data<>(i, Resultat.get(i).getTemperature()));
+//                series1.getData().add(new XYChart.Data<>(i, Resultat.get(i).getHumidite()));
+//                series2.getData().add(new XYChart.Data<>(i, Resultat.get(i).getNebulosite()));
+//
+//            }
+//            S.add(series);
+//            S.add(series1);
+//            S.add(series2);
+//
+//            if (S != null) {
+//                AfficheTemp.getData().setAll(S.get(0));
+//                AfficheHum.getData().setAll(S.get(1));
+//                AfficheNebul.getData().setAll(S.get(2));
+//                System.out.println("Chart constructed succefully ");
+//                return true;
+//            } else {
+//                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+//                return false;
+//            }
+//
+//        } else {
+//             /*
+//                tester si le fichier existe
+//                si oui l'afficher
+//                si non verifier si onligne
+//                si oui telecharger
+//                si non importer
+//                */
+//            try {
+//               DisplayAlertToImport();
+//            } catch (IOException ex) {
+//                Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            constructChartAffichage(true, date, stationName, 
+//                    AfficheTemp,
+//                    AfficheHum,
+//                    AfficheNebul);
+//            return true;
+//        }
+//
+//        //return false;
+//    }
 
     
     public boolean downloadAndUncompress(String date) throws IOException {
@@ -453,90 +511,90 @@ public class MyModel {
      * @return ArrayList of series that are parameters to ChartLine
      *
      */
-    public boolean constructChartComparaison(boolean onlineMode, String date1, String date2, String stationName,
-            LineChart<Number, Number> lineCharttemp,
-            LineChart<Number, Number> lineCharthum,
-            LineChart<Number, Number> lineChartnebul
-    ){
-
-        /*
-            tester si le fichier existe 
-            si oui l'afficher 
-            si non verifier si onligne
-                si oui telecharger
-                si non importer
-         */
-        if (onlineMode) {
-            ArrayList<XYChart.Series> S1 = new ArrayList<>();
-            ArrayList<XYChart.Series> S2 = new ArrayList<>();
-
-            XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
-            XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
-            XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
-
-            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-            XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
-            XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
-
-            ArrayList<DataCity> Resultat1 = getListForChart(date1, stationName);
-            ArrayList<DataCity> Resultat2 = getListForChart(date2, stationName);
-            if (Resultat1 == null || Resultat2 == null) {
-                return false;
-            }
-
-            for (int i = 0; i < Resultat1.size(); i++) {
-
-                series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
-                series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
-                series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
-
-            }
-
-            S1.add(series0);
-            S1.add(series01);
-            S1.add(series02);
-
-            for (int i = 0; i < Resultat2.size(); i++) {
-
-                series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
-                series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
-                series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
-
-            }
-
-            S2.add(series1);
-            S2.add(series11);
-            S2.add(series12);
-
-            if (S1 != null && S2 != null) {
-                lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
-                lineCharthum.getData().setAll(S1.get(1), S2.get(1));
-                lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
-                System.out.println("Chart constructed succefully ");
-                return true;
-            } else {
-                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-                return false;
-            }
-
-            //return false;
-        } else {
-
-            try {
-                DisplayAlertToImport();
-            } catch (IOException ex) {
-                Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            constructChartComparaison(true, date1, date2, stationName,
-                    lineCharttemp,
-                    lineCharthum,
-                    lineChartnebul
-            );
-            return true;
-        }
-
-    }
+//    public boolean constructChartComparaison(boolean onlineMode, String date1, String date2, String stationName,
+//            LineChart<Number, Number> lineCharttemp,
+//            LineChart<Number, Number> lineCharthum,
+//            LineChart<Number, Number> lineChartnebul
+//    ){
+//
+//        /*
+//            tester si le fichier existe 
+//            si oui l'afficher 
+//            si non verifier si onligne
+//                si oui telecharger
+//                si non importer
+//         */
+//        if (onlineMode) {
+//            ArrayList<XYChart.Series> S1 = new ArrayList<>();
+//            ArrayList<XYChart.Series> S2 = new ArrayList<>();
+//
+//            XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
+//            XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
+//            XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
+//
+//            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+//            XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
+//            XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
+//
+//            ArrayList<DataCity> Resultat1 = getListForChart(date1, stationName);
+//            ArrayList<DataCity> Resultat2 = getListForChart(date2, stationName);
+//            if (Resultat1 == null || Resultat2 == null) {
+//                return false;
+//            }
+//
+//            for (int i = 0; i < Resultat1.size(); i++) {
+//
+//                series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
+//                series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
+//                series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
+//
+//            }
+//
+//            S1.add(series0);
+//            S1.add(series01);
+//            S1.add(series02);
+//
+//            for (int i = 0; i < Resultat2.size(); i++) {
+//
+//                series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
+//                series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
+//                series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
+//
+//            }
+//
+//            S2.add(series1);
+//            S2.add(series11);
+//            S2.add(series12);
+//
+//            if (S1 != null && S2 != null) {
+//                lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
+//                lineCharthum.getData().setAll(S1.get(1), S2.get(1));
+//                lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
+//                System.out.println("Chart constructed succefully ");
+//                return true;
+//            } else {
+//                System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+//                return false;
+//            }
+//
+//            //return false;
+//        } else {
+//
+//            try {
+//                DisplayAlertToImport();
+//            } catch (IOException ex) {
+//                Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//            constructChartComparaison(true, date1, date2, stationName,
+//                    lineCharttemp,
+//                    lineCharthum,
+//                    lineChartnebul
+//            );
+//            return true;
+//        }
+//
+//    }
 
     /**
      * Afficher une alert permettant d'importer un fichier

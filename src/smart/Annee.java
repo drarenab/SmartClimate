@@ -5,7 +5,9 @@
  */
 package smart;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -13,7 +15,11 @@ import java.util.List;
  */
 public class Annee {
     private int id;
-    private List<Mois> mois;
+    private Map<Integer,Mois> moisList;
+    
+    public Annee(int id) {
+        moisList = new HashMap<Integer,Mois>();
+    }
     
     public List<Releve> getReleves() {
         return null;

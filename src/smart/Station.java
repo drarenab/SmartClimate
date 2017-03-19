@@ -5,6 +5,8 @@
  */
 package smart;
 
+import coordonnee.Point;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +16,15 @@ import java.util.List;
 public class Station {
     private int id;
     private String nom;
+    private Point point;
     private List<Annee> anneesList;
+    
+    public Station(int id,String nom,Point point) {
+        this.id = id;
+        this.nom = nom;
+        this.point = point;
+        anneesList = new ArrayList<Annee>();
+    }
     
     public List<Releve> getReleves(int annee,int mois,int jour) {
         return null;
