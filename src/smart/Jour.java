@@ -8,6 +8,7 @@ package smart;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utilitaire.Utilitaire;
 
 /**
  *
@@ -17,20 +18,82 @@ public class Jour {
 
     private int id;
     private Map<Integer, Releve> relevesList ;
-//    private List<Releve> relevesList;
-
+ 
     public Jour(int id) {
         this.id = id;
-        relevesList= new HashMap<>();
+        relevesList= new HashMap<Integer,Releve>();
     }
 
+    public Releve getAndCreateReleve(int ordre,Releve releve) 
+    {   Boolean bool = relevesList.containsKey(ordre);
+        if(!bool)
+            relevesList.put(ordre,releve);
+        
+        return (relevesList.get(ordre));
+    }
+    /**
+     * Checks if data is updated for the day , and if it contains all needed data for all releves
+     * @param year the year which this day belongs 
+     * @param month the month which this day belongs    
+     * @return true if data is fully updated
+     *         false if data is not fully updated
+     */
+    public boolean isUpdated(int year,int month)
+    {   //fichier n'existe pas        
+        String currentYear,currentMonth,currentDay;
+        int currentHour;
+        boolean today = false;
+        int[] currentDate= Utilitaire.getCurrentDate();
+        currentHour = Utilitaire.getCurrentDate()[0];
+        //pour avoir 01 pour le premier jour de moi au lieu de 1
+        currentDay = String.valueOf(currentDate[1]);
+        currentDay = ("00" + currentDay).substring(currentDay.length());
+        
+        currentMonth = String.valueOf(currentDate[2]);
+        currentMonth = ("00" + currentMonth).substring(currentMonth.length());
+
+        currentYear = String.valueOf(currentDate[3]);
+        
+        //System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
+        if (currentYear.equals(year)
+                && //si le fichier contient les donnees de l'année courante
+                currentMonth.equals(month)
+                && //et si le fichier contient les donnees mois courant
+                currentDay.equals(id)
+                ) 
+            today = true;
+        
+        for(int i=0;i<24;i++) {
+            if(i%3!=0)
+                continue;
+            
+            //si date ajourd'hui et ordre de releve inferieure a l'heure actuelle,  donc le relevé doit forcement exister sinon erreure
+            if(today&&
+                    (i/3)<=(currentHour/3)&&
+                    !relevesList.containsKey(i/3)) {
+                
+                return false;// donc le jour n'est pas a jour 
+            }    
+        }
+        return true;
+    }
     
     public Releve getReleve(int ordre) {
 
         return relevesList.get(ordre);
 
     }
-/**
+    
+    public boolean releveExists(int ordre) {
+        return relevesList.containsKey(ordre);
+    }
+    
+    public boolean addReleve(int ordre, float temperature, float humidite, float nebulosite)
+    {
+        return relevesList.put(ordre,new Releve(ordre,temperature,humidite,nebulosite))!=null;
+    }
+    
+    /**
  * 
  * @return un releve representant la moyenne des données d'un jour
  */
@@ -48,6 +111,7 @@ public class Jour {
         temperature/=relevesList.size();
         humidite/=relevesList.size();
         nebulosite/=relevesList.size();
+        
         return new Releve(0, temperature, humidite, nebulosite);
     }
 

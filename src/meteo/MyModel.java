@@ -38,6 +38,7 @@ import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,6 +55,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import smart.Releve;
 import smart.Station;
 import utilitaire.Utilitaire;
 
@@ -71,7 +73,16 @@ public class MyModel {
         constructMapVilles();
     }
   
-  /**
+   public void showEveryThing() {
+       Iterator it = stationList.values().iterator();
+       while(it.hasNext()) 
+       {
+           Station station = (Station) it.next();
+           System.out.println(station.getId()+":"+station.getNom()+"  |"+station.getPoint());
+       }
+   } 
+    
+   /**
      * COnstruire la map qui contient la correspondance idVille => nomVille
      *
      * @return true if succesfully charged false if not
@@ -229,7 +240,24 @@ public class MyModel {
     */
         return null;
         }
+    
+    private boolean addReleve(int station,int annee,int mois,int jour,int ordre, float temperature, float humidite, float nebulosite) {
+        Releve releve = new Releve(ordre,temperature,humidite,nebulosite);
         
+        return (stationList
+                .get(station)
+                .getAndCreateAnnee(annee)
+                .getAndCreateMois(mois)
+                .getAndCreateJour(jour)
+                .getAndCreateReleve(ordre, releve)==null);
+    
+    }
+    
+    /*
+    public Station getAvailableData(int annee,int mois,int jour, String cityId){
+        if(stationList.get(cityId).anneeExists(annee))
+    }
+    */
     
     /**
      * Cette methode Donne les donnée qui correspond a une date dans une liste,
@@ -242,7 +270,7 @@ public class MyModel {
      * elle contient "all" la mthode retourne les donner de tout les villes
      * @return une arrayList de type DataCity qui contient les donner demander
      */
-    public ArrayList<DataCity> getDataForDateByCity(String date, String cityId) {
+    public boolean getDataForDateByCity(String date, String cityId) {
     // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient 
     //les données de la date demander
     //System.out.println("Recuperation des donnée de la ville => " + cityId + " et la date =>" + date);
@@ -256,7 +284,7 @@ public class MyModel {
     //System.out.println("file exist" + fileName);
     if (!Utilitaire.checkIfFileExists(fileName)) {
         //System.out.println("file doens't exist");
-        return null;
+        return false;
     }
 
     try {
@@ -305,7 +333,8 @@ public class MyModel {
                     
                     //noter j'ai pa mis le nom de la ville a rajouter
                     //ville = getVilleFromId(Integer.parseInt(idVille));
-                    stationList.get(idVille);
+                    //attention si anneee or mois or jour n'existe pas ! 
+                      addReleve(Integer.parseInt(idVille), annee, mois, jour, ordre, temperature, himudite, himudite);
                     
                     //listDonnees.add(new DataCity(ville, temperature, himudite, nebu, adate));
                 }
@@ -314,13 +343,13 @@ public class MyModel {
             line = dataBR.readLine();
         }
         dataBR.close();
-        return listDonnees;
+        return true;
     } catch (FileNotFoundException ex) {
         Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
     } catch (IOException ex) {
         Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
     }
-    return null;
+    return false;
 }
 
     
@@ -717,22 +746,7 @@ public class MyModel {
 
     }
 
-    /**
-     * Method classique qui retourne pour un mois donner le dernier jour de ce
-     * moi EX: le mois JUIN(06) il contient 30 jours
-     *
-     * @param year
-     * @param month
-     * @return le nombre de jour de ce mois
-     */
-    public int getNumberDaysOfMonth(int year, int month) {
-        int currentDay, currentMonth, currentYear;
-        ZoneId zoneId = ZoneId.of("Europe/Paris");
-        LocalDateTime localTime = LocalDateTime.of(year, Month.of(month), 3, 3, 3);
-        LocalDateTime lastDay = localTime.with(TemporalAdjusters.lastDayOfMonth());
-
-        return lastDay.getDayOfMonth();
-    }
+    
 
     /**
      * une methode qui prend en parametre un fichier de donnéer d'un mois sous
@@ -784,7 +798,7 @@ public class MyModel {
                 ) {
             return true;
         } else {
-            int nbDays = getNumberDaysOfMonth(Integer.parseInt(year), Integer.parseInt(month));
+            int nbDays = Utilitaire.getNumberDaysOfMonth(Integer.parseInt(year), Integer.parseInt(month));
             //System.out.println("nbDays:"+nbDays);
             if (String.valueOf(nbDays).equals(lastDay)) {
                 return true;
@@ -803,7 +817,6 @@ public class MyModel {
      * veux chercher dedans
      * @return la date la plus recente dans le fichier qui correspond a @date
      */
-    
     public String getLatestAvailableDateOnFile(String date) {
         File f;
         FileReader fr;
@@ -859,8 +872,7 @@ public class MyModel {
      *
      * @param date sous la forme de yyyymm
      * @return date sous form yyyymmjjhh
-     */
-    
+     */ 
     public double netIsAvailable() {
         try {
             final URL url = new URL("http://donneespubliques.meteofrance.fr");
@@ -884,7 +896,6 @@ public class MyModel {
      *
      * @return ArrayList contenant les dates existantes en local
      */
-    
     public ArrayList<String> getYearExists() {
         ArrayList<String> list = new ArrayList<>();
         File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
@@ -901,7 +912,6 @@ public class MyModel {
      * @return arrayList contenant les mois existants en local pour une année
      * mise en paramétre
      */
-    
     public ArrayList<String> getMonthsExistsForYear(String year) {
         ArrayList<String> list = new ArrayList<>();
         File file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + year);

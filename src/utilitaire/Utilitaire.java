@@ -403,5 +403,36 @@ public class Utilitaire {
         }
         return (file.delete());
     }
+    
+    public static int[] getCurrentDate() {
+        ZoneId zoneId = ZoneId.of("Europe/Paris");
+        LocalDateTime localTime = LocalDateTime.now(zoneId);
+        int[] temp = new int[3];
+        
+        temp[0] = localTime.getHour();
+        temp[1] = localTime.getDayOfMonth();
+        temp[2] = localTime.getMonthValue();
+        temp[3] = localTime.getYear();
+        
+        return temp;
+    }
+    
+    /**
+     * Method classique qui retourne pour un mois donner le dernier jour de ce
+     * moi EX: le mois JUIN(06) il contient 30 jours
+     *
+     * @param year
+     * @param month
+     * @return le nombre de jour de ce mois
+     */
+    public static int getNumberDaysOfMonth(int year, int month) {
+        int currentDay, currentMonth, currentYear;
+        ZoneId zoneId = ZoneId.of("Europe/Paris");
+        LocalDateTime localTime = LocalDateTime.of(year, Month.of(month), 3, 3, 3);
+        LocalDateTime lastDay = localTime.with(TemporalAdjusters.lastDayOfMonth());
+
+        return lastDay.getDayOfMonth();
+    }
+    
 }
 

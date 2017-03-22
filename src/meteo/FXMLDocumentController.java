@@ -37,6 +37,7 @@ import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -52,6 +53,7 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import smart.Station;
 import utilitaire.*;
 
 /**
@@ -278,12 +280,12 @@ public class FXMLDocumentController implements Controller {
                 String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
                 String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
 
-                model.constructChartComparaison(onlineMode,Date1, Date2, 
-                        StationComparaison.getValue().toString(), 
-                        lineCharttemp, 
-                        lineCharthum, 
-                        lineChartnebul
-                );
+//                model.constructChartComparaison(onlineMode,Date1, Date2, 
+//                        StationComparaison.getValue().toString(), 
+//                        lineCharttemp, 
+//                        lineCharthum, 
+//                        lineChartnebul
+//                );
 
             } else {
                 //not logicaly valid date!
@@ -451,9 +453,9 @@ public class FXMLDocumentController implements Controller {
                 }
                 System.out.println("Everything looks good, Trying to construct the chart");
                 //on lance la construction de chart
-                model.constructChartAffichage(onlineMode, year.getText()
-                        + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
-                /*
+//                model.constructChartAffichage(onlineMode, year.getText()
+//                        + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
+//                /*
                 if (chartList != null) {
                     AfficheTemp.getData().setAll(chartList.get(0));
                     AfficheHum.getData().setAll(chartList.get(1));
@@ -462,7 +464,7 @@ public class FXMLDocumentController implements Controller {
                 } else {
                     System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
                 }
-                 */
+//                 */
  /*
                 TableView
                  */
@@ -484,11 +486,31 @@ public class FXMLDocumentController implements Controller {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        /*Map<Integer,Station> list= new HashMap<Integer,Station>();
+        Station station1 = new Station();
+        Station station2 = new Station();
+        
+        Station temp = list.put(1,station1);
+        Station temp2 = list.put(1,station2);
         model = MyModel.getInstance();
-
-        CreateMenu();
-
+        if(temp==null)
+            System.out.println("temp1 null");
+        
+        if(temp2==null)
+            System.out.println("temp2 null");
+        
+        if(temp2.equals(station1))
+            System.out.println("equals true");
+        
+        Station stationx = list.get(1);
+        if(stationx.equals(station1))
+            System.out.println("old value");
+        */
+        MyModel model = MyModel.getInstance();
+        model.showEveryThing();
+//CreateMenu();
+        
+        /*
         switch (Interface) {
             case 0:
                 InitInterfacePrincipal();
@@ -510,7 +532,7 @@ public class FXMLDocumentController implements Controller {
             default:
                 break;
         }
-
+        */
     }
 
     /**
@@ -657,7 +679,7 @@ public class FXMLDocumentController implements Controller {
         LocationDefault.setStyle(
                 "-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
         List L = new ArrayList();
-        dataList = model.getLatestAvailableData();
+//        dataList = model.getLatestAvailableData();
         for (int i = 0;
                 i < dataList.size();
                 i++) {
@@ -693,7 +715,7 @@ public class FXMLDocumentController implements Controller {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
         List L = new ArrayList();
-        dataList = model.getLatestAvailableData();
+//        dataList = model.getLatestAvailableData();
         for (int i = 0; i < dataList.size(); i++) {
             L.add(i, dataList.get(i).getCity().getNom());
         }
@@ -1223,7 +1245,7 @@ public class FXMLDocumentController implements Controller {
         /*C is a choiceBox who contain the name of all station*/
 
         nomVillle = (LocationDefault != null) ? LocationDefault.getValue().toString() : "BREST-GUIPAVAS";
-        tabVille = model.getLatestAvailableData();
+//        tabVille = model.getLatestAvailableData();
 
         /*Affichage sur l'interface principal le nom de la ville selectionnée par défaut et la derniere date connu
         avec les temératures,humidité et nébulosité adéquat +image representatif de la nébulosité*/
@@ -1336,14 +1358,15 @@ public class FXMLDocumentController implements Controller {
     }
 
     private List<DataBean> parseDataList(String date, String station) {
-        ArrayList<DataCity> listDonnee = model.getListForChart(date, station);
-        ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
-        if (listDonnee != null) {
-            for (DataCity villeTemp : listDonnee) {
-                listDataBean.add(villeTemp.toDataBean());
-            }
-        }
-        return listDataBean;
+////        ArrayList<DataCity> listDonnee = model.getListForChart(date, station);
+//        ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
+////        if (listDonnee != null) {
+////            for (DataCity villeTemp : listDonnee) {
+////                listDataBean.add(villeTemp.toDataBean());
+//            }
+//        }
+//        return listDataBean;
+    return null;
     }
 
     /**

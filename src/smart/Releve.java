@@ -15,6 +15,22 @@ public class Releve {
     private float humidite;
     private float nebulosite;
 
+    public Releve(int ordre, float temperature, float humidite, float nebulosite) {
+        this.ordre = ordre;
+        this.temperature = temperature;
+        this.humidite = humidite;
+        this.nebulosite = nebulosite;
+    }
+    
+    
+    public String toString() {
+        return 
+                "ordre: "+ordre+
+                " temperature: "+temperature+
+                " humidite: "+humidite+
+                " nebulosite: "+nebulosite;
+    }
+    
     public int getOrdre() {
         return ordre;
     }
