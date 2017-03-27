@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utilitaire.Utilitaire;
 
 /**
  *
@@ -22,6 +23,7 @@ public class Annee {
     private Map<Integer, Mois> moisList;
 
     public Annee(int id) {
+        this.id = id;
         moisList = new HashMap<Integer, Mois>();
     }
 
@@ -40,6 +42,32 @@ public class Annee {
      *         false if this year is not updated
      */
     public boolean isUpdated() {
+        int lastMonth;
+        boolean currentDate = Utilitaire.isCurrentDate(id, -1, -1, 2);
+
+        if (currentDate) {
+            lastMonth = Utilitaire.getCurrentDate()[2];
+        } else {
+            lastMonth = 12;
+        }
+        /*
+        if(jourExists(lastDay))
+            return joursList.get(lastDay).isUpdated(year, id);
+        else
+            return false;
+         */
+        System.out.println("lastMonth:" + lastMonth);
+        for (int i = 1; i <= lastMonth; i++) {
+            if (!moisExists(i) || !getMois(i).isUpdated(id)) {
+                //si le jour n'existe pas , ou bien le jour exist mais il contient pas touts les relevés
+                if(moisExists(i)&&!getMois(i).isUpdated(id)){
+                    System.out.println("Not updated month id="+i);
+                }
+                return false;
+            }
+            
+        }
+
         return true;
     }
     
@@ -97,7 +125,7 @@ public class Annee {
         return null;
     }
     
-    //to be deleted after
+    /*needed for tests : dangerous */
     public void copyMap(Map<Integer,Mois> l) {
         moisList = l;
     }
