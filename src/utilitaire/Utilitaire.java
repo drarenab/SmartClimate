@@ -404,10 +404,18 @@ public class Utilitaire {
         return (file.delete());
     }
     
+    /**
+     * get the current date for EUROPE/PARIS ZONE
+     * @return array of integers that contains at : 
+     *                                  index 0 : HH
+     *                                  index 1 : DD
+     *                                  index 2 : MM
+     *                                  index 3 : YYYY
+     */
     public static int[] getCurrentDate() {
         ZoneId zoneId = ZoneId.of("Europe/Paris");
         LocalDateTime localTime = LocalDateTime.now(zoneId);
-        int[] temp = new int[3];
+        int[] temp = new int[4];
         
         temp[0] = localTime.getHour();
         temp[1] = localTime.getDayOfMonth();
@@ -434,5 +442,45 @@ public class Utilitaire {
         return lastDay.getDayOfMonth();
     }
     
+    /**
+     * This method tells if the date given on parameters corresponds to the CURRENT DATE ( TODAY)
+     * @param year year to be checked
+     * @param month month to be checked
+     * @param day day to be checked
+     * @param mode 0 comparing :year + month + day
+     *             1 comparing :year + month
+     *             2 comparing :year
+     * @return TRUE if the date given on parameters is a current date
+     *         FALSE else
+     */
+    public static boolean isCurrentDate(int year,int month,int day,int mode) {
+        int currentYear,currentMonth,currentDay;
+        int currentHour;
+        boolean today = false;
+        int[] currentDate= Utilitaire.getCurrentDate();
+        currentHour = currentDate[0];
+        //pour avoir 01 pour le premier jour de moi au lieu de 1
+        currentDay = currentDate[1];
+       // currentDay = ("00" + currentDay).substring(currentDay.length());
+        
+        currentMonth = currentDate[2];
+        //currentMonth = ("00" + currentMonth).substring(currentMonth.length());
+
+        currentYear = currentDate[3];
+        
+        
+        System.out.println("isCurrentDate: given year="+year+" current="+currentYear);
+        if(mode==0)
+            return currentYear == year
+                    &&currentMonth == month
+                    &&currentDay ==day;
+        else if(mode==1)
+            return currentYear == year
+                    &&currentMonth==month;
+        else if(mode==2)
+            return currentYear==year;
+        else
+            return false;
+}
 }
 

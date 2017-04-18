@@ -5,6 +5,7 @@
  */
 package smart;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,16 @@ public class Jour {
         relevesList= new HashMap<Integer,Releve>();
     }
 
+    /*Needed for tests only*/
+    /*public boolean createReleve(int ordre,Releve releve) {
+        
+    }*/
+    
+    
+    public void copyAll(Map<Integer,Releve> list) {
+        this.relevesList = list;
+    }
+    
     public Releve getAndCreateReleve(int ordre,Releve releve) 
     {   Boolean bool = relevesList.containsKey(ordre);
         if(!bool)
@@ -31,7 +42,10 @@ public class Jour {
         
         return (relevesList.get(ordre));
     }
+    
     /**
+     * TESTED WITH JUNIT
+     * 
      * Checks if data is updated for the day , and if it contains all needed data for all releves
      * @param year the year which this day belongs 
      * @param month the month which this day belongs    
@@ -39,43 +53,81 @@ public class Jour {
      *         false if data is not fully updated
      */
     public boolean isUpdated(int year,int month)
-    {   //fichier n'existe pas        
-        String currentYear,currentMonth,currentDay;
+    {   int currentYear,currentMonth,currentDay;
         int currentHour;
         boolean today = false;
         int[] currentDate= Utilitaire.getCurrentDate();
-        currentHour = Utilitaire.getCurrentDate()[0];
-        //pour avoir 01 pour le premier jour de moi au lieu de 1
-        currentDay = String.valueOf(currentDate[1]);
-        currentDay = ("00" + currentDay).substring(currentDay.length());
-        
-        currentMonth = String.valueOf(currentDate[2]);
-        currentMonth = ("00" + currentMonth).substring(currentMonth.length());
-
-        currentYear = String.valueOf(currentDate[3]);
-        
-        //System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
-        if (currentYear.equals(year)
+        currentHour = currentDate[0];
+        currentDay = currentDate[1];
+        currentMonth = currentDate[2];
+        currentYear = currentDate[3];
+        if (currentYear==year
                 && //si le fichier contient les donnees de l'année courante
-                currentMonth.equals(month)
+                currentMonth==month
                 && //et si le fichier contient les donnees mois courant
-                currentDay.equals(id)
+                currentDay==id
                 ) 
             today = true;
         
         for(int i=0;i<24;i++) {
             if(i%3!=0)
                 continue;
-            
+   
             //si date ajourd'hui et ordre de releve inferieure a l'heure actuelle,  donc le relevé doit forcement exister sinon erreure
             if(today&&
                     (i/3)<=(currentHour/3)&&
                     !relevesList.containsKey(i/3)) {
-                
                 return false;// donc le jour n'est pas a jour 
-            }    
+            }   
+            else if(!today&&
+                    !relevesList.containsKey(i/3)) {
+                return false;  
+            }
         }
         return true;
+    }
+     
+    /**
+     * Returns the missing <relevées>  on this object
+     * @param year
+     * @param month
+     * @return List of missing <relevées>
+     */
+    public Map<Integer,Releve> getMissingData(int year,int month) {
+        Map<Integer,Releve> missingList = new HashMap<Integer,Releve>();
+        int currentYear,currentMonth,currentDay;
+        int currentHour;
+        boolean today = false;
+        int[] currentDate= Utilitaire.getCurrentDate();
+        currentHour = currentDate[0];
+        currentDay = currentDate[1];
+        currentMonth = currentDate[2];
+        currentYear = currentDate[3];
+        if (currentYear==year
+                && //si le fichier contient les donnees de l'année courante
+                currentMonth==month
+                && //et si le fichier contient les donnees mois courant
+                currentDay==id
+                ) 
+            today = true;
+        
+        for(int i=0;i<24;i++) {
+            if(i%3!=0)
+                continue;
+   
+            //si date ajourd'hui et ordre de releve inferieure a l'heure actuelle,  donc le relevé doit forcement exister sinon erreure
+            if(today&&
+                    (i/3)<=(currentHour/3)&&
+                    !relevesList.containsKey(i/3)) {
+                // donc le jour n'est pas a jour 
+                missingList.put(i/3,new Releve(i/3,-1,-1,-1));
+            }   
+            else if(!today&&
+                    !relevesList.containsKey(i/3)) {
+                missingList.put(i/3,new Releve(i/3,-1,-1,-1));
+            }
+        }
+        return missingList;
     }
     
     public Releve getReleve(int ordre) {

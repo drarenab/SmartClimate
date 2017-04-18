@@ -2,80 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0fbb273-4e5f-4f17-803e-84f58ba92d9e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lib/commons-io-2.5.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lib/hamcrest-core-1.3.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lib/junit-4.12.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/BackgroundSetting1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/BackgroundSetting2.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/BackgroundSetting3.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/BackgroundSetting4.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/Logo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/NA.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/country-fra.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/delete.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/ensoleille.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/ensoleille1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/left.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/left1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/nuageux.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/nuageux1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/pluvieux.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/pluvieux1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/right.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Image/right1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.project" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.settings/.jsdtscope" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.settings/org.eclipse.wst.jsdt.ui.superType.container" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.settings/org.eclipse.wst.jsdt.ui.superType.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Configuration.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/TODO.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ccccl" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/donnees/2017/201703.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/manifest.mf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/build-impl.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/configs/Run_as_WebStart.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/configs/Run_in_Browser.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/genfiles.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/jfx-impl.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/private/configs/Run_as_WebStart.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/private/configs/Run_in_Browser.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/private/private.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/project.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nbproject/project.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CSS/CSSComparaison.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CSS/CSSSplitPane.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CSS/CSSTabPane.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Myclass.ucls" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/coordonnee/DataBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/coordonnee/DataCity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/coordonnee/Point.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/coordonnee/Ville.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/coordonnee/aDate.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/coordonnee/diagram.ucls" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/AProposView.fxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Configuration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Controller.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/DataComparView.fxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/FXMLDocumentController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/LocalDataView.fxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Meteo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/Model.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/My Class Diagram.ucls" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/MyModel.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/PrincipalView.fxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/ServerStateView.fxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/meteo/SettingView.fxml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/smart/Annee.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/smart/Jour.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/smart/Mois.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/smart/Releve.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/smart/Station.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utilitaire/Utilitaire.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SmartClimate.iml" afterPath="$PROJECT_DIR$/SmartClimate.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Annee.java" afterPath="$PROJECT_DIR$/src/smart/Annee.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Jour.java" afterPath="$PROJECT_DIR$/src/smart/Jour.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Mois.java" afterPath="$PROJECT_DIR$/src/smart/Mois.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Station.java" afterPath="$PROJECT_DIR$/src/smart/Station.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utilitaire/Utilitaire.java" afterPath="$PROJECT_DIR$/src/utilitaire/Utilitaire.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -106,8 +37,6 @@
                 <element signature="method#decompresserGzip#0;class#Utilitaire#0" expanded="true" />
                 <element signature="method#CopyFileImported#0;class#Utilitaire#0" expanded="true" />
                 <element signature="method#deleteCSVFile#0;class#Utilitaire#0" expanded="true" />
-                <element signature="method#getCurrentDate#0;class#Utilitaire#0" expanded="true" />
-                <element signature="method#getNumberDaysOfMonth#0;class#Utilitaire#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -138,12 +67,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Station.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Station.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/smart/Station.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="52" column="5" lean-forward="false" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
-              <folding />
+            <state relative-caret-position="391">
+              <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+              <folding>
+                <element signature="method#Station#0;class#Station#0" expanded="true" />
+                <element signature="method#Station#1;class#Station#0" expanded="true" />
+                <element signature="method#getAndCreateAnnee#0;class#Station#0" expanded="true" />
+                <element signature="e#1004#1005#0" expanded="true" />
+                <element signature="e#1047#1048#0" expanded="true" />
+                <element signature="e#1083#1084#0" expanded="true" />
+                <element signature="e#1136#1137#0" expanded="true" />
+                <element signature="e#1170#1171#0" expanded="true" />
+                <element signature="e#1201#1202#0" expanded="true" />
+                <element signature="e#1234#1235#0" expanded="true" />
+                <element signature="e#1275#1276#0" expanded="true" />
+                <element signature="method#isUpdated#0;class#Station#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -152,18 +94,38 @@
         <entry file="file://$PROJECT_DIR$/src/smart/Jour.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="476">
-              <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-              <folding />
+              <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+              <folding>
+                <marker date="1492505191792" expanded="false" signature="4185:4192" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Mois.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Mois.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/smart/Mois.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
               <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-              <folding />
+              <folding>
+                <element signature="method#Mois#0;class#Mois#0" expanded="true" />
+                <element signature="e#627#628#0" expanded="true" />
+                <element signature="e#652#653#0" expanded="true" />
+                <element signature="e#727#728#0" expanded="true" />
+                <element signature="e#764#765#0" expanded="true" />
+                <element signature="method#isUpdated#0;class#Mois#0" expanded="true" />
+                <element signature="method#getMissingData#0;class#Mois#0" expanded="true" />
+                <element signature="e#2602#2616#0" expanded="true" />
+                <element signature="method#getAndCreateJour#0;class#Mois#0" expanded="true" />
+                <element signature="e#3737#3738#0" expanded="true" />
+                <element signature="e#3779#3780#0" expanded="true" />
+                <element signature="e#3822#3823#0" expanded="true" />
+                <element signature="e#3872#3873#0" expanded="true" />
+                <element signature="e#3920#3921#0" expanded="true" />
+                <element signature="e#3947#3948#0" expanded="true" />
+                <element signature="e#4003#4004#0" expanded="true" />
+                <element signature="e#4030#4031#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -220,6 +182,7 @@
         <option value="$PROJECT_DIR$/Configuration.txt" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/meteo/FXMLDocumentController.java" />
+        <option value="$PROJECT_DIR$/src/smart/Mois.java" />
         <option value="$PROJECT_DIR$/src/smart/Station.java" />
       </list>
     </option>
@@ -759,15 +722,16 @@
       <updated>1492447731041</updated>
       <workItem from="1492447736119" duration="692000" />
       <workItem from="1492500982773" duration="374000" />
-      <workItem from="1492501402816" duration="2213000" />
+      <workItem from="1492501402816" duration="2632000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3279000" />
+    <option name="totallyTimeSpent" value="3698000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -784,7 +748,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24963397" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24963397" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -912,8 +876,6 @@
             <element signature="method#decompresserGzip#0;class#Utilitaire#0" expanded="true" />
             <element signature="method#CopyFileImported#0;class#Utilitaire#0" expanded="true" />
             <element signature="method#deleteCSVFile#0;class#Utilitaire#0" expanded="true" />
-            <element signature="method#getCurrentDate#0;class#Utilitaire#0" expanded="true" />
-            <element signature="method#getNumberDaysOfMonth#0;class#Utilitaire#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -941,19 +903,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/smart/Station.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="52" column="5" lean-forward="false" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/smart/Jour.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
-          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-          <folding />
+          <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+          <folding>
+            <marker date="1492505191792" expanded="false" signature="4185:4192" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -961,7 +917,46 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="method#Mois#0;class#Mois#0" expanded="true" />
+            <element signature="e#627#628#0" expanded="true" />
+            <element signature="e#652#653#0" expanded="true" />
+            <element signature="e#727#728#0" expanded="true" />
+            <element signature="e#764#765#0" expanded="true" />
+            <element signature="method#isUpdated#0;class#Mois#0" expanded="true" />
+            <element signature="method#getMissingData#0;class#Mois#0" expanded="true" />
+            <element signature="e#2602#2616#0" expanded="true" />
+            <element signature="method#getAndCreateJour#0;class#Mois#0" expanded="true" />
+            <element signature="e#3737#3738#0" expanded="true" />
+            <element signature="e#3779#3780#0" expanded="true" />
+            <element signature="e#3822#3823#0" expanded="true" />
+            <element signature="e#3872#3873#0" expanded="true" />
+            <element signature="e#3920#3921#0" expanded="true" />
+            <element signature="e#3947#3948#0" expanded="true" />
+            <element signature="e#4003#4004#0" expanded="true" />
+            <element signature="e#4030#4031#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/smart/Station.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+          <folding>
+            <element signature="method#Station#0;class#Station#0" expanded="true" />
+            <element signature="method#Station#1;class#Station#0" expanded="true" />
+            <element signature="method#getAndCreateAnnee#0;class#Station#0" expanded="true" />
+            <element signature="e#1004#1005#0" expanded="true" />
+            <element signature="e#1047#1048#0" expanded="true" />
+            <element signature="e#1083#1084#0" expanded="true" />
+            <element signature="e#1136#1137#0" expanded="true" />
+            <element signature="e#1170#1171#0" expanded="true" />
+            <element signature="e#1201#1202#0" expanded="true" />
+            <element signature="e#1234#1235#0" expanded="true" />
+            <element signature="e#1275#1276#0" expanded="true" />
+            <element signature="method#isUpdated#0;class#Station#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
