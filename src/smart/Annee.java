@@ -71,6 +71,42 @@ public class Annee {
         return true;
     }
     
+    /**
+     * Checks if this Year is fully updated (contains the entire data) , in terms of months, days in a month , releve in days 
+     * @return true if this year is updated
+     *         false if this year is not updated
+     */
+    public Map<Integer,Mois> getMissingData() {
+        int lastMonth;
+        boolean currentDate = Utilitaire.isCurrentDate(id, -1, -1, 2);
+        if (currentDate) {
+            lastMonth = Utilitaire.getCurrentDate()[2];
+        } else {
+            lastMonth = 12;
+        }
+        
+        Map<Integer,Mois> missingMois = new HashMap<Integer,Mois>();
+        Map<Integer,Jour> misssingJours;
+        Mois missingMonth;
+        System.out.println("lastMonth:" + lastMonth);
+        for (int i = 1; i <= lastMonth; i++) {
+            if (moisExists(i)) {
+                misssingJours = getMois(i).getMissingData(id);
+                //si le jour n'existe pas , ou bien le jour exist mais il contient pas touts les relevés
+               if(misssingJours.size()>0) {
+                   missingMonth = new Mois(i);
+                   missingMonth.copyAll(misssingJours);
+                   missingMois.put(i, missingMonth);
+               }
+            }
+            else {
+                  missingMonth = new Mois(i); 
+                  missingMois.put(i, missingMonth);
+            }           
+        }
+        return missingMois;
+    }
+    
     public boolean containsFullMonths() {
         int currentDay, currentMonth, currentYear;
         ArrayList<String> missedMonths = new ArrayList<String>();

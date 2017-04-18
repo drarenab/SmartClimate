@@ -77,6 +77,42 @@ public class Mois {
         return true;
     }
 
+    public Map<Integer,Jour> getMissingData(int year) {
+        int lastDay;
+        boolean currentDate = Utilitaire.isCurrentDate(year, id, -1, 1);
+
+        if (currentDate) {
+            lastDay = Utilitaire.getCurrentDate()[1];
+        } else {
+            lastDay = Utilitaire.getNumberDaysOfMonth(year, id);
+        }
+        
+        System.out.println("lastDay:" + lastDay);
+        Map<Integer,Jour> missingJours = new HashMap<Integer,Jour>();
+        Map<Integer,Releve> missingReleve;       
+        Jour missingDay;
+        for (int i = 1; i <= lastDay; i++) {
+            if (jourExists(i)) {
+                //si le jour n'existe pas , ou bien le jour exist mais il contient pas touts les relevés
+                missingReleve = getJour(i).getMissingData(year, id);
+                if(missingReleve.size()>0) {
+                    missingDay = new Jour(i);
+                    missingDay.copyAll(missingReleve);
+                    missingJours.put(i, missingDay);
+                }
+            }
+            else {
+                /**
+                 * ajouter les relevées qui manque pour ce jour !! (tout les relevées)
+                 */
+               missingDay = new Jour(i);
+               missingJours.put(i, missingDay);
+            }
+        }
+
+        return missingJours;
+    }  
+    
     public Jour getAndCreateJour(int jour) {
         Boolean bool = joursList.containsKey(jour);
         if (!bool) {

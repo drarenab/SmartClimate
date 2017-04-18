@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utilitaire.Utilitaire;
 
 /**
  *
@@ -39,10 +40,13 @@ public class Station {
         return (anneeList.get(annee));
     }
     
+    public Annee getAnnee(int annee) {
+        return anneeList.get(annee);
+    }
+    
     public String getPoint() {
         return point.getX() +"x"+point.getY();
     }
-    
     
     public String getNom() {
         return this.nom;
@@ -52,6 +56,27 @@ public class Station {
         return String.valueOf(id);
     }
     
+    /**
+     * Checks if this station contains full DATA (data for all 
+     * years AND data for all month for each year AND data for all days for each month)
+     * 
+     * @return true if station contains full data
+     *         false otherwise
+     */
+    public boolean isUpdated() {
+        int lastYear;
+        
+        lastYear = Utilitaire.getCurrentDate()[3];
+       
+        System.out.println("lastMonth:" + lastYear);
+        for (int i = 1996; i <= lastYear; i++) {
+            if (!anneeExists(i) || !getAnnee(i).isUpdated()) {
+                //si le jour n'existe pas , ou bien le jour exist mais il contient pas touts les relevés
+                return false;
+            }   
+        }
+        return true;
+    }
     
     public boolean anneeExists(int annee) {
         return anneeList.containsKey(annee);
