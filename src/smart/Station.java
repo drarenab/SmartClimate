@@ -39,7 +39,19 @@ public class Station {
         
         return (anneeList.get(annee));
     }
-    
+
+    public void buildMissingYears() {
+        int[] currentDate = Utilitaire.getCurrentDate();
+        int latestYear = currentDate[3];
+
+
+        for (int j = 1996; j <= latestYear; j++) {
+            Annee annee = new Annee(j);
+            annee.buildMissingMonths();
+            anneeList.put(j, annee);
+        }
+    }
+
     public Annee getAnnee(int annee) {
         return anneeList.get(annee);
     }

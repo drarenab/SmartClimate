@@ -72,6 +72,8 @@ public class FXMLDocumentController implements Controller {
     static boolean userSelectOffline = false;
     static ChoiceBox LocationDefault;
 
+    private ArrayList<String> stationNames;
+
     @FXML
     AnchorPane anchorSeting, AnchorVisu, anchorComp;
     AreaChart<Number, Number> AfficheTemp, AfficheNebul, AfficheHum;
@@ -140,7 +142,7 @@ public class FXMLDocumentController implements Controller {
 
         Map errors = model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
         Map errors2 = model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
-        
+
         if (!errors.get("Year").toString().equals("") || !errors2.get("Year").toString().equals("")) {
             System.out.println("year1 or year 2 errors");
             if (!errors.get("Year").toString().equals("")) {
@@ -196,11 +198,11 @@ public class FXMLDocumentController implements Controller {
                 }
 
                 if (showMode.equals("day")) {
-                    //si on est sur le day mode 
+                    //si on est sur le day mode
                     System.out.println("Day MODE ,looking for data for whole days");
                     latestDate1 = model.getLatestAvailableDateOnFile(yearMonth1);
                     latestDate2 = model.getLatestAvailableDateOnFile(yearMonth2);
-                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander 
+                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
                     if (latestDate1 == null ||
                               Integer.parseInt(latestDate1.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
                         System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth1 + " ...");
@@ -210,7 +212,7 @@ public class FXMLDocumentController implements Controller {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    
+
                     if (latestDate2 == null ||
                               Integer.parseInt(latestDate2.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
                         System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth2 + " ...");
@@ -224,7 +226,7 @@ public class FXMLDocumentController implements Controller {
                 } else if (showMode.equals("month")) {
                    // System.out.println("Month MODE ,looking for data for whole yearMonth="+yearMonth1);
                     //si le mois n'est pas a jour
-                    
+
                     if (!model.isUpdatedMonth(yearMonth1)) {
                         System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth1 + " ...");
                         try {
@@ -234,7 +236,7 @@ public class FXMLDocumentController implements Controller {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    
+
                     if (!model.isUpdatedMonth(yearMonth2)) {
                         System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth2 + " ...");
                         try {
@@ -244,7 +246,7 @@ public class FXMLDocumentController implements Controller {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    
+
                     // si on est sur le year mode
                 } else if (showMode.equals("year")) {
                     System.out.println("Year MODE ,looking for data for whole year=" + Year1Comparaison.getText());
@@ -259,8 +261,8 @@ public class FXMLDocumentController implements Controller {
                             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                
-                
+
+
                     System.out.println("Year MODE ,looking for data for whole year=" + Year2Comparaison.getText());
                     //retourner la liste des mois qui manques dans le dossier de l'année
                     ArrayList<String> missedMonths2 = model.getMissedMonthsFiles(Year2Comparaison.getText());
@@ -274,16 +276,16 @@ public class FXMLDocumentController implements Controller {
                         }
                     }
                 }
-                
+
                 System.out.println("Everything looks good, Trying to construct the chart");
                 //on lance la construction de chart
                 String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
                 String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
 
-//                model.constructChartComparaison(onlineMode,Date1, Date2, 
-//                        StationComparaison.getValue().toString(), 
-//                        lineCharttemp, 
-//                        lineCharthum, 
+//                model.constructChartComparaison(onlineMode,Date1, Date2,
+//                        StationComparaison.getValue().toString(),
+//                        lineCharttemp,
+//                        lineCharthum,
 //                        lineChartnebul
 //                );
 
@@ -292,7 +294,7 @@ public class FXMLDocumentController implements Controller {
             }
 
             /*
-            
+
              */
 
         }
@@ -382,101 +384,109 @@ public class FXMLDocumentController implements Controller {
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-                AfficheTemp.setTitle("Températures");
-                AfficheHum.setTitle("Humidité");
-                AfficheNebul.setTitle("Nébulosité");
+                model.constructChartAffichage(Station.getValue().toString()
+                        , year.getText()
+                        , month.getText()
+                        , day.getText()
+                        , AfficheTemp
+                        , AfficheHum
+                        , AfficheNebul);
 
-                /**
-                 * CAN BE PUT INSIDE A METHOD
-                 */
-                // si l'utilisateur a saisie l'année et le mois et le jour donc on est sur le mode "day"
-                if (month.getText().length() > 0 && day.getText().length() > 0) {
-                    showMode = "day";
-
-                    yearMonth = year.getText() + month.getText();
-                    yearMonthDay = yearMonth + day.getText();
-                } // si l'utilisateur a saisie que le mois alors on est sur le mode "month"
-                else if (month.getText().length() > 0) {
-                    showMode = "month";
-                    yearMonth = year.getText() + month.getText();
-                } // si l'utilisateur a saisie que l'année alors on est sur le mode "year"
-                else {
-                    showMode = "year";
-                }
-
-                if (showMode.equals("day")) {
-                    //si on est sur le day mode 
-                    System.out.println("Day MODE ,looking for data for whole day=" + day.getText());
-                    latestDate = model.getLatestAvailableDateOnFile(yearMonth);
-                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander 
-                    if (latestDate == null
-                            || Integer.parseInt(latestDate.substring(6, 8)) < Integer.parseInt(day.getText())) {
-                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth + " ...");
-                        try {
-                            model.downloadAndUncompress(year.getText() + month.getText());
-
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    // si on est sur le month mode
-                } else if (showMode.equals("month")) {
-                    System.out.println("Month MODE ,looking for data for whole yearMonth=" + yearMonth);
-                    //si le mois n'est pas a jour
-                    if (!model.isUpdatedMonth(yearMonth)) {
-                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth + " ...");
-                        try {
-                            //on lance le télechargement
-
-                            model.downloadAndUncompress(year.getText() + month.getText());
-
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    // si on est sur le year mode
-                } else if (showMode.equals("year")) {
-                    System.out.println("Year MODE ,looking for data for whole year=" + year.getText());
-                    //retourner la liste des mois qui manques dans le dossier de l'année
-                    ArrayList<String> missedMonths = model.getMissedMonthsFiles(year.getText());
-                    for (String month : missedMonths) {
-                        try {
-                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-                            //on lance le telechargement des mois qui ne sont pas a jour
-
-                            model.downloadAndUncompress(month);
-
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-                System.out.println("Everything looks good, Trying to construct the chart");
-                //on lance la construction de chart
-//                model.constructChartAffichage(onlineMode, year.getText()
-//                        + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
-//                /*
-                if (chartList != null) {
-                    AfficheTemp.getData().setAll(chartList.get(0));
-                    AfficheHum.getData().setAll(chartList.get(1));
-                    AfficheNebul.getData().setAll(chartList.get(2));
-                    System.out.println("Chart constructed succefully ");
-                } else {
-                    System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-                }
+//                AfficheTemp.setTitle("Températures");
+//                AfficheHum.setTitle("Humidité");
+//                AfficheNebul.setTitle("Nébulosité");
+//
+//                /**
+//                 * CAN BE PUT INSIDE A METHOD
 //                 */
- /*
-                TableView
-                 */
-                /*Attention can be throw an exception if data is null ! */
-                columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
-                columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
-                columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
-                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
-                columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
-                tableView.getItems().setAll(parseDataList(year.getText() + month.getText() + day.getText(),
-                        Station.getValue().toString()
-                ));
+//                // si l'utilisateur a saisie l'année et le mois et le jour donc on est sur le mode "day"
+//                if (month.getText().length() > 0 && day.getText().length() > 0) {
+//                    showMode = "day";
+//
+//                    yearMonth = year.getText() + month.getText();
+//                    yearMonthDay = yearMonth + day.getText();
+//                } // si l'utilisateur a saisie que le mois alors on est sur le mode "month"
+//                else if (month.getText().length() > 0) {
+//                    showMode = "month";
+//                    yearMonth = year.getText() + month.getText();
+//                } // si l'utilisateur a saisie que l'année alors on est sur le mode "year"
+//                else {
+//                    showMode = "year";
+//                }
+//
+//                if (showMode.equals("day")) {
+//                    //si on est sur le day mode
+//                    System.out.println("Day MODE ,looking for data for whole day=" + day.getText());
+//                    latestDate = model.getLatestAvailableDateOnFile(yearMonth);
+//                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
+//                    if (latestDate == null
+//                            || Integer.parseInt(latestDate.substring(6, 8)) < Integer.parseInt(day.getText())) {
+//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth + " ...");
+//                        try {
+//                            model.downloadAndUncompress(year.getText() + month.getText());
+//
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                    // si on est sur le month mode
+//                } else if (showMode.equals("month")) {
+//                    System.out.println("Month MODE ,looking for data for whole yearMonth=" + yearMonth);
+//                    //si le mois n'est pas a jour
+//                    if (!model.isUpdatedMonth(yearMonth)) {
+//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth + " ...");
+//                        try {
+//                            //on lance le télechargement
+//
+//                            model.downloadAndUncompress(year.getText() + month.getText());
+//
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                    // si on est sur le year mode
+//                } else if (showMode.equals("year")) {
+//                    System.out.println("Year MODE ,looking for data for whole year=" + year.getText());
+//                    //retourner la liste des mois qui manques dans le dossier de l'année
+//                    ArrayList<String> missedMonths = model.getMissedMonthsFiles(year.getText());
+//                    for (String month : missedMonths) {
+//                        try {
+//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
+//                            //on lance le telechargement des mois qui ne sont pas a jour
+//
+//                            model.downloadAndUncompress(month);
+//
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                }
+//                System.out.println("Everything looks good, Trying to construct the chart");
+//                //on lance la construction de chart
+////                model.constructChartAffichage(onlineMode, year.getText()
+////                        + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
+////                /*
+//                if (chartList != null) {
+//                    AfficheTemp.getData().setAll(chartList.get(0));
+//                    AfficheHum.getData().setAll(chartList.get(1));
+//                    AfficheNebul.getData().setAll(chartList.get(2));
+//                    System.out.println("Chart constructed succefully ");
+//                } else {
+//                    System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+//                }
+////                 */
+// /*
+//                TableView
+//                 */
+//                /*Attention can be throw an exception if data is null ! */
+//                columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
+//                columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
+//                columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
+//                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
+//                columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
+//                tableView.getItems().setAll(parseDataList(year.getText() + month.getText() + day.getText(),
+//                        Station.getValue().toString()
+//                ));
             } else {
                 //not logicaly valid date!
             }
@@ -489,19 +499,19 @@ public class FXMLDocumentController implements Controller {
         /*Map<Integer,Station> list= new HashMap<Integer,Station>();
         Station station1 = new Station();
         Station station2 = new Station();
-        
+
         Station temp = list.put(1,station1);
         Station temp2 = list.put(1,station2);
         model = MyModel.getInstance();
         if(temp==null)
             System.out.println("temp1 null");
-        
+
         if(temp2==null)
             System.out.println("temp2 null");
-        
+
         if(temp2.equals(station1))
             System.out.println("equals true");
-        
+
         Station stationx = list.get(1);
         if(stationx.equals(station1))
             System.out.println("old value");
@@ -509,7 +519,7 @@ public class FXMLDocumentController implements Controller {
         model = MyModel.getInstance();
         model.showEveryThing();
 CreateMenu();
-        
+
 
         switch (Interface) {
             case 0:
@@ -570,7 +580,7 @@ CreateMenu();
         /*
         Dans le timer on telecharger si possible a chaque 3 heurs
          */
-        RunTimer();
+        //RunTimer();
     }
 
     private void RunTimer() {
@@ -590,9 +600,9 @@ CreateMenu();
                         String[] laDate = (dateFormat.format(date)).split("/");
 
                         /*
-                        1-verifier que la date est %3 
+                        1-verifier que la date est %3
                         2-verifier qu'on est en mode en ligne
-                        
+
                          */
 
                         //verifier continuellement si il y a une connexion internet
@@ -602,7 +612,7 @@ CreateMenu();
 
                             if (onlineMode) {
                                 try {
-                                    System.out.println("telechargement des dernieres données"); 
+                                    System.out.println("telechargement des dernieres données");
                                     model.downloadAndUncompress(laDate[0] + laDate[1]);
 
                                 } catch (IOException ex) {
@@ -715,10 +725,13 @@ CreateMenu();
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
         List L = new ArrayList();
-//        dataList = model.getLatestAvailableData();
-        for (int i = 0; i < dataList.size(); i++) {
-            L.add(i, dataList.get(i).getCity().getNom());
+
+        //dataList = model.getAllStations();
+        stationNames = (ArrayList) model.getStationNames();
+        for (int i = 0; i < stationNames.size(); i++) {
+            L.add(i, stationNames.get(i));
         }
+
         ObservableList<String> observableList = FXCollections.observableList(L);
         observableList.addListener(new ListChangeListener() {
 
@@ -847,14 +860,14 @@ CreateMenu();
                             20, 20, true, false));
             buttonDelete.setGraphic(deleteimg1);
             buttonDelete.setStyle("-fx-background-color:transparent;");
-            
+
             buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
                     System.out.println("supprimer le mois "+s);
-                    
+
                     Utilitaire.deleteCSVFile(s);
-                    
+
                 }
             });
 
@@ -886,9 +899,9 @@ CreateMenu();
 //        for (int i = 0; i < listYear.size(); i++) {
 //
 //            final TreeItem<String> oneYear = new TreeItem<>(listYear.get(i));
-//            
+//
 //            ArrayList<String> listMonth = model.getMonthsExistsForYear(listYear.get(i));
-//            
+//
 //            for (int j = 0; j < listMonth.size(); j++) {
 //                oneYear.getChildren().add(j, new TreeItem(listMonth.get(j).substring(9, 11)));
 //            }
@@ -905,16 +918,16 @@ CreateMenu();
 //                                                @Override
 //                                                public void handle(ActionEvent arg0) {
 //                                                    System.out.println("Menu Item Clicked!");
-//                                                    
-//                                                    
+//
+//
 //                                                }
 //                                            }
-//                                                    
+//
 //                                            )
 //                                            .build()
 //                            )
 //                            .build();
-//            
+//
         treeView.setRoot(dispoData);
 //        treeView.setContextMenu(menucontext);
     }
@@ -1302,7 +1315,7 @@ CreateMenu();
                 .getResourceAsStream("Image/country-fra.png"));
 
         /*appel de la methode qui recupére les donnée du fichier configuration.txt
-          et les mets dans la liste instancier précédement   
+          et les mets dans la liste instancier précédement
          */
         ImageView imgview = new ImageView();
         imgview.setImage(image);
