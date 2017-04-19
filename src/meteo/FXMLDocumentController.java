@@ -5,6 +5,7 @@ package meteo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -31,6 +33,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import coordonnee.*;
+
 import java.awt.Desktop;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.HPos;
@@ -49,7 +53,9 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -57,7 +63,6 @@ import smart.Station;
 import utilitaire.*;
 
 /**
- *
  * @author karim
  */
 public class FXMLDocumentController implements Controller {
@@ -124,7 +129,7 @@ public class FXMLDocumentController implements Controller {
 
     @FXML
     private void handleButtonActionComparer() throws IOException {
-        String latestDate1 = "",latestDate2 = "";
+        String latestDate1 = "", latestDate2 = "";
         /*
         verifier le formulaire done
         afficher les donnée  done
@@ -151,7 +156,7 @@ public class FXMLDocumentController implements Controller {
                 Year1Comparaison.setPromptText(errors.get("Year").toString());
             }
             if (!errors2.get("Year").toString().equals("")) {
-                    System.out.println("year1 or year 2 errors");
+                System.out.println("year1 or year 2 errors");
                 Year2Comparaison.setStyle("-fx-background-color: #333333, red , #333333;");
                 Year2Comparaison.setPromptText(errors.get("Year").toString());
             }
@@ -169,9 +174,9 @@ public class FXMLDocumentController implements Controller {
             boolean validated1, validated2;
             validated1 = model.validateNotFuture(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
             validated2 = model.validateNotFuture(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
-            String yearMonth1 = "",yearMonth2="",yearMonthDay1 = "",yearMonthDay2 = "";
+            String yearMonth1 = "", yearMonth2 = "", yearMonthDay1 = "", yearMonthDay2 = "";
             if (validated1 && validated2) {
-               // progressComparaison.setVisible(true);
+                // progressComparaison.setVisible(true);
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
@@ -197,90 +202,101 @@ public class FXMLDocumentController implements Controller {
                     showMode = "year";
                 }
 
-                if (showMode.equals("day")) {
-                    //si on est sur le day mode
-                    System.out.println("Day MODE ,looking for data for whole days");
-                    latestDate1 = model.getLatestAvailableDateOnFile(yearMonth1);
-                    latestDate2 = model.getLatestAvailableDateOnFile(yearMonth2);
-                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
-                    if (latestDate1 == null ||
-                              Integer.parseInt(latestDate1.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
-                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth1 + " ...");
-                        try {
-                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                model.constructChartComparaison(StationComparaison.getValue().toString()
+                        , Year1Comparaison.getText()
+                        , MonthComparaison.getText()
+                        , DayComparaison.getText()
+                        , Year2Comparaison.getText()
+                        , MonthComparaison.getText()
+                        , DayComparaison.getText()
+                        , lineCharttemp
+                        , lineCharthum
+                        , lineChartnebul);
 
-                    if (latestDate2 == null ||
-                              Integer.parseInt(latestDate2.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
-                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth2 + " ...");
-                        try {
-                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    // si on est sur le month mode
-                } else if (showMode.equals("month")) {
-                   // System.out.println("Month MODE ,looking for data for whole yearMonth="+yearMonth1);
-                    //si le mois n'est pas a jour
-
-                    if (!model.isUpdatedMonth(yearMonth1)) {
-                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth1 + " ...");
-                        try {
-                            //on lance le télechargement
-                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-                    if (!model.isUpdatedMonth(yearMonth2)) {
-                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth2 + " ...");
-                        try {
-                            //on lance le télechargement
-                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-                    // si on est sur le year mode
-                } else if (showMode.equals("year")) {
-                    System.out.println("Year MODE ,looking for data for whole year=" + Year1Comparaison.getText());
-                    //retourner la liste des mois qui manques dans le dossier de l'année
-                    ArrayList<String> missedMonths1 = model.getMissedMonthsFiles(Year1Comparaison.getText());
-                    for (String month : missedMonths1) {
-                        try {
-                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-                            //on lance le telechargement des mois qui ne sont pas a jour
-                            model.downloadAndUncompress(month);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-
-                    System.out.println("Year MODE ,looking for data for whole year=" + Year2Comparaison.getText());
-                    //retourner la liste des mois qui manques dans le dossier de l'année
-                    ArrayList<String> missedMonths2 = model.getMissedMonthsFiles(Year2Comparaison.getText());
-                    for (String month : missedMonths2) {
-                        try {
-                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-                            //on lance le telechargement des mois qui ne sont pas a jour
-                            model.downloadAndUncompress(month);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-
-                System.out.println("Everything looks good, Trying to construct the chart");
-                //on lance la construction de chart
-                String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-                String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
+//                if (showMode.equals("day")) {
+//                    //si on est sur le day mode
+//                    System.out.println("Day MODE ,looking for data for whole days");
+//                    latestDate1 = model.getLatestAvailableDateOnFile(yearMonth1);
+//                    latestDate2 = model.getLatestAvailableDateOnFile(yearMonth2);
+//                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
+//                    if (latestDate1 == null ||
+//                              Integer.parseInt(latestDate1.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
+//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth1 + " ...");
+//                        try {
+//                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//
+//                    if (latestDate2 == null ||
+//                              Integer.parseInt(latestDate2.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
+//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth2 + " ...");
+//                        try {
+//                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                    // si on est sur le month mode
+//                } else if (showMode.equals("month")) {
+//                   // System.out.println("Month MODE ,looking for data for whole yearMonth="+yearMonth1);
+//                    //si le mois n'est pas a jour
+//
+//                    if (!model.isUpdatedMonth(yearMonth1)) {
+//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth1 + " ...");
+//                        try {
+//                            //on lance le télechargement
+//                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//
+//                    if (!model.isUpdatedMonth(yearMonth2)) {
+//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth2 + " ...");
+//                        try {
+//                            //on lance le télechargement
+//                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//
+//                    // si on est sur le year mode
+//                } else if (showMode.equals("year")) {
+//                    System.out.println("Year MODE ,looking for data for whole year=" + Year1Comparaison.getText());
+//                    //retourner la liste des mois qui manques dans le dossier de l'année
+//                    ArrayList<String> missedMonths1 = model.getMissedMonthsFiles(Year1Comparaison.getText());
+//                    for (String month : missedMonths1) {
+//                        try {
+//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
+//                            //on lance le telechargement des mois qui ne sont pas a jour
+//                            model.downloadAndUncompress(month);
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//
+//
+//                    System.out.println("Year MODE ,looking for data for whole year=" + Year2Comparaison.getText());
+//                    //retourner la liste des mois qui manques dans le dossier de l'année
+//                    ArrayList<String> missedMonths2 = model.getMissedMonthsFiles(Year2Comparaison.getText());
+//                    for (String month : missedMonths2) {
+//                        try {
+//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
+//                            //on lance le telechargement des mois qui ne sont pas a jour
+//                            model.downloadAndUncompress(month);
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                }
+//
+//                System.out.println("Everything looks good, Trying to construct the chart");
+//                //on lance la construction de chart
+//                String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
+//                String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
 
 //                model.constructChartComparaison(onlineMode,Date1, Date2,
 //                        StationComparaison.getValue().toString(),
@@ -494,6 +510,7 @@ public class FXMLDocumentController implements Controller {
 
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         /*Map<Integer,Station> list= new HashMap<Integer,Station>();
@@ -518,7 +535,7 @@ public class FXMLDocumentController implements Controller {
         */
         model = MyModel.getInstance();
         model.showEveryThing();
-CreateMenu();
+        CreateMenu();
 
 
         switch (Interface) {
@@ -691,8 +708,8 @@ CreateMenu();
         List L = new ArrayList();
 //        dataList = model.getLatestAvailableData();
         for (int i = 0;
-                i < dataList.size();
-                i++) {
+             i < dataList.size();
+             i++) {
             L.add(i, dataList.get(i).getCity().getNom());
         }
         ObservableList<String> observableList = FXCollections.observableList(L);
@@ -700,12 +717,12 @@ CreateMenu();
         observableList.addListener(
                 new ListChangeListener() {
 
-            @Override
-            public void onChanged(ListChangeListener.Change change
-            ) {
+                    @Override
+                    public void onChanged(ListChangeListener.Change change
+                    ) {
 
-            }
-        });
+                    }
+                });
         LocationDefault.getItems()
                 .clear();
         LocationDefault.setItems(observableList);
@@ -851,7 +868,7 @@ CreateMenu();
         dispoData.setExpanded(true);
         ArrayList<String> listYear = model.getYearExists();
         for (int i = 0; i < listYear.size(); i++) {
-            String s=listYear.get(i);
+            String s = listYear.get(i);
             HBox hboxYear = new HBox();
             Text textYear = new Text(listYear.get(i));
             Button buttonDelete = new Button();
@@ -864,7 +881,7 @@ CreateMenu();
             buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    System.out.println("supprimer le mois "+s);
+                    System.out.println("supprimer le mois " + s);
 
                     Utilitaire.deleteCSVFile(s);
 
@@ -961,118 +978,118 @@ CreateMenu();
 
         ImportData.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent e) {
-                try {
-                    model.DisplayAlertToImport();
+                                   @Override
+                                   public void handle(ActionEvent e) {
+                                       try {
+                                           model.DisplayAlertToImport();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class
-                            .getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+                                       } catch (IOException ex) {
+                                           Logger.getLogger(FXMLDocumentController.class
+                                                   .getName()).log(Level.SEVERE, null, ex);
+                                       }
+                                   }
 
-        }
+                               }
         );
         MenuItem VisiteWebSite = new MenuItem("Visit Web Site");
 
         VisiteWebSite.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent e
-            ) {
-                String url = "https://donneespubliques.meteofrance.fr/";
+                    @Override
+                    public void handle(ActionEvent e
+                    ) {
+                        String url = "https://donneespubliques.meteofrance.fr/";
 
-                //how to open default browser and visit url defined below
-                if (Desktop.isDesktopSupported()) {
-                    try {
-                        Desktop.getDesktop().browse(new URI(url));
+                        //how to open default browser and visit url defined below
+                        if (Desktop.isDesktopSupported()) {
+                            try {
+                                Desktop.getDesktop().browse(new URI(url));
 
-                    } catch (IOException ex) {
-                        Logger.getLogger(FXMLDocumentController.class
-                                .getName()).log(Level.SEVERE, null, ex);
+                            } catch (IOException ex) {
+                                Logger.getLogger(FXMLDocumentController.class
+                                        .getName()).log(Level.SEVERE, null, ex);
 
-                    } catch (URISyntaxException ex) {
-                        Logger.getLogger(FXMLDocumentController.class
-                                .getName()).log(Level.SEVERE, null, ex);
+                            } catch (URISyntaxException ex) {
+                                Logger.getLogger(FXMLDocumentController.class
+                                        .getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                     }
-                }
-            }
 
-        }
+                }
         );
         MenuItem Information = new MenuItem("Informations sur les données");
 
         Information.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent e
-            ) {
+                    @Override
+                    public void handle(ActionEvent e
+                    ) {
 
-                Parent root;
-                try {
-                    Interface = 3;
-                    root = FXMLLoader.load(getClass().getResource("LocalDataView.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
+                        Parent root;
+                        try {
+                            Interface = 3;
+                            root = FXMLLoader.load(getClass().getResource("LocalDataView.fxml"));
+                            Scene scene = new Scene(root);
+                            Stage s = new Stage();
+                            s.setScene(scene);
+                            s.show();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLDocumentController.class
+                                    .getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
                 }
-            }
-
-        }
         );
         MenuItem EtatServeur = new MenuItem("Etat du serveur MeteoFrance");
 
         EtatServeur.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent e
-            ) {
+                    @Override
+                    public void handle(ActionEvent e
+                    ) {
 
-                Parent root;
-                try {
-                    Interface = 4;
-                    root = FXMLLoader.load(getClass().getResource("ServerStateView.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
+                        Parent root;
+                        try {
+                            Interface = 4;
+                            root = FXMLLoader.load(getClass().getResource("ServerStateView.fxml"));
+                            Scene scene = new Scene(root);
+                            Stage s = new Stage();
+                            s.setScene(scene);
+                            s.show();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLDocumentController.class
+                                    .getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
                 }
-            }
-
-        }
         );
         MenuItem Close = new MenuItem("Close");
 
         Close.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent e
-            ) {
-                if (Interface == 0) {
-                    System.exit(0);
+                    @Override
+                    public void handle(ActionEvent e
+                    ) {
+                        if (Interface == 0) {
+                            System.exit(0);
 
-                } else {
-                    Stage s = (Stage) menuBar.getScene().getWindow();
-                    s.close();
+                        } else {
+                            Stage s = (Stage) menuBar.getScene().getWindow();
+                            s.close();
+                        }
+
+                    }
+
                 }
-
-            }
-
-        }
         );
         file.getItems()
                 .addAll(ImportData, VisiteWebSite, Information, EtatServeur, Close);
@@ -1082,30 +1099,30 @@ CreateMenu();
 
         maximize.setOnAction(
                 new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event
-            ) {
+                    @Override
+                    public void handle(ActionEvent event
+                    ) {
 //                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
-                Stage s = (Stage) menuBar.getScene().getWindow();
-                s.setMaximized(true);
+                        Stage s = (Stage) menuBar.getScene().getWindow();
+                        s.setMaximized(true);
 
-            }
-        }
+                    }
+                }
         );
 
         MenuItem minimize = new MenuItem("Windowed Screen");
 
         minimize.setOnAction(
                 new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event
-            ) {
+                    @Override
+                    public void handle(ActionEvent event
+                    ) {
 //                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
-                Stage s = (Stage) menuBar.getScene().getWindow();
-                s.setMaximized(false);
+                        Stage s = (Stage) menuBar.getScene().getWindow();
+                        s.setMaximized(false);
 
-            }
-        }
+                    }
+                }
         );
         window.getItems()
                 .addAll(maximize, minimize);
@@ -1114,24 +1131,24 @@ CreateMenu();
 
         view.setOnAction(
                 new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event
-            ) {
-                Interface = 2;
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("DataComparView.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
+                    @Override
+                    public void handle(ActionEvent event
+                    ) {
+                        Interface = 2;
+                        Parent root;
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("DataComparView.fxml"));
+                            Scene scene = new Scene(root);
+                            Stage s = new Stage();
+                            s.setScene(scene);
+                            s.show();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLDocumentController.class
+                                    .getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
-            }
-        }
         );
         statistic.getItems()
                 .add(view);
@@ -1141,25 +1158,25 @@ CreateMenu();
         preference.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent event
-            ) {
-                Interface = 1;
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("SettingView.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
+                    @Override
+                    public void handle(ActionEvent event
+                    ) {
+                        Interface = 1;
+                        Parent root;
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("SettingView.fxml"));
+                            Scene scene = new Scene(root);
+                            Stage s = new Stage();
+                            s.setScene(scene);
+                            s.show();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLDocumentController.class
+                                    .getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
                 }
-
-            }
-        }
         );
         seting.getItems()
                 .add(preference);
@@ -1170,25 +1187,25 @@ CreateMenu();
         aPropos.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent event
-            ) {
-                Interface = 1;
-                Parent root;
-                try {
-                    root = FXMLLoader.load(getClass().getResource("AProposView.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage s = new Stage();
-                    s.setScene(scene);
-                    s.show();
+                    @Override
+                    public void handle(ActionEvent event
+                    ) {
+                        Interface = 1;
+                        Parent root;
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("AProposView.fxml"));
+                            Scene scene = new Scene(root);
+                            Stage s = new Stage();
+                            s.setScene(scene);
+                            s.show();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLDocumentController.class
+                                    .getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
                 }
-
-            }
-        }
         );
 
         help.getItems()
@@ -1379,11 +1396,10 @@ CreateMenu();
 //            }
 //        }
 //        return listDataBean;
-    return null;
+        return null;
     }
 
     /**
-     *
      * @param nebul
      * @return une chaine de caractére qui represente le nom de l'image associé
      * a la nébulosité d'une station donnée

@@ -163,9 +163,9 @@ public class MyModel {
      * @param year
      * @param month
      * @param day
-     * @param mode      2 get data for Year Only
-     *                  1 get data for Year AND Month
-     *                  0 get data for year AND Month AND Day
+     * @param mode        2 get data for Year Only
+     *                    1 get data for Year AND Month
+     *                    0 get data for year AND Month AND Day
      * @return list of data
      */
     public List<DataBean2> getData(String stationName,
@@ -458,7 +458,7 @@ public class MyModel {
                 for (DataBean2 dataBean2 : listReleves) {
                     System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
                 }
-                if(listReleves.isEmpty())
+                if (listReleves.isEmpty())
                     System.out.println("Attention , null data found ! ");
                 return listReleves;
         }
@@ -477,12 +477,12 @@ public class MyModel {
     }
 
     public boolean constructChartAffichage(String station,
-                                  String year,
-                                  String month,
-                                  String day,
-                                  AreaChart<Number, Number> AfficheTemp,
-                                  AreaChart<Number, Number> AfficheHum,
-                                  AreaChart<Number, Number> AfficheNebul
+                                           String year,
+                                           String month,
+                                           String day,
+                                           AreaChart<Number, Number> AfficheTemp,
+                                           AreaChart<Number, Number> AfficheHum,
+                                           AreaChart<Number, Number> AfficheNebul
     ) throws IOException {
 
         int mode = whichMode(year, month, day);
@@ -524,6 +524,77 @@ public class MyModel {
             System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
             return false;
         }
+    }
+
+    public boolean constructChartComparaison(String station
+            , String year1
+            , String month1
+            , String day1
+            , String year2
+            , String month2
+            , String day2
+            , LineChart<Number, Number> lineCharttemp
+            , LineChart<Number, Number> lineCharthum
+            , LineChart<Number, Number> lineChartnebul
+    ) throws IOException {
+
+        int mode = whichMode(year1, month1, day1);
+
+        ArrayList<XYChart.Series> S1 = new ArrayList<>();
+        ArrayList<XYChart.Series> S2 = new ArrayList<>();
+
+        XYChart.Series<Number, Number> series0 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series01 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series02 = new XYChart.Series<>();
+
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
+
+        ArrayList<DataBean2> Resultat1 = (ArrayList<DataBean2>) getData(station, year1, month1, day1, mode);
+        ArrayList<DataBean2> Resultat2 = (ArrayList<DataBean2>) getData(station, year2, month2, day2, mode);
+        if (Resultat1 == null || Resultat2 == null) {
+            return false;
+        }
+
+        for (int i = 0; i < Resultat1.size(); i++) {
+
+            series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
+            series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
+            series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
+
+        }
+
+        S1.add(series0);
+        S1.add(series01);
+        S1.add(series02);
+
+        for (int i = 0; i < Resultat2.size(); i++) {
+
+            series1.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getTemperature()));
+            series11.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getHumidite()));
+            series12.getData().add(new XYChart.Data<>(i, Resultat2.get(i).getNebulosite()));
+
+        }
+
+        S2.add(series1);
+        S2.add(series11);
+        S2.add(series12);
+
+        if (S1 != null && S2 != null) {
+            lineCharttemp.getData().setAll(S1.get(0), S2.get(0));
+            lineCharthum.getData().setAll(S1.get(1), S2.get(1));
+            lineChartnebul.getData().setAll(S1.get(2), S2.get(2));
+            System.out.println("Chart constructed succefully ");
+            return true;
+        } else {
+            System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
+            return false;
+        }
+
+        //return false;
+
+
     }
 
 
@@ -650,7 +721,7 @@ public class MyModel {
                         ////System.out.println("match date=>"+dateLine);
                         // si on a bien matcher une date
                         //recuperation des données apartir du fichier
-                        System.out.print("Match found, ");
+                        //System.out.print("Match found, ");
                         temperature = (float) (!splitedLine[7].equals("mq") ? Float.parseFloat(splitedLine[7]) - 273.15 : 101.0);
                         nebu = !splitedLine[14].equals("mq") ? Float.parseFloat(splitedLine[14]) : 101;
                         himudite = !splitedLine[9].equals("mq") ? Float.parseFloat(splitedLine[9]) : 101;
@@ -663,7 +734,7 @@ public class MyModel {
                         ordre = Integer.parseInt(splitedLine[1].substring(8, 10));
 
 
-                        System.out.print("Match found ordre=" + ordre);
+                        //System.out.print("Match found ordre=" + ordre);
 
                         //noter j'ai pa mis le nom de la ville a rajouter
                         //ville = getVilleFromId(Integer.parseInt(idVille));
@@ -981,7 +1052,7 @@ public class MyModel {
                     get path of file selected
                      */
                     String pathOfFile = recupp.get(i).getPath();
-                    System.out.println(pathOfFile);
+                   // System.out.println(pathOfFile);
                     if (utilitaire.Utilitaire.CopyFileImported(recupp.get(i))) {
                         System.out.println("File correctly Imported !");
                     } else {

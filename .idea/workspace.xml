@@ -2,19 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0fbb273-4e5f-4f17-803e-84f58ba92d9e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/smart/Annee.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/smart/Annee.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/smart/Jour.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/smart/Jour.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/smart/Mois.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/smart/Mois.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/smart/Station.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/smart/Station.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/utilitaire/Utilitaire.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/utilitaire/Utilitaire.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$1$1.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$1$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$1.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$10.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$10.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$11.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$11.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$12.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$12.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$13.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$13.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$14.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$14.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$15.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$15.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$16.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$16.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$2$1.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$2$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$2.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$3.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$4.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$5.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$6.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$6.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$7.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$7.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$8.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$8.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$9.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController$9.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/FXMLDocumentController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/meteo/MyModel.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/meteo/MyModel.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SmartClimate.iml" afterPath="$PROJECT_DIR$/SmartClimate.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/meteo/FXMLDocumentController.java" afterPath="$PROJECT_DIR$/src/meteo/FXMLDocumentController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/meteo/MyModel.java" afterPath="$PROJECT_DIR$/src/meteo/MyModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Annee.java" afterPath="$PROJECT_DIR$/src/smart/Annee.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Jour.java" afterPath="$PROJECT_DIR$/src/smart/Jour.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Mois.java" afterPath="$PROJECT_DIR$/src/smart/Mois.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Station.java" afterPath="$PROJECT_DIR$/src/smart/Station.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -66,26 +76,26 @@
       <file leaf-file-name="MyModel.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/meteo/MyModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="165" column="27" lean-forward="true" selection-start-line="165" selection-start-column="27" selection-end-line="165" selection-end-column="27" />
+            <state relative-caret-position="166">
+              <caret line="1054" column="21" lean-forward="false" selection-start-line="1054" selection-start-column="21" selection-end-line="1054" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;class#MyModel#0" expanded="false" />
                 <element signature="method#downloadAndUncompress#0;class#MyModel#0" expanded="true" />
                 <element signature="method#getStationIdFromName#0;class#MyModel#0" expanded="true" />
-                <element signature="method#getStationNames#0;class#MyModel#0" expanded="true" />
+                <element signature="method#constructChartComparaison#0;class#MyModel#0" expanded="true" />
                 <element signature="method#showEveryThing#0;class#MyModel#0" expanded="true" />
                 <element signature="method#getInstance#0;class#MyModel#0" expanded="true" />
-                <element signature="e#22494#22528#0" expanded="false" />
+                <element signature="e#25243#25277#0" expanded="false" />
                 <element signature="method#getMissedMonthsFiles#0;class#MyModel#0" expanded="true" />
                 <element signature="method#getDataForDateByCity#0;class#MyModel#0" expanded="true" />
-                <element signature="e#25123#25274#0" expanded="false" />
-                <element signature="e#25688#25740#0" expanded="false" />
-                <element signature="e#27366#27414#0" expanded="false" />
-                <element signature="e#29571#29654#0" expanded="false" />
-                <element signature="e#30581#30640#0" expanded="false" />
-                <element signature="method#DisplayAlertToImport#0;class#MyModel#0" expanded="true" />
-                <element signature="e#39549#39569#0" expanded="false" />
+                <element signature="e#27872#28023#0" expanded="false" />
+                <element signature="e#28437#28489#0" expanded="false" />
+                <element signature="e#30115#30163#0" expanded="false" />
+                <element signature="e#32324#32407#0" expanded="false" />
+                <element signature="e#33334#33393#0" expanded="false" />
+                <element signature="e#38259#38373#0" expanded="false" />
+                <element signature="e#42302#42322#0" expanded="false" />
                 <element signature="method#validateDate#0;class#MyModel#0" expanded="true" />
                 <element signature="method#whichMode#0;class#MyModel#0" expanded="true" />
                 <element signature="method#validateNotFuture#0;class#MyModel#0" expanded="true" />
@@ -115,8 +125,8 @@
       <file leaf-file-name="FXMLDocumentController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/meteo/FXMLDocumentController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="386" column="45" lean-forward="false" selection-start-line="386" selection-start-column="45" selection-end-line="386" selection-end-column="45" />
+            <state relative-caret-position="51">
+              <caret line="198" column="89" lean-forward="false" selection-start-line="198" selection-start-column="89" selection-end-line="198" selection-end-column="89" />
               <folding>
                 <element signature="docComment;class#FXMLDocumentController#0" expanded="false" />
                 <element signature="method#InitInterfacePrincipal#0;class#FXMLDocumentController#0" expanded="true" />
@@ -213,8 +223,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>DataCity</find>
-      <find>ordre</find>
       <find>010118</find>
       <find>010118;</find>
       <find>07149;</find>
@@ -240,9 +248,11 @@
       <find>07690;20110122</find>
       <find>showAll</find>
       <find>00</find>
-      <find>currentDate</find>
       <find>getData</find>
+      <find>currentDate</find>
+      <find>constructChartCom</find>
       <find>stationNames</find>
+      <find>System.out.print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -1059,8 +1069,16 @@
       <workItem from="1492447736119" duration="692000" />
       <workItem from="1492500982773" duration="374000" />
       <workItem from="1492501402816" duration="23332000" />
-      <workItem from="1492593689474" duration="17565000" />
+      <workItem from="1492593689474" duration="19271000" />
     </task>
+    <task id="LOCAL-00001" summary="constructChartAffichage is tested and working with the new conception">
+      <created>1492618361046</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1492618361046</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1096,10 +1114,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41963000" />
+    <option name="totallyTimeSpent" value="43669000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1116,7 +1135,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19838946" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19838946" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1131,12 +1150,47 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5890208" sideWeight="0.5058565" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32937685" sideWeight="0.49707174" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.57863504" sideWeight="0.4941435" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19838946" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="constructChartAffichage is tested and working with the new conception" />
+    <option name="LAST_COMMIT_MESSAGE" value="constructChartAffichage is tested and working with the new conception" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1148,7 +1202,7 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="7" />
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1198,19 +1252,19 @@
             <element signature="docComment;class#MyModel#0" expanded="false" />
             <element signature="method#downloadAndUncompress#0;class#MyModel#0" expanded="true" />
             <element signature="method#getStationIdFromName#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getStationNames#0;class#MyModel#0" expanded="true" />
+            <element signature="method#constructChartComparaison#0;class#MyModel#0" expanded="true" />
             <element signature="method#showEveryThing#0;class#MyModel#0" expanded="true" />
             <element signature="method#getInstance#0;class#MyModel#0" expanded="true" />
-            <element signature="e#22494#22528#0" expanded="false" />
+            <element signature="e#25243#25277#0" expanded="false" />
             <element signature="method#getMissedMonthsFiles#0;class#MyModel#0" expanded="true" />
             <element signature="method#getDataForDateByCity#0;class#MyModel#0" expanded="true" />
-            <element signature="e#25123#25274#0" expanded="false" />
-            <element signature="e#25688#25740#0" expanded="false" />
-            <element signature="e#27366#27414#0" expanded="false" />
-            <element signature="e#29571#29654#0" expanded="false" />
-            <element signature="e#30581#30640#0" expanded="false" />
-            <element signature="method#DisplayAlertToImport#0;class#MyModel#0" expanded="true" />
-            <element signature="e#39549#39569#0" expanded="false" />
+            <element signature="e#27872#28023#0" expanded="false" />
+            <element signature="e#28437#28489#0" expanded="false" />
+            <element signature="e#30115#30163#0" expanded="false" />
+            <element signature="e#32324#32407#0" expanded="false" />
+            <element signature="e#33334#33393#0" expanded="false" />
+            <element signature="e#38259#38373#0" expanded="false" />
+            <element signature="e#42302#42322#0" expanded="false" />
             <element signature="method#validateDate#0;class#MyModel#0" expanded="true" />
             <element signature="method#whichMode#0;class#MyModel#0" expanded="true" />
             <element signature="method#validateNotFuture#0;class#MyModel#0" expanded="true" />
@@ -1593,8 +1647,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/meteo/FXMLDocumentController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="386" column="45" lean-forward="false" selection-start-line="386" selection-start-column="45" selection-end-line="386" selection-end-column="45" />
+        <state relative-caret-position="51">
+          <caret line="198" column="89" lean-forward="false" selection-start-line="198" selection-start-column="89" selection-end-line="198" selection-end-column="89" />
           <folding>
             <element signature="docComment;class#FXMLDocumentController#0" expanded="false" />
             <element signature="method#InitInterfacePrincipal#0;class#FXMLDocumentController#0" expanded="true" />
@@ -1605,26 +1659,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/meteo/MyModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="165" column="27" lean-forward="true" selection-start-line="165" selection-start-column="27" selection-end-line="165" selection-end-column="27" />
+        <state relative-caret-position="166">
+          <caret line="1054" column="21" lean-forward="false" selection-start-line="1054" selection-start-column="21" selection-end-line="1054" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;class#MyModel#0" expanded="false" />
             <element signature="method#downloadAndUncompress#0;class#MyModel#0" expanded="true" />
             <element signature="method#getStationIdFromName#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getStationNames#0;class#MyModel#0" expanded="true" />
+            <element signature="method#constructChartComparaison#0;class#MyModel#0" expanded="true" />
             <element signature="method#showEveryThing#0;class#MyModel#0" expanded="true" />
             <element signature="method#getInstance#0;class#MyModel#0" expanded="true" />
-            <element signature="e#22494#22528#0" expanded="false" />
+            <element signature="e#25243#25277#0" expanded="false" />
             <element signature="method#getMissedMonthsFiles#0;class#MyModel#0" expanded="true" />
             <element signature="method#getDataForDateByCity#0;class#MyModel#0" expanded="true" />
-            <element signature="e#25123#25274#0" expanded="false" />
-            <element signature="e#25688#25740#0" expanded="false" />
-            <element signature="e#27366#27414#0" expanded="false" />
-            <element signature="e#29571#29654#0" expanded="false" />
-            <element signature="e#30581#30640#0" expanded="false" />
-            <element signature="method#DisplayAlertToImport#0;class#MyModel#0" expanded="true" />
-            <element signature="e#39549#39569#0" expanded="false" />
+            <element signature="e#27872#28023#0" expanded="false" />
+            <element signature="e#28437#28489#0" expanded="false" />
+            <element signature="e#30115#30163#0" expanded="false" />
+            <element signature="e#32324#32407#0" expanded="false" />
+            <element signature="e#33334#33393#0" expanded="false" />
+            <element signature="e#38259#38373#0" expanded="false" />
+            <element signature="e#42302#42322#0" expanded="false" />
             <element signature="method#validateDate#0;class#MyModel#0" expanded="true" />
             <element signature="method#whichMode#0;class#MyModel#0" expanded="true" />
             <element signature="method#validateNotFuture#0;class#MyModel#0" expanded="true" />
