@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package meteo;
+package abstraction;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,7 +31,7 @@ public interface Controller extends Initializable{
 
     /**
      * permet d'initialiser l'interface permettant de savoir si le serveur de
-     * meteo france contenant les données nécessaires est bien en marche est
+     * main france contenant les données nécessaires est bien en marche est
      * combien de temps a fallut pour faire un ping
      */
     void initInterfaceEtatServeur();

@@ -5,15 +5,11 @@
  */
 package smart;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import coordonnee.DataBean2;
-import coordonnee.aDate;
 import utilitaire.Utilitaire;
 
 /**
@@ -133,11 +129,11 @@ public class Mois {
         }
     }
 
-    public List<DataBean2> getAllReleves(int idStation, int annee) {
+    public List<DataBean2> getAllReleves(String stationName,int idStation, int annee,int x,int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Jour jour : joursList.values()) {
-            tempList.addAll(jour.getAllReleves(idStation,annee,id));
+            tempList.addAll(jour.getAllReleves(stationName,idStation,annee,id,x,y));
         }
         return tempList;
     }

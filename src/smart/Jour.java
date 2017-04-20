@@ -10,12 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import coordonnee.DataBean2;
-import coordonnee.DataCity;
-import coordonnee.aDate;
 import utilitaire.Utilitaire;
-
-import javax.rmi.CORBA.Util;
 
 /**
  * @author SEIF
@@ -135,10 +130,9 @@ public class Jour {
         return missingList;
     }
 
-    public void showAll()
-    {
-        for(Releve releve : relevesList.values()) {
-            System.out.println("ordre:"+releve.getOrdre()+" temperature:"+releve.getTemperature());
+    public void showAll() {
+        for (Releve releve : relevesList.values()) {
+            System.out.println("ordre:" + releve.getOrdre() + " temperature:" + releve.getTemperature());
         }
     }
 
@@ -154,19 +148,19 @@ public class Jour {
     public Map<Integer, Releve> getMissingReleves(int year, int month) {
         Map<Integer, Releve> missingList = new HashMap<Integer, Releve>();
         int currentYear, currentMonth, currentDay;
-        int currentHour,latestReleve;
-        boolean today = Utilitaire.isCurrentDate(year,month,id,0);
+        int currentHour, latestReleve;
+        boolean today = Utilitaire.isCurrentDate(year, month, id, 0);
         int[] currentDate = Utilitaire.getCurrentDate();
 
 
-        if(!today)
-            latestReleve =7;
+        if (!today)
+            latestReleve = 7;
         else
-            latestReleve =currentDate[0]/3;
+            latestReleve = currentDate[0] / 3;
 
-        for(int i=0;i<=latestReleve;i++) {
-            if(!releveExists(i))
-                missingList.put(i,new Releve(i,-1,-1,-1));
+        for (int i = 0; i <= latestReleve; i++) {
+            if (!releveExists(i))
+                missingList.put(i, new Releve(i, -1, -1, -1));
         }
 
         return missingList;
@@ -187,6 +181,44 @@ public class Jour {
         return relevesList.put(ordre, new Releve(ordre, temperature, humidite, nebulosite)) != null;
     }
 
+    public DataBean2 getLatestReleve(String nomStation, int idStation, int annnee, int mois, int x, int y) {
+        Releve releveTemp = relevesList.get(0);
+        for(Releve releve : relevesList.values()) {
+            releveTemp = releve;
+        }
+        System.out.println("nomStation:"+nomStation +" id:"+idStation+" empty?:"+relevesList.isEmpty());
+        float temperature,humidite,nebulosite;
+        String ordre;
+        if(relevesList.isEmpty()) {
+            temperature = 1000;
+            humidite = 1000;
+            nebulosite = 1000;
+            ordre = "X";
+        }
+        else {
+            temperature = releveTemp.getTemperature() ;
+            humidite = releveTemp.getHumidite();
+            nebulosite = releveTemp.getNebulosite();
+            ordre = String.valueOf(releveTemp.getOrdre());
+        }
+
+        DataBean2 dataBean2 = new DataBean2(
+                nomStation
+                , idStation
+                , temperature
+                , humidite
+                , nebulosite
+                , new aDate(String.valueOf(annnee)
+                                , String.valueOf(mois)
+                                , String.valueOf(id)
+                                , String.valueOf(ordre)
+                )
+                ,x
+                ,y
+                );
+
+        return dataBean2;
+    }
 
     public void buildMissingReleves(int year, int month) {
         boolean isCurrentDay = Utilitaire.isCurrentDate(year, month, id, 0);
@@ -227,11 +259,12 @@ public class Jour {
         return relevesList;
     }
 
-    public List<DataBean2> getAllReleves(int idStation, int annee, int mois) {
+    public List<DataBean2> getAllReleves(String nomStation, int idStation, int annee, int mois, int x, int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Releve releve : relevesList.values()) {
             DataBean2 dataBean = new DataBean2(
+                    nomStation,
                     idStation,
                     releve.getTemperature(),
                     releve.getHumidite(),
@@ -241,7 +274,9 @@ public class Jour {
                             String.valueOf(mois),
                             String.valueOf(id),
                             String.valueOf(releve.getOrdre())
-                    )
+                    ),
+                    x,
+                    y
             );
 
             tempList.add(dataBean);

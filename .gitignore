@@ -1,9 +1,9 @@
 nbproject/**
 src/junit/**
 mylibs/**
-/build/
+build/**
 /dist/
 *.csv.gz
 *.csv
 donnees/**
-test/**
+test/**l

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import coordonnee.DataBean2;
 import utilitaire.Utilitaire;
 
 /**
@@ -137,11 +136,11 @@ public class Annee {
         }
     }
 
-    public List<DataBean2> getAllReleves(int idStation) {
+    public List<DataBean2> getAllReleves(String stationName,int idStation,int x,int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Mois mois : moisList.values()) {
-            tempList.addAll(mois.getAllReleves(idStation,id));
+            tempList.addAll(mois.getAllReleves(stationName,idStation,id,x,y));
         }
         return tempList;
     }

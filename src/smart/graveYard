@@ -1,0 +1,198 @@
+    public ArrayList<String> getMissedMonthsFiles(String year) {
+        /*
+        int currentDay, currentMonth, currentYear;
+        ArrayList<String> missedMonths = new ArrayList<String>();
+        String yearMonth, month;
+        ZoneId zoneId = ZoneId.of("Europe/Paris");
+        LocalDateTime localTime = LocalDateTime.now(zoneId);
+        currentDay = localTime.getDayOfMonth();
+        currentMonth = localTime.getMonthValue();
+        currentYear = localTime.getYear();
+        boolean stopSearch = false;
+        if (String.valueOf(currentYear).equals(year)) {
+            //si l'année donner est l'année courante, on met le boolean stopSearch a true pour ne pas
+            //mettre les mois qui sont plus grand que le mois courant comme missed !
+            stopSearch = true;
+        }
+
+        for (int i = 1; i <= 12; i++) {
+            month = ("00" + i).substring(String.valueOf(i).length());
+            yearMonth = year + month;
+            if (stopSearch && Integer.parseInt(month) > currentMonth) //si le mois generer est supperieure au mois courant
+            {
+                break;
+            }
+
+            //si le fichier de ce moi n'existe pas OU si il est pas a jour alors on l'ajout comme missed
+            if (!checkIfFileExists(getCsvFilePathFromDate(yearMonth)) || !isUpdatedMonth(yearMonth)) {
+                missedMonths.add(yearMonth);
+            }
+
+        }
+        return missedMonths;
+    */
+        return null;
+    }
+
+
+
+
+    ------------------------
+
+
+        /**
+         * This method returns the latest available data localy
+         *
+         * @return latest available data that we have localy if exists null if no
+         * data found localy
+         */
+
+    //    public ArrayList<DataCity> getLatestAvailableData() {
+    //        ArrayList<DataCity> liste = null;
+    //        String file = Utilitaire.getLatesttAvailableFile();
+    //        //System.out.println("damnFile:"+file);
+    //        String date = this.getLatestAvailableDateOnFile(file);
+    //        if (date != null) {
+    //            liste = this.getDataForDateByCity(date, "all");
+    //        }
+    //
+    //        return liste;
+    //    }
+
+
+
+    -----------------------
+
+
+//    public ArrayList<DataCity> getDataForYearByCity(String date, String cityId) {
+//        String year = date.substring(0, 4);
+//        ArrayList<DataCity> liste = new ArrayList<DataCity>();
+//        ArrayList<DataCity> tempList = null;
+//        String yearMonth;
+//        for (int i = 1; i <= 12; i++) {
+//            if (i < 10) {
+//                yearMonth = year + ("00" + i).substring("i".length());
+//            } else {
+//                yearMonth = year + String.valueOf(i);
+//            }
+//
+//            tempList = getDataForDateByCity(yearMonth, cityId);
+//            if (tempList != null) {
+//                liste.addAll(tempList);
+//                //System.out.println("list is null");
+//            }
+//            ////System.out.println("tour:"+i);
+//        }
+//        return liste;
+//    }
+
+
+    ----------------------------
+
+    /**
+     * Cette methode retourne la date des donner la plus recente inclut dans un
+     * fichier
+     *
+     * @param date sous la forme de yyyymm correspond au nom du fichier qu'on
+     *             veux chercher dedans
+     * @return la date la plus recente dans le fichier qui correspond a @date
+     */
+    public String getLatestAvailableDateOnFile(String date) {
+        File f;
+        FileReader fr;
+        BufferedReader br;
+        String line;
+        int latestDate = 0;
+        String dateLine;
+        String filePath;
+
+        try {
+            filePath = utilitaire.Utilitaire.getCsvFilePathFromDate(date);
+            if (!utilitaire.Utilitaire.checkIfFileExists(filePath)) {
+                return null;
+            }
+
+            f = new File(filePath);
+            fr = new FileReader(f);
+            br = new BufferedReader(fr);
+            line = br.readLine();
+
+            if (line.startsWith("numer_sta")) {
+                line = br.readLine();
+            }
+
+            while (line != null) {
+                dateLine = line.split(";")[1].substring(0, 10);
+
+                if (Integer.parseInt(dateLine) > latestDate) {
+                    latestDate = Integer.parseInt(dateLine);
+                }
+
+                line = br.readLine();
+            }
+
+            fr.close();
+            br.close();
+            return String.valueOf(latestDate);
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Utilitaire.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Utilitaire.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+
+    /**
+     * @return ArrayList contenant les dates existantes en local
+     */
+    public ArrayList<String> getYearExists() {
+        ArrayList<String> list = new ArrayList<>();
+        File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
+        for (File file : file1.listFiles()) {
+            list.add(file.toString().substring(8));
+        }
+
+        return list;
+    }
+
+    ----------------------------------------------------
+
+    /**
+     * @param year
+     * @return arrayList contenant les mois existants en local pour une année
+     * mise en paramétre
+     */
+    public ArrayList<String> getMonthsExistsForYear(String year) {
+        ArrayList<String> list = new ArrayList<>();
+        File file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + year);
+        for (File file : file1.listFiles()) {
+            list.add(file.toString().substring(8));
+        }
+
+        return list;
+    }
+
+
+
+
+    -----------------------------------------------
+
+        private List<DataBean> parseDataList(String date, String station) {
+    ////        ArrayList<DataCity> listDonnee = model.getListForChart(date, station);
+    //        ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
+    ////        if (listDonnee != null) {
+    ////            for (DataCity villeTemp : listDonnee) {
+    ////                listDataBean.add(villeTemp.toDataBean());
+    //            }
+    //        }
+    //        return listDataBean;
+            return null;
+        }
+
+
+
