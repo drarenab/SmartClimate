@@ -359,6 +359,7 @@ public class FXMLDocumentController implements Controller {
 
     @FXML
     private void handleButtonActionAfficher() throws IOException {
+       
         /*
         Test si le formulaire est bien rempli
          */
@@ -398,100 +399,21 @@ public class FXMLDocumentController implements Controller {
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-                model.constructChartAffichage(Station.getValue().toString(),
+                
+                model.Affichage(Station.getValue().toString(),
                          year.getText(),
                          month.getText(),
                          day.getText(),
                          AfficheTemp,
                          AfficheHum,
                          AfficheNebul,
-                         MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio)
-                );
+                         tableView,
+                         MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
+                
+                
+               
 
-//                AfficheTemp.setTitle("Températures");
-//                AfficheHum.setTitle("Humidité");
-//                AfficheNebul.setTitle("Nébulosité");
-//
-//                /**
-//                 * CAN BE PUT INSIDE A METHOD
-//                 */
-//                // si l'utilisateur a saisie l'année et le mois et le jour donc on est sur le mode "day"
-//                if (month.getText().length() > 0 && day.getText().length() > 0) {
-//                    showMode = "day";
-//
-//                    yearMonth = year.getText() + month.getText();
-//                    yearMonthDay = yearMonth + day.getText();
-//                } // si l'utilisateur a saisie que le mois alors on est sur le mode "month"
-//                else if (month.getText().length() > 0) {
-//                    showMode = "month";
-//                    yearMonth = year.getText() + month.getText();
-//                } // si l'utilisateur a saisie que l'année alors on est sur le mode "year"
-//                else {
-//                    showMode = "year";
-//                }
-//
-//                if (showMode.equals("day")) {
-//                    //si on est sur le day mode
-//                    System.out.println("Day MODE ,looking for data for whole day=" + day.getText());
-//                    latestDate = model.getLatestAvailableDateOnFile(yearMonth);
-//                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
-//                    if (latestDate == null
-//                            || Integer.parseInt(latestDate.substring(6, 8)) < Integer.parseInt(day.getText())) {
-//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth + " ...");
-//                        try {
-//                            model.downloadAndUncompress(year.getText() + month.getText());
-//
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                    // si on est sur le month mode
-//                } else if (showMode.equals("month")) {
-//                    System.out.println("Month MODE ,looking for data for whole yearMonth=" + yearMonth);
-//                    //si le mois n'est pas a jour
-//                    if (!model.isUpdatedMonth(yearMonth)) {
-//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth + " ...");
-//                        try {
-//                            //on lance le télechargement
-//
-//                            model.downloadAndUncompress(year.getText() + month.getText());
-//
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                    // si on est sur le year mode
-//                } else if (showMode.equals("year")) {
-//                    System.out.println("Year MODE ,looking for data for whole year=" + year.getText());
-//                    //retourner la liste des mois qui manques dans le dossier de l'année
-//                    ArrayList<String> missedMonths = model.getMissedMonthsFiles(year.getText());
-//                    for (String month : missedMonths) {
-//                        try {
-//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-//                            //on lance le telechargement des mois qui ne sont pas a jour
-//
-//                            model.downloadAndUncompress(month);
-//
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                }
-//                System.out.println("Everything looks good, Trying to construct the chart");
-//                //on lance la construction de chart
-////                model.constructChartAffichage(onlineMode, year.getText()
-////                        + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
-////                /*
-//                if (chartList != null) {
-//                    AfficheTemp.getData().setAll(chartList.get(0));
-//                    AfficheHum.getData().setAll(chartList.get(1));
-//                    AfficheNebul.getData().setAll(chartList.get(2));
-//                    System.out.println("Chart constructed succefully ");
-//                } else {
-//                    System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-//                }
-////                 */
-// /*
+
 //                TableView
 //                 */
 //                /*Attention can be throw an exception if data is null ! */
@@ -500,12 +422,7 @@ public class FXMLDocumentController implements Controller {
                 columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
                 columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
 
-                model.constructTableView(Station.getValue().toString(),
-                         year.getText(),
-                         month.getText(),
-                         day.getText(),
-                         tableView,
-                         MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
+                
 
             } else {
                 //not logicaly valid date!

@@ -56,6 +56,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import smart.Releve;
@@ -179,7 +180,8 @@ public class MyModel {
             String month,
             String day,
             int mode,
-            int MinOrMaxOrMoy
+            int MinOrMaxOrMoy,
+            boolean importOrNot
     ) throws IOException {
 
         Map<Integer, Mois> missingMonths;
@@ -246,11 +248,20 @@ public class MyModel {
                         /**
                          * MANQUE SI APP EST EN LIGNE*
                          */
-                        //si encore on a trouver des relevés qui manque , et si app est enligne on lance le telechargement
-                        System.out.println("Still have missing relevées , trying to download them! size=" + missingReleve.size());
-                        downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
 
-                        System.out.println("Download is done , trying to upload local files ");
+                        if (netIsAvailable() != -1) {
+                            //si encore on a trouver des relevés qui manque , et si app est enligne on lance le telechargement
+                            System.out.println("Still have missing relevées , trying to download them! size=" + missingReleve.size());
+                            downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
+
+                            System.out.println("Download is done , trying to upload local files ");
+                        } else {
+                            if( importOrNot){
+                                 DisplayAlertToImport();
+                            }
+                            System.out.println("No need to import");
+                        }
+
                         for (Releve releve : missingReleve.values()) {
                             ordreInt = releve.getOrdre() * 3;
                             ordre = ("00" + ordreInt).substring(String.valueOf(ordreInt).length());
@@ -337,10 +348,16 @@ public class MyModel {
                         /**
                          * MANQUE SI APP EST EN LIGNE*
                          */
-                        //si encore on a trouver des jours qui manque , et si app est enligne on lance le telechargement
-                        System.out.println("Still have missing days , trying to download them! size=" + missingDays.size());
-                        downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
-
+                        if (netIsAvailable() != -1) {
+                            //si encore on a trouver des jours qui manque , et si app est enligne on lance le telechargement
+                            System.out.println("Still have missing days , trying to download them! size=" + missingDays.size());
+                            downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
+                        } else {
+                            if( importOrNot){
+                                 DisplayAlertToImport();
+                            }
+                            System.out.println("No need to import");
+                        }
                         System.out.println("Download is done , trying to upload local files ");
                         for (Jour jour : missingDays.values()) {
                             jourIdInt = jour.getId();
@@ -440,16 +457,23 @@ public class MyModel {
                         /**
                          * MANQUE SI APP EST EN LIGNE*
                          */
-                        //si encore on a trouver des mois qui manque , et si app est enligne on lance le telechargement
-                        System.out.println("Still have missing mois , trying to download them! size=" + missingMonths.size());
+                        if (netIsAvailable() != -1) {
+                            //si encore on a trouver des mois qui manque , et si app est enligne on lance le telechargement
+                            System.out.println("Still have missing mois , trying to download them! size=" + missingMonths.size());
 
-                        for (Mois mois : missingMonths.values()) {
-                            moisIdInt = mois.getId();
-                            moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
-                            downloadAndUncompress(year + moisId);
+                            for (Mois mois : missingMonths.values()) {
+                                moisIdInt = mois.getId();
+                                moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
+                                downloadAndUncompress(year + moisId);
+                            }
+
+                            System.out.println("Download is done , trying to upload local files ");
+                        } else {
+                            if( importOrNot){
+                                 DisplayAlertToImport();
+                            }
+                            System.out.println("No need to import");
                         }
-
-                        System.out.println("Download is done , trying to upload local files ");
                         for (Mois mois : missingMonths.values()) {
                             moisIdInt = mois.getId();
                             moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
@@ -544,6 +568,7 @@ public class MyModel {
             AreaChart<Number, Number> AfficheHum,
             AreaChart<Number, Number> AfficheNebul,
             int MinOrMaxOrMoy
+            ,boolean importOrNot
     ) throws IOException {
 
         int mode = whichMode(year, month, day);
@@ -553,7 +578,7 @@ public class MyModel {
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
 
-        ArrayList<DataBean2> Resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy);
+        ArrayList<DataBean2> Resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy, importOrNot);
 
         if (Resultat == null) {
             return false;
@@ -632,8 +657,8 @@ public class MyModel {
         XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
         XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
 
-        ArrayList<DataBean2> Resultat1 = (ArrayList<DataBean2>) getData(station, year1, month1, day1, mode, MinOrMaxOrMoy);
-        ArrayList<DataBean2> Resultat2 = (ArrayList<DataBean2>) getData(station, year2, month2, day2, mode, MinOrMaxOrMoy);
+        ArrayList<DataBean2> Resultat1 = (ArrayList<DataBean2>) getData(station, year1, month1, day1, mode, MinOrMaxOrMoy, true);
+        ArrayList<DataBean2> Resultat2 = (ArrayList<DataBean2>) getData(station, year2, month2, day2, mode, MinOrMaxOrMoy, true);
         if (Resultat1 == null || Resultat2 == null) {
             return false;
         }
@@ -681,11 +706,12 @@ public class MyModel {
             String month,
             String day,
             TableView<DataBean> tableView,
-            int MinOrMaxOrMoy
+            int MinOrMaxOrMoy,
+            boolean importOrNot
     ) throws IOException {
         int mode = whichMode(year, month, day);
 
-        ArrayList<DataBean2> resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy);
+        ArrayList<DataBean2> resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy, importOrNot);
         ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
         if (resultat != null) {
             for (DataBean2 dataBean2 : resultat) {
@@ -1142,6 +1168,7 @@ public class MyModel {
                      */
                     String pathOfFile = recupp.get(i).getPath();
                     // System.out.println(pathOfFile);
+                    System.out.println(recupp.get(i));
                     if (utilitaire.Utilitaire.CopyFileImported(recupp.get(i))) {
                         System.out.println("File correctly Imported !");
                     } else {
@@ -1420,7 +1447,39 @@ public class MyModel {
         return list;
     }
 
+    public void Affichage(String station,
+            String year,
+            String month,
+            String day,
+            AreaChart<Number, Number> AfficheTemp,
+            AreaChart<Number, Number> AfficheHum,
+            AreaChart<Number, Number> AfficheNebul,
+            TableView<DataBean> tableView,
+            int MinOrMaxOrMoy) throws IOException {
+
+        constructChartAffichage(station,
+                year,
+                month,
+                day,
+                AfficheTemp,
+                AfficheHum,
+                AfficheNebul,
+                MinOrMaxOrMoy,
+                true
+        );
+
+        constructTableView(station,
+                year,
+                month,
+                day,
+                tableView,
+                MinOrMaxOrMoy,
+                false);
+
+    }
+
 }
+
 
 /*
 TODO: 
