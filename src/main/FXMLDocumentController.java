@@ -214,96 +214,6 @@ public class FXMLDocumentController implements Controller {
                          lineChartnebul,
                          MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
 
-//                if (showMode.equals("day")) {
-//                    //si on est sur le day mode
-//                    System.out.println("Day MODE ,looking for data for whole days");
-//                    latestDate1 = model.getLatestAvailableDateOnFile(yearMonth1);
-//                    latestDate2 = model.getLatestAvailableDateOnFile(yearMonth2);
-//                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
-//                    if (latestDate1 == null ||
-//                              Integer.parseInt(latestDate1.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
-//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth1 + " ...");
-//                        try {
-//                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//                    if (latestDate2 == null ||
-//                              Integer.parseInt(latestDate2.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
-//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth2 + " ...");
-//                        try {
-//                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                    // si on est sur le month mode
-//                } else if (showMode.equals("month")) {
-//                   // System.out.println("Month MODE ,looking for data for whole yearMonth="+yearMonth1);
-//                    //si le mois n'est pas a jour
-//
-//                    if (!model.isUpdatedMonth(yearMonth1)) {
-//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth1 + " ...");
-//                        try {
-//                            //on lance le télechargement
-//                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//                    if (!model.isUpdatedMonth(yearMonth2)) {
-//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth2 + " ...");
-//                        try {
-//                            //on lance le télechargement
-//                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//                    // si on est sur le year mode
-//                } else if (showMode.equals("year")) {
-//                    System.out.println("Year MODE ,looking for data for whole year=" + Year1Comparaison.getText());
-//                    //retourner la liste des mois qui manques dans le dossier de l'année
-//                    ArrayList<String> missedMonths1 = model.getMissedMonthsFiles(Year1Comparaison.getText());
-//                    for (String month : missedMonths1) {
-//                        try {
-//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-//                            //on lance le telechargement des mois qui ne sont pas a jour
-//                            model.downloadAndUncompress(month);
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//
-//                    System.out.println("Year MODE ,looking for data for whole year=" + Year2Comparaison.getText());
-//                    //retourner la liste des mois qui manques dans le dossier de l'année
-//                    ArrayList<String> missedMonths2 = model.getMissedMonthsFiles(Year2Comparaison.getText());
-//                    for (String month : missedMonths2) {
-//                        try {
-//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-//                            //on lance le telechargement des mois qui ne sont pas a jour
-//                            model.downloadAndUncompress(month);
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                }
-//
-//                System.out.println("Everything looks good, Trying to construct the chart");
-//                //on lance la construction de chart
-//                String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-//                String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-//                model.constructChartComparaison(onlineMode,Date1, Date2,
-//                        StationComparaison.getValue().toString(),
-//                        lineCharttemp,
-//                        lineCharthum,
-//                        lineChartnebul
-//                );
             } else {
                 //not logicaly valid date!
             }
@@ -395,6 +305,7 @@ public class FXMLDocumentController implements Controller {
             /*
                 Chart
              */
+            
             boolean validated;
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
