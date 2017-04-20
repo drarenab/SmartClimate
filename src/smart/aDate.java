@@ -59,6 +59,9 @@ public class aDate {
     }
 
     public String toString(){
-        return(year + month + day + time);
+        String annee,mois,jour;
+        mois = ("00" + month).substring(String.valueOf(month).length());
+        jour = ("00" + day).substring(String.valueOf(day).length());
+        return("Le "+ jour+"/"+ mois +"/"+ year  +" a "+ Integer.parseInt(time)*3+" heure");
     }
 }

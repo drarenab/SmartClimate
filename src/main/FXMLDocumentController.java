@@ -495,14 +495,17 @@ public class FXMLDocumentController implements Controller {
 //                TableView
 //                 */
 //                /*Attention can be throw an exception if data is null ! */
-//                columnName.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nomVille"));
-//                columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
-//                columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
-//                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
-//                columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
-//                tableView.getItems().setAll(parseDataList(year.getText() + month.getText() + day.getText(),
-//                        Station.getValue().toString()
-//                ));
+                columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
+                columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
+                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
+                columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
+
+                model.constructTableView(Station.getValue().toString()
+                        , year.getText()
+                        , month.getText()
+                        , day.getText()
+                        , tableView);
+
             } else {
                 //not logicaly valid date!
             }

@@ -67,8 +67,7 @@
                                                       <VBox fx:id="VboxComparaison" />
                                                       <TableView fx:id="tableView">
                                                         <columns>
-                                                          <TableColumn fx:id="columnName" prefWidth="109.0" text="Nom" />
-                                                          <TableColumn fx:id="columnDate" prefWidth="102.0" text="Date" />
+                                                          <TableColumn fx:id="columnDate" prefWidth="150.0" text="Date" />
                                                             <TableColumn fx:id="columnTemp" prefWidth="127.0" text="Température" />
                                                             <TableColumn fx:id="columnHum" prefWidth="102.0" text="Humidité" />
                                                             <TableColumn fx:id="columnNebul" prefWidth="101.0" text="Nébulosité" />

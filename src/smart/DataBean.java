@@ -11,21 +11,21 @@ package coordonnee;
  */
 public class DataBean {
 
-    String nomVille;
+    String idVille;
     String date;
     String humidite;
     String nebulosite;
     String temperature;
 
-    public String getNomVille() {
-        return nomVille;
+    public String getIdVille() {
+        return idVille;
     }
 
-    public void setNomVille(String nomVille) {
-        this.nomVille = nomVille;
+    public void setIdVille(String idVille) {
+        this.idVille = idVille;
     }
-    
-      public String getDate() {
+
+    public String getDate() {
         return date;
     }
 

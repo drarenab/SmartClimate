@@ -57,4 +57,15 @@ public class DataBean2 {
     public void setDate(aDate date) {
         this.date = date;
     }
+
+    public DataBean toDataBean() {
+        DataBean dataBean = new DataBean();
+        dataBean.setDate(date.toString());
+        dataBean.setHumidite(String.valueOf(humidite));
+        dataBean.setNebulosite(String.valueOf(nebulosite));
+        dataBean.setTemperature(String.format("%.1f",temperature));
+        dataBean.setIdVille(String.valueOf(idStation));
+        return dataBean;
+
+    }
 }

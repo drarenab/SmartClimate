@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javafx.scene.control.TableView;
 import smart.Jour;
 import smart.Mois;
 import utilitaire.*;
@@ -157,12 +158,15 @@ public class MyModel {
     }
 
     /**
-     * return list of data for a station on a certain date
+     * Return list of data for a station on a certain date
+     * This Method is used by : -ConstructChartAffichage()
+     * -ConstructChartComparaison()
+     * -ConstructTableView()
      *
-     * @param stationName
-     * @param year
-     * @param month
-     * @param day
+     * @param stationName name of station given by the user
+     * @param year        year of the data that will be returned
+     * @param month       month of data that will be returned
+     * @param day         day of data that will be returned
      * @param mode        2 get data for Year Only
      *                    1 get data for Year AND Month
      *                    0 get data for year AND Month AND Day
@@ -476,13 +480,26 @@ public class MyModel {
         return list;
     }
 
-    public boolean constructChartAffichage(String station,
-                                           String year,
-                                           String month,
-                                           String day,
-                                           AreaChart<Number, Number> AfficheTemp,
-                                           AreaChart<Number, Number> AfficheHum,
-                                           AreaChart<Number, Number> AfficheNebul
+    /**
+     * this method constructs Affichage chart lists with the  asked data
+     *
+     * @param station      station name
+     * @param year         year given by the user
+     * @param month        month given by the user
+     * @param day          day given by the user
+     * @param AfficheTemp  temperature observable list that will be written on
+     * @param AfficheHum   humidite observable list that will be written on
+     * @param AfficheNebul nebulosite observable list that will be written on
+     * @return
+     * @throws IOException
+     */
+    public boolean constructChartAffichage(String station
+            , String year
+            , String month
+            , String day
+            , AreaChart<Number, Number> AfficheTemp
+            , AreaChart<Number, Number> AfficheHum
+            , AreaChart<Number, Number> AfficheNebul
     ) throws IOException {
 
         int mode = whichMode(year, month, day);
@@ -526,6 +543,22 @@ public class MyModel {
         }
     }
 
+    /**
+     * this method constructs Comparaison chart lists using asked data
+     *
+     * @param station        station name
+     * @param year1          given by the user for date 1
+     * @param month1         given by the user  for date 1
+     * @param day1           given by the user  for date1
+     * @param year2          given by the user  for date2
+     * @param month2         given by the user  for date2
+     * @param day2           given by the user for date2
+     * @param lineCharttemp  the observable list for temperature data that will be written on
+     * @param lineCharthum   the observable list for humidite data that will be written on
+     * @param lineChartnebul the observable list for nebelusite data that will be written on
+     * @return
+     * @throws IOException
+     */
     public boolean constructChartComparaison(String station
             , String year1
             , String month1
@@ -597,6 +630,26 @@ public class MyModel {
 
     }
 
+
+    public boolean constructTableView(String station
+            , String year
+            , String month
+            , String day
+            , TableView<DataBean> tableView
+    ) throws IOException {
+        int mode = whichMode(year, month, day);
+
+        ArrayList<DataBean2> resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode);
+        ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
+        if (resultat != null) {
+            for (DataBean2 dataBean2 : resultat) {
+                listDataBean.add(dataBean2.toDataBean());
+            }
+        }
+
+        tableView.getItems().setAll(listDataBean);
+        return true;
+    }
 
     public void showEveryThing() {
         Iterator it = stationList.values().iterator();
@@ -1052,7 +1105,7 @@ public class MyModel {
                     get path of file selected
                      */
                     String pathOfFile = recupp.get(i).getPath();
-                   // System.out.println(pathOfFile);
+                    // System.out.println(pathOfFile);
                     if (utilitaire.Utilitaire.CopyFileImported(recupp.get(i))) {
                         System.out.println("File correctly Imported !");
                     } else {
