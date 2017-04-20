@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="887.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="meteo.FXMLDocumentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="887.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.FXMLDocumentController">
    <children>
       <VBox fx:id="VboxPrincipal" prefHeight="200.0" prefWidth="100.0" stylesheets="@../CSS/CSSComparaison.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -54,7 +54,7 @@
                                                 <Insets bottom="30.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <HBox alignment="CENTER" prefHeight="33.0" prefWidth="222.0">
+                                          <HBox alignment="CENTER" prefHeight="28.0" prefWidth="222.0">
                                              <VBox.margin>
                                                 <Insets bottom="30.0" />
                                              </VBox.margin>

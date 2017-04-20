@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package meteo;
+package main;
 
 /**
  * TODO yearMode,MonthMode,DayMode
@@ -11,7 +11,6 @@ package meteo;
  * if data doesn't exist or not updated we download it , and it depends if it is
  * only a month , or a whole year !
  */
-
 import coordonnee.*;
 
 import java.io.BufferedReader;
@@ -67,7 +66,11 @@ import utilitaire.Utilitaire;
  * @author karim
  */
 public class MyModel {
-    /*******************************************PRIVATE SECTION********************************************************/
+
+    /**
+     * *****************************************PRIVATE
+     * SECTION*******************************************************
+     */
     private Map<Integer, Station> stationList;
     //for singelton
     private static volatile MyModel instance = null;
@@ -151,32 +154,33 @@ public class MyModel {
 
     private String getStationIdFromName(String stationName) {
         for (Station station : stationList.values()) {
-            if (station.getNom().equals(stationName))
+            if (station.getNom().equals(stationName)) {
                 return station.getId();
+            }
         }
         return null;
     }
 
     /**
-     * Return list of data for a station on a certain date
-     * This Method is used by : -ConstructChartAffichage()
-     * -ConstructChartComparaison()
+     * Return list of data for a station on a certain date This Method is used
+     * by : -ConstructChartAffichage() -ConstructChartComparaison()
      * -ConstructTableView()
      *
      * @param stationName name of station given by the user
-     * @param year        year of the data that will be returned
-     * @param month       month of data that will be returned
-     * @param day         day of data that will be returned
-     * @param mode        2 get data for Year Only
-     *                    1 get data for Year AND Month
-     *                    0 get data for year AND Month AND Day
+     * @param year year of the data that will be returned
+     * @param month month of data that will be returned
+     * @param day day of data that will be returned
+     * @param mode 2 get data for Year Only 1 get data for Year AND Month 0 get
+     * data for year AND Month AND Day
      * @return list of data
      */
     public List<DataBean2> getData(String stationName,
-                                   String year,
-                                   String month,
-                                   String day,
-                                   int mode) throws IOException {
+            String year,
+            String month,
+            String day,
+            int mode,
+            int MinOrMaxOrMoy
+    ) throws IOException {
 
         Map<Integer, Mois> missingMonths;
         Map<Integer, Jour> missingDays;
@@ -194,8 +198,10 @@ public class MyModel {
         stationIdInt = Integer.parseInt(stationId);
 
         switch (mode) {
-            /**********************************************************************************************************/
-            case 0:
+            /**
+             * *******************************************************************************************************
+             */
+            case 0://jour pas besoin de faire la moyenne
                 dayInt = Integer.parseInt(day);
                 monthInt = Integer.parseInt(month);
                 yearInt = Integer.parseInt(year);
@@ -213,10 +219,10 @@ public class MyModel {
                         ordreInt = releve.getOrdre() * 3;
                         ordre = ("00" + ordreInt).substring(String.valueOf(ordreInt).length());
                         getDataForDateByCity(
-                                year +
-                                        month +
-                                        day +
-                                        ordre,
+                                year
+                                + month
+                                + day
+                                + ordre,
                                 stationId
                         );
                     }
@@ -234,24 +240,25 @@ public class MyModel {
                             .getAndCreateMois(monthInt)
                             .getAndCreateJour(dayInt)
                             .showAll();
-                    */
+                     */
 
                     if (missingReleve.size() > 0) {
-                        /**MANQUE SI APP EST EN LIGNE**/
+                        /**
+                         * MANQUE SI APP EST EN LIGNE*
+                         */
                         //si encore on a trouver des relevés qui manque , et si app est enligne on lance le telechargement
                         System.out.println("Still have missing relevées , trying to download them! size=" + missingReleve.size());
                         downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
-
 
                         System.out.println("Download is done , trying to upload local files ");
                         for (Releve releve : missingReleve.values()) {
                             ordreInt = releve.getOrdre() * 3;
                             ordre = ("00" + ordreInt).substring(String.valueOf(ordreInt).length());
                             getDataForDateByCity(
-                                    year +
-                                            month +
-                                            day +
-                                            ordre,
+                                    year
+                                    + month
+                                    + day
+                                    + ordre,
                                     stationId
                             );
                         }
@@ -262,7 +269,6 @@ public class MyModel {
                                 .getAndCreateJour(dayInt)
                                 .getMissingReleves(yearInt, monthInt);
 
-
                         if (missingReleve.size() > 0) {
                             //si encore on a des relevés qui manque
                             System.out.println("Attention - Not completed data, returning data even though ! size=" + missingReleve.size());
@@ -270,7 +276,6 @@ public class MyModel {
                     }
 
                 }
-
 
                 System.out.println("Everything looks good, returning data now");
                 listReleves = stationList.get(stationIdInt)
@@ -284,13 +289,15 @@ public class MyModel {
                     System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
                 }
 
-                if (listReleves.isEmpty())
+                if (listReleves.isEmpty()) {
                     System.out.println("Attention, Null data found  ! ");
+                }
                 return listReleves;
 
-
-            /**********************************************************************************************************/
-            case 1:
+            /**
+             * *******************************************************************************************************
+             */
+            case 1:// un mois on fait la moyenne ou le min ou le max
                 monthInt = Integer.parseInt(month);
                 yearInt = Integer.parseInt(year);
                 missingDays = stationList.get(stationIdInt)
@@ -306,10 +313,9 @@ public class MyModel {
                         jourIdInt = jour.getId();
                         jourId = ("00" + jourIdInt).substring(String.valueOf(jourIdInt).length());
                         getDataForDateByCity(
-                                year +
-                                        month +
-                                        jourId
-                                ,
+                                year
+                                + month
+                                + jourId,
                                 stationId
                         );
                     }
@@ -326,23 +332,23 @@ public class MyModel {
                             .getAndCreateAnnee(yearInt)
                             .getAndCreateMois(monthInt)
                             .showAll();
-                    */
+                     */
                     if (missingDays.size() > 0) {
-                        /**MANQUE SI APP EST EN LIGNE**/
+                        /**
+                         * MANQUE SI APP EST EN LIGNE*
+                         */
                         //si encore on a trouver des jours qui manque , et si app est enligne on lance le telechargement
                         System.out.println("Still have missing days , trying to download them! size=" + missingDays.size());
                         downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
-
 
                         System.out.println("Download is done , trying to upload local files ");
                         for (Jour jour : missingDays.values()) {
                             jourIdInt = jour.getId();
                             jourId = ("00" + jourIdInt).substring(String.valueOf(jourIdInt).length());
                             getDataForDateByCity(
-                                    year +
-                                            month +
-                                            jourId
-                                    ,
+                                    year
+                                    + month
+                                    + jourId,
                                     stationId
                             );
                         }
@@ -352,35 +358,55 @@ public class MyModel {
                                 .getAndCreateMois(monthInt)
                                 .getMissingData(yearInt);
 
-
                         if (missingDays.size() > 0) {
                             //si encore on a des jours qui manque
                             System.out.println("Attention - Not completed data, returning data even though ! size=" + missingDays.size());
                             /*for (Jour jour : missingDays.values()) {
                                 System.out.println(jour.getId());
                             }
-                            */
+                             */
                         }
 
                     }
                 }
 
                 System.out.println("Everything looks good, returning data now");
-                listReleves = stationList.get(stationIdInt)
-                        .getAndCreateAnnee(yearInt)
-                        .getAndCreateMois(monthInt)
-                        .getAllReleves(stationIdInt, yearInt);
+//                listReleves = stationList.get(stationIdInt)
+//                        .getAndCreateAnnee(yearInt)
+//                        .getAndCreateMois(monthInt)
+//                        .getAllReleves(stationIdInt, yearInt);
+//                Array
+                if (MinOrMaxOrMoy == 0) {//moy
+                    listReleves = stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getAndCreateMois(monthInt)
+                            .getMoyennesParJour(stationIdInt, year);
+                } else {
+                    if (MinOrMaxOrMoy == 1) {//min
+                        listReleves = stationList.get(stationIdInt)
+                                .getAndCreateAnnee(yearInt)
+                                .getAndCreateMois(monthInt)
+                                .getMinParMois(stationIdInt, year);
+                    } else {//max
+                        listReleves = stationList.get(stationIdInt)
+                                .getAndCreateAnnee(yearInt)
+                                .getAndCreateMois(monthInt)
+                                .getMaxParMois(stationIdInt, year);
+                    }
+                }
 
                 System.out.println("List jours .. size:" + listReleves.size());
                 for (DataBean2 dataBean2 : listReleves) {
                     System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
                 }
-                if (listReleves.isEmpty())
+                if (listReleves.isEmpty()) {
                     System.out.println("Attention, Null data found  ! ");
+                }
                 return listReleves;
 
-
-            /**********************************************************************************************************/
+            /**
+             * *******************************************************************************************************
+             */
             case 2:
                 yearInt = Integer.parseInt(year);
                 missingMonths = stationList.get(stationIdInt)
@@ -395,8 +421,7 @@ public class MyModel {
                         moisIdInt = mois.getId();
                         moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
                         getDataForDateByCity(
-                                year + moisId
-                                ,
+                                year + moisId,
                                 stationId
                         );
                     }
@@ -412,7 +437,9 @@ public class MyModel {
                             .showAll();
 
                     if (missingMonths.size() > 0) {
-                        /**MANQUE SI APP EST EN LIGNE**/
+                        /**
+                         * MANQUE SI APP EST EN LIGNE*
+                         */
                         //si encore on a trouver des mois qui manque , et si app est enligne on lance le telechargement
                         System.out.println("Still have missing mois , trying to download them! size=" + missingMonths.size());
 
@@ -422,15 +449,13 @@ public class MyModel {
                             downloadAndUncompress(year + moisId);
                         }
 
-
                         System.out.println("Download is done , trying to upload local files ");
                         for (Mois mois : missingMonths.values()) {
                             moisIdInt = mois.getId();
                             moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
                             getDataForDateByCity(
-                                    year +
-                                            moisId
-                                    ,
+                                    year
+                                    + moisId,
                                     stationId
                             );
                         }
@@ -438,7 +463,6 @@ public class MyModel {
                         missingMonths = stationList.get(stationIdInt)
                                 .getAndCreateAnnee(yearInt)
                                 .getMissingData();
-
 
                         if (missingMonths.size() > 0) {
                             //si encore on a des mois qui manque
@@ -458,20 +482,39 @@ public class MyModel {
                         .getAndCreateAnnee(yearInt)
                         .getAllReleves(stationIdInt);
 
+                if (MinOrMaxOrMoy == 0) {//moy
+                    listReleves = stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getMoyenneParMois(stationIdInt);
+                } else {
+                    if (MinOrMaxOrMoy == 1) {//min
+                        listReleves = stationList.get(stationIdInt)
+                                .getAndCreateAnnee(yearInt)
+                                .getMinParMois(stationIdInt);
+                    } else {//max
+                        listReleves = stationList.get(stationIdInt)
+                                .getAndCreateAnnee(yearInt)
+                                .getMaxParMois(stationIdInt);
+                    }
+                }
+
                 System.out.println("List mois .. size:" + listReleves.size());
                 for (DataBean2 dataBean2 : listReleves) {
                     System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
                 }
-                if (listReleves.isEmpty())
+                if (listReleves.isEmpty()) {
                     System.out.println("Attention , null data found ! ");
+                }
                 return listReleves;
         }
 
         return null;
     }
 
-    /*******************************************PUBLIC SECTION ********************************************************/
-
+    /**
+     * *****************************************PUBLIC SECTION
+     * *******************************************************
+     */
     public List<String> getStationNames() {
         List<String> list = new ArrayList<>();
         for (Station station : stationList.values()) {
@@ -481,25 +524,26 @@ public class MyModel {
     }
 
     /**
-     * this method constructs Affichage chart lists with the  asked data
+     * this method constructs Affichage chart lists with the asked data
      *
-     * @param station      station name
-     * @param year         year given by the user
-     * @param month        month given by the user
-     * @param day          day given by the user
-     * @param AfficheTemp  temperature observable list that will be written on
-     * @param AfficheHum   humidite observable list that will be written on
+     * @param station station name
+     * @param year year given by the user
+     * @param month month given by the user
+     * @param day day given by the user
+     * @param AfficheTemp temperature observable list that will be written on
+     * @param AfficheHum humidite observable list that will be written on
      * @param AfficheNebul nebulosite observable list that will be written on
      * @return
      * @throws IOException
      */
-    public boolean constructChartAffichage(String station
-            , String year
-            , String month
-            , String day
-            , AreaChart<Number, Number> AfficheTemp
-            , AreaChart<Number, Number> AfficheHum
-            , AreaChart<Number, Number> AfficheNebul
+    public boolean constructChartAffichage(String station,
+            String year,
+            String month,
+            String day,
+            AreaChart<Number, Number> AfficheTemp,
+            AreaChart<Number, Number> AfficheHum,
+            AreaChart<Number, Number> AfficheNebul,
+            int MinOrMaxOrMoy
     ) throws IOException {
 
         int mode = whichMode(year, month, day);
@@ -509,16 +553,16 @@ public class MyModel {
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
 
-        ArrayList<DataBean2> Resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode);
+        ArrayList<DataBean2> Resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy);
 
         if (Resultat == null) {
             return false;
         }
-            /*
+        /*
             a partir de date : si c une année alors afficher la moyenne de chaque mois
                                 si c un mois alors afficher les 30 jours
                                 si c un jours afficher les 8 valeurs
-             */
+         */
 
         for (int i = 0; i < Resultat.size(); i++) {
 
@@ -546,29 +590,33 @@ public class MyModel {
     /**
      * this method constructs Comparaison chart lists using asked data
      *
-     * @param station        station name
-     * @param year1          given by the user for date 1
-     * @param month1         given by the user  for date 1
-     * @param day1           given by the user  for date1
-     * @param year2          given by the user  for date2
-     * @param month2         given by the user  for date2
-     * @param day2           given by the user for date2
-     * @param lineCharttemp  the observable list for temperature data that will be written on
-     * @param lineCharthum   the observable list for humidite data that will be written on
-     * @param lineChartnebul the observable list for nebelusite data that will be written on
+     * @param station station name
+     * @param year1 given by the user for date 1
+     * @param month1 given by the user for date 1
+     * @param day1 given by the user for date1
+     * @param year2 given by the user for date2
+     * @param month2 given by the user for date2
+     * @param day2 given by the user for date2
+     * @param lineCharttemp the observable list for temperature data that will
+     * be written on
+     * @param lineCharthum the observable list for humidite data that will be
+     * written on
+     * @param lineChartnebul the observable list for nebelusite data that will
+     * be written on
      * @return
      * @throws IOException
      */
-    public boolean constructChartComparaison(String station
-            , String year1
-            , String month1
-            , String day1
-            , String year2
-            , String month2
-            , String day2
-            , LineChart<Number, Number> lineCharttemp
-            , LineChart<Number, Number> lineCharthum
-            , LineChart<Number, Number> lineChartnebul
+    public boolean constructChartComparaison(String station,
+            String year1,
+            String month1,
+            String day1,
+            String year2,
+            String month2,
+            String day2,
+            LineChart<Number, Number> lineCharttemp,
+            LineChart<Number, Number> lineCharthum,
+            LineChart<Number, Number> lineChartnebul,
+            int MinOrMaxOrMoy
     ) throws IOException {
 
         int mode = whichMode(year1, month1, day1);
@@ -584,8 +632,8 @@ public class MyModel {
         XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
         XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
 
-        ArrayList<DataBean2> Resultat1 = (ArrayList<DataBean2>) getData(station, year1, month1, day1, mode);
-        ArrayList<DataBean2> Resultat2 = (ArrayList<DataBean2>) getData(station, year2, month2, day2, mode);
+        ArrayList<DataBean2> Resultat1 = (ArrayList<DataBean2>) getData(station, year1, month1, day1, mode, MinOrMaxOrMoy);
+        ArrayList<DataBean2> Resultat2 = (ArrayList<DataBean2>) getData(station, year2, month2, day2, mode, MinOrMaxOrMoy);
         if (Resultat1 == null || Resultat2 == null) {
             return false;
         }
@@ -626,20 +674,18 @@ public class MyModel {
         }
 
         //return false;
-
-
     }
 
-
-    public boolean constructTableView(String station
-            , String year
-            , String month
-            , String day
-            , TableView<DataBean> tableView
+    public boolean constructTableView(String station,
+            String year,
+            String month,
+            String day,
+            TableView<DataBean> tableView,
+            int MinOrMaxOrMoy
     ) throws IOException {
         int mode = whichMode(year, month, day);
 
-        ArrayList<DataBean2> resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode);
+        ArrayList<DataBean2> resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy);
         ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
         if (resultat != null) {
             for (DataBean2 dataBean2 : resultat) {
@@ -703,7 +749,7 @@ public class MyModel {
 
         }
         return missedMonths;
-    */
+         */
         return null;
     }
 
@@ -712,17 +758,16 @@ public class MyModel {
     public Station getAvailableData(int annee,int mois,int jour, String cityId){
         if(stationList.get(cityId).anneeExists(annee))
     }
-    */
-
+     */
     /**
      * Cette methode Donne les donnée qui correspond a une date dans une liste,
      * ,n
      *
-     * @param date   la date des donner quand veux recuperer dans la list : Si
-     *               yyyymm fournit elle donne tout les donner du moi , Si yyyymmjj elle donne
-     *               les donner du jour jj,
+     * @param date la date des donner quand veux recuperer dans la list : Si
+     * yyyymm fournit elle donne tout les donner du moi , Si yyyymmjj elle donne
+     * les donner du jour jj,
      * @param cityId la ville des donner quand veux recuperer dans la list, si
-     *               elle contient "all" la mthode retourne les donner de tout les villes
+     * elle contient "all" la mthode retourne les donner de tout les villes
      * @return une arrayList de type DataCity qui contient les donner demander
      */
     public boolean getDataForDateByCity(String date, String cityId) {
@@ -786,9 +831,7 @@ public class MyModel {
                         jour = Integer.parseInt(splitedLine[1].substring(6, 8));
                         ordre = Integer.parseInt(splitedLine[1].substring(8, 10));
 
-
                         //System.out.print("Match found ordre=" + ordre);
-
                         //noter j'ai pa mis le nom de la ville a rajouter
                         //ville = getVilleFromId(Integer.parseInt(idVille));
                         //attention si anneee or mois or jour n'existe pas !
@@ -809,7 +852,6 @@ public class MyModel {
         }
         return false;
     }
-
 
 //    public ArrayList<DataCity> getDataForYearByCity(String date, String cityId) {
 //        String year = date.substring(0, 4);
@@ -832,14 +874,12 @@ public class MyModel {
 //        }
 //        return liste;
 //    }
-
     /**
      * This method returns the latest available data localy
      *
      * @return latest available data that we have localy if exists null if no
      * data found localy
      */
-
 //    public ArrayList<DataCity> getLatestAvailableData() {
 //        ArrayList<DataCity> liste = null;
 //        String file = Utilitaire.getLatesttAvailableFile();
@@ -851,7 +891,6 @@ public class MyModel {
 //
 //        return liste;
 //    }
-
     /**
      * @param date
      * @param stationName
@@ -982,8 +1021,6 @@ public class MyModel {
 //
 //        //return false;
 //    }
-
-
     /**
      *
      * @param date
@@ -1075,7 +1112,6 @@ public class MyModel {
 //        }
 //
 //    }
-
     /**
      * Afficher une alert permettant d'importer un fichier
      *
@@ -1170,24 +1206,23 @@ public class MyModel {
     }
 
     /**
-     * simple method that returns for a given date the corresponding mode
-     * mode 0 : if year & month & day are given
-     * 1 : if ONLY year & month are given
-     * 2 : if ONLY year is given
+     * simple method that returns for a given date the corresponding mode mode 0
+     * : if year & month & day are given 1 : if ONLY year & month are given 2 :
+     * if ONLY year is given
      *
      * @return
      */
     private int whichMode(String year, String month, String day) {
-        if (year.length() > 0 && month.length() > 0 && day.length() > 0)
+        if (year.length() > 0 && month.length() > 0 && day.length() > 0) {
             return 0;
-        else if (year.length() > 0 && month.length() > 0)
+        } else if (year.length() > 0 && month.length() > 0) {
             return 1;
-        else if (year.length() > 0)
+        } else if (year.length() > 0) {
             return 2;
-
-        else return -1; // invalid date !
+        } else {
+            return -1; // invalid date !
+        }
     }
-
 
     /**
      * Verification que la date donner ne doit pas depasser la date courante
@@ -1217,7 +1252,6 @@ public class MyModel {
 
     }
 
-
     /**
      * une methode qui prend en parametre un fichier de donnéer d'un mois sous
      * forme de yyyymm EX: 201405 et dis si ce fichier est a jour (contient tout
@@ -1229,8 +1263,9 @@ public class MyModel {
     public boolean isUpdatedMonth(String date) {
         String lastDate, year, month, lastDay;
         //fichier n'existe pas
-        if (!Utilitaire.checkIfFileExists(Utilitaire.getCsvFilePathFromDate(date)))
+        if (!Utilitaire.checkIfFileExists(Utilitaire.getCsvFilePathFromDate(date))) {
             return false;
+        }
 
         lastDate = getLatestAvailableDateOnFile(date);
         System.out.println("lastDate=" + lastDate);
@@ -1283,7 +1318,7 @@ public class MyModel {
      * fichier
      *
      * @param date sous la forme de yyyymm correspond au nom du fichier qu'on
-     *             veux chercher dedans
+     * veux chercher dedans
      * @return la date la plus recente dans le fichier qui correspond a @date
      */
     public String getLatestAvailableDateOnFile(String date) {
@@ -1356,7 +1391,6 @@ public class MyModel {
             return -1;
         }
     }
-
 
     /**
      * @return ArrayList contenant les dates existantes en local

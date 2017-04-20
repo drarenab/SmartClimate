@@ -97,7 +97,7 @@ public class DataCity {
         dataBean.setHumidite(String.valueOf(humidite));
         dataBean.setNebulosite(String.valueOf(nebulosite));
         dataBean.setTemperature(String.valueOf(temperature));
-        dataBean.setNomVille(city.getNom());
+       // dataBean.setNomVille(city.getNom());
         return dataBean;
     }
 }

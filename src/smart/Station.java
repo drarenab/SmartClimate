@@ -36,7 +36,7 @@ public class Station {
     {   Boolean bool = anneeList.containsKey(annee);
         if(!bool)
             anneeList.put(annee,new Annee(annee));
-        
+        System.out.println("where is a problem");
         return (anneeList.get(annee));
     }
 
