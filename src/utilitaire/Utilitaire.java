@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.FileUtils;
-
+import main.*;
         
 /**
  *
@@ -494,6 +494,18 @@ public class Utilitaire {
         else
             return false;
 }
+
+
+    public static int whichMode(String year, String month, String day) {
+        if (year.length() > 0 && month.length() > 0 && day.length() > 0)
+            return 0;
+        else if (year.length() > 0 && month.length() > 0)
+            return 1;
+        else if (year.length() > 0)
+            return 2;
+
+        else return -1; // invalid date !
+    }
 
 }
 

@@ -27,7 +27,8 @@ public interface Controller extends Initializable{
     /**
      * permet d'initialiser l'interface principale
      */
-    void InitInterfacePrincipal();
+    
+    void InitInterfacePrincipal() throws Exception;
 
     /**
      * permet d'initialiser l'interface permettant de savoir si le serveur de

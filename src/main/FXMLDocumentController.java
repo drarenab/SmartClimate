@@ -6,6 +6,8 @@ package main;
  * and open the template in the editor.
  */
 
+import abstraction.Controller;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import abstraction.Controller;
+import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXScrollPane;
 import coordonnee.DataCity;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -116,12 +120,15 @@ public class FXMLDocumentController implements Controller {
     Text text, text2, etatConnexion;
     @FXML
     TreeView treeView;
-    ToggleGroup groupeChart, groupeRadioAffichage;
+    ToggleGroup groupeChart, groupeRadioAffichage, MinMaxMoyenne;
     @FXML
     VBox v, VboxPrincipal, v1, v2, VboxComparaison;
-
+    @FXML
+    RadioButton MoyRadio, MaxRadio, MinRadio;
     //@FXML
     //ProgressBar ProgressComparaison;
+    @FXML
+    ImageView loading;
 
     @FXML
     private void handleButtonActionComparer() throws IOException {
@@ -135,7 +142,6 @@ public class FXMLDocumentController implements Controller {
         Year1Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
 
         Year2Comparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-
 
         MonthComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
 
@@ -198,108 +204,20 @@ public class FXMLDocumentController implements Controller {
                     showMode = "year";
                 }
 
-                model.constructChartComparaison(StationComparaison.getValue().toString()
-                        , Year1Comparaison.getText()
-                        , MonthComparaison.getText()
-                        , DayComparaison.getText()
-                        , Year2Comparaison.getText()
-                        , MonthComparaison.getText()
-                        , DayComparaison.getText()
-                        , lineCharttemp
-                        , lineCharthum
-                        , lineChartnebul);
+                loading.setVisible(true);
+                model.constructChartComparaison(StationComparaison.getValue().toString(),
+                        Year1Comparaison.getText(),
+                        MonthComparaison.getText(),
+                        DayComparaison.getText(),
+                        Year2Comparaison.getText(),
+                        MonthComparaison.getText(),
+                        DayComparaison.getText(),
+                        lineCharttemp,
+                        lineCharthum,
+                        lineChartnebul,
+                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
 
-//                if (showMode.equals("day")) {
-//                    //si on est sur le day mode
-//                    System.out.println("Day MODE ,looking for data for whole days");
-//                    latestDate1 = model.getLatestAvailableDateOnFile(yearMonth1);
-//                    latestDate2 = model.getLatestAvailableDateOnFile(yearMonth2);
-//                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
-//                    if (latestDate1 == null ||
-//                              Integer.parseInt(latestDate1.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
-//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth1 + " ...");
-//                        try {
-//                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//                    if (latestDate2 == null ||
-//                              Integer.parseInt(latestDate2.substring(6, 8)) < Integer.parseInt(DayComparaison.getText())) {
-//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth2 + " ...");
-//                        try {
-//                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                    // si on est sur le month mode
-//                } else if (showMode.equals("month")) {
-//                   // System.out.println("Month MODE ,looking for data for whole yearMonth="+yearMonth1);
-//                    //si le mois n'est pas a jour
-//
-//                    if (!model.isUpdatedMonth(yearMonth1)) {
-//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth1 + " ...");
-//                        try {
-//                            //on lance le télechargement
-//                            model.downloadAndUncompress(Year1Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//                    if (!model.isUpdatedMonth(yearMonth2)) {
-//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth2 + " ...");
-//                        try {
-//                            //on lance le télechargement
-//                            model.downloadAndUncompress(Year2Comparaison.getText() + MonthComparaison.getText());
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//                    // si on est sur le year mode
-//                } else if (showMode.equals("year")) {
-//                    System.out.println("Year MODE ,looking for data for whole year=" + Year1Comparaison.getText());
-//                    //retourner la liste des mois qui manques dans le dossier de l'année
-//                    ArrayList<String> missedMonths1 = model.getMissedMonthsFiles(Year1Comparaison.getText());
-//                    for (String month : missedMonths1) {
-//                        try {
-//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-//                            //on lance le telechargement des mois qui ne sont pas a jour
-//                            model.downloadAndUncompress(month);
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//
-//
-//                    System.out.println("Year MODE ,looking for data for whole year=" + Year2Comparaison.getText());
-//                    //retourner la liste des mois qui manques dans le dossier de l'année
-//                    ArrayList<String> missedMonths2 = model.getMissedMonthsFiles(Year2Comparaison.getText());
-//                    for (String month : missedMonths2) {
-//                        try {
-//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-//                            //on lance le telechargement des mois qui ne sont pas a jour
-//                            model.downloadAndUncompress(month);
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                }
-//
-//                System.out.println("Everything looks good, Trying to construct the chart");
-//                //on lance la construction de chart
-//                String Date1 = Year1Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-//                String Date2 = Year2Comparaison.getText() + MonthComparaison.getText() + DayComparaison.getText();
-
-//                model.constructChartComparaison(onlineMode,Date1, Date2,
-//                        StationComparaison.getValue().toString(),
-//                        lineCharttemp,
-//                        lineCharthum,
-//                        lineChartnebul
-//                );
+                //loading.setVisible(false);
 
             } else {
                 //not logicaly valid date!
@@ -308,7 +226,6 @@ public class FXMLDocumentController implements Controller {
             /*
 
              */
-
         }
     }
 
@@ -357,6 +274,7 @@ public class FXMLDocumentController implements Controller {
 
     @FXML
     private void handleButtonActionAfficher() throws IOException {
+        loading.setVisible(true);
         /*
         Test si le formulaire est bien rempli
          */
@@ -396,111 +314,34 @@ public class FXMLDocumentController implements Controller {
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-                model.constructChartAffichage(Station.getValue().toString()
-                        , year.getText()
-                        , month.getText()
-                        , day.getText()
-                        , AfficheTemp
-                        , AfficheHum
-                        , AfficheNebul);
+                loading.setVisible(true);
 
-//                AfficheTemp.setTitle("Températures");
-//                AfficheHum.setTitle("Humidité");
-//                AfficheNebul.setTitle("Nébulosité");
-//
-//                /**
-//                 * CAN BE PUT INSIDE A METHOD
-//                 */
-//                // si l'utilisateur a saisie l'année et le mois et le jour donc on est sur le mode "day"
-//                if (month.getText().length() > 0 && day.getText().length() > 0) {
-//                    showMode = "day";
-//
-//                    yearMonth = year.getText() + month.getText();
-//                    yearMonthDay = yearMonth + day.getText();
-//                } // si l'utilisateur a saisie que le mois alors on est sur le mode "month"
-//                else if (month.getText().length() > 0) {
-//                    showMode = "month";
-//                    yearMonth = year.getText() + month.getText();
-//                } // si l'utilisateur a saisie que l'année alors on est sur le mode "year"
-//                else {
-//                    showMode = "year";
-//                }
-//
-//                if (showMode.equals("day")) {
-//                    //si on est sur le day mode
-//                    System.out.println("Day MODE ,looking for data for whole day=" + day.getText());
-//                    latestDate = model.getLatestAvailableDateOnFile(yearMonth);
-//                    // si la derniere date est null or si la dernier date dans le fichier est inferieure a la date demander
-//                    if (latestDate == null
-//                            || Integer.parseInt(latestDate.substring(6, 8)) < Integer.parseInt(day.getText())) {
-//                        System.out.println("Data asked cannot be found , Downloading data for whole YearMonth = " + yearMonth + " ...");
-//                        try {
-//                            model.downloadAndUncompress(year.getText() + month.getText());
-//
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                    // si on est sur le month mode
-//                } else if (showMode.equals("month")) {
-//                    System.out.println("Month MODE ,looking for data for whole yearMonth=" + yearMonth);
-//                    //si le mois n'est pas a jour
-//                    if (!model.isUpdatedMonth(yearMonth)) {
-//                        System.out.println("Data of the wanted month is not completed, Dowloading data for whole yearMonth = " + yearMonth + " ...");
-//                        try {
-//                            //on lance le télechargement
-//
-//                            model.downloadAndUncompress(year.getText() + month.getText());
-//
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                    // si on est sur le year mode
-//                } else if (showMode.equals("year")) {
-//                    System.out.println("Year MODE ,looking for data for whole year=" + year.getText());
-//                    //retourner la liste des mois qui manques dans le dossier de l'année
-//                    ArrayList<String> missedMonths = model.getMissedMonthsFiles(year.getText());
-//                    for (String month : missedMonths) {
-//                        try {
-//                            System.out.println("Data for The month=" + month + " is not completed , Downloading data for the whole month ...");
-//                            //on lance le telechargement des mois qui ne sont pas a jour
-//
-//                            model.downloadAndUncompress(month);
-//
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                }
-//                System.out.println("Everything looks good, Trying to construct the chart");
-//                //on lance la construction de chart
-////                model.constructChartAffichage(onlineMode, year.getText()
-////                        + month.getText() + day.getText(), Station.getValue().toString(), AfficheTemp, AfficheHum, AfficheNebul);
-////                /*
-//                if (chartList != null) {
-//                    AfficheTemp.getData().setAll(chartList.get(0));
-//                    AfficheHum.getData().setAll(chartList.get(1));
-//                    AfficheNebul.getData().setAll(chartList.get(2));
-//                    System.out.println("Chart constructed succefully ");
-//                } else {
-//                    System.out.println("Opps ,Chart cannot be constructed please submit a bug report ");
-//                }
-////                 */
-// /*
-//                TableView
-//                 */
-//                /*Attention can be throw an exception if data is null ! */
+                model.constructChartAffichage(Station.getValue().toString(),
+                        year.getText(),
+                        month.getText(),
+                        day.getText(),
+                        AfficheTemp,
+                        AfficheHum,
+                        AfficheNebul,
+                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio)
+                );
+
+                loading.setVisible(false);
+
+               // loading.setVisible(false);
+                /*Attention can be throw an exception if data is null ! */
                 columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
                 columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
                 columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
                 columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
 
-                model.constructTableView(Station.getValue().toString()
-                        , year.getText()
-                        , month.getText()
-                        , day.getText()
-                        , tableView);
+                model.constructTableView(
+                        Station.getValue().toString(),
+                        year.getText(),
+                        month.getText(),
+                        day.getText(),
+                        tableView,
+                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
 
             } else {
                 //not logicaly valid date!
@@ -509,16 +350,21 @@ public class FXMLDocumentController implements Controller {
 
     }
 
-
-    @Override
     public void initialize(URL url, ResourceBundle rb) {
         model = MyModel.getInstance();
         model.showEveryThing();
         CreateMenu();
         switch (Interface) {
-            case 0:
-                InitInterfacePrincipal();
-                break;
+            case 0: {
+                System.out.println("Affichage menu");
+
+                try {
+                    InitInterfacePrincipal();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
             case 1:
                 initInterfaceSetting();
                 break;
@@ -547,7 +393,7 @@ public class FXMLDocumentController implements Controller {
      * permet d'initialiser l'interface principale
      */
     @Override
-    public void InitInterfacePrincipal() {
+    public void InitInterfacePrincipal() throws IOException {
         //au debut on verifie si il y a une connexion et on initialise online_offline
         //onLine_offLine = "offLine";
         VboxPrincipal.getChildren().add(0, menuBar);
@@ -562,7 +408,8 @@ public class FXMLDocumentController implements Controller {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         String[] laDate = (dateFormat.format(date)).split("/");
-       AfficherCarte();
+
+        AfficherCarte();
 //        if (onlineMode) {
 //            try {
 //                model.downloadAndUncompress(laDate[0] + laDate[1]);
@@ -581,12 +428,12 @@ public class FXMLDocumentController implements Controller {
     private void RunTimer() {
         Timer timer = new Timer();
         TimerTask t = new TimerTask() {
-            @Override
+
             public void run() {
                 // some code
 //                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
                 Platform.runLater(new Runnable() {
-                    @Override
+
                     public void run() {
                         onlineMode = Utilitaire.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
 
@@ -599,13 +446,11 @@ public class FXMLDocumentController implements Controller {
                         2-verifier qu'on est en mode en ligne
 
                          */
-
                         //verifier continuellement si il y a une connexion internet
-
-
                         if (date.getHours() % 3 == 1 && date.getMinutes() == 0 && date.getSeconds() == 0) {
 
                             if (onlineMode) {
+
                                 //   try {
                                 System.out.println("telechargement des dernieres données");
                                 //model.downloadAndUncompress(laDate[0] + laDate[1]);
@@ -613,12 +458,13 @@ public class FXMLDocumentController implements Controller {
 //                                } catch (IOException ex) {
 //                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 //                                }
+
                             } else {
                                 System.out.println("no connection ! users must import by her self data if he want !");
                             }
                         }
 
-                        AfficherCarte();
+//                        AfficherCarte();
 
                     }
                 });
@@ -631,7 +477,6 @@ public class FXMLDocumentController implements Controller {
     /**
      * permet d'initialiser l'interface setting
      */
-    @Override
     public void initInterfaceSetting() {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
@@ -654,12 +499,12 @@ public class FXMLDocumentController implements Controller {
 
         Timer timer = new Timer();
         TimerTask t = new TimerTask() {
-            @Override
+
             public void run() {
                 // some code
 //                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
                 Platform.runLater(new Runnable() {
-                    @Override
+
                     public void run() {
                         onlineMode = Utilitaire.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
                         if (online != null & userSelectOffline == false) {
@@ -695,7 +540,6 @@ public class FXMLDocumentController implements Controller {
         observableList.addListener(
                 new ListChangeListener() {
 
-                    @Override
                     public void onChanged(ListChangeListener.Change change
                     ) {
 
@@ -715,12 +559,13 @@ public class FXMLDocumentController implements Controller {
      * permet d'initialiser l'interface d'affichage et de comparaison des
      * données
      */
-    @Override
     public void InitInterfaceComparaison() {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
         List L = new ArrayList();
+        loading.setImage( new Image(getClass().getResourceAsStream("Image/loading.png")));
 
+        loading.setVisible(false);
         //dataList = model.getAllStations();
         stationNames = (ArrayList) model.getStationNames();
         for (int i = 0; i < stationNames.size(); i++) {
@@ -730,7 +575,6 @@ public class FXMLDocumentController implements Controller {
         ObservableList<String> observableList = FXCollections.observableList(L);
         observableList.addListener(new ListChangeListener() {
 
-            @Override
             public void onChanged(ListChangeListener.Change change) {
             }
         });
@@ -741,6 +585,7 @@ public class FXMLDocumentController implements Controller {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Température");
+
         AfficheTemp = new AreaChart<Number, Number>(xAxis, yAxis);
         //AfficheTemp.setStyle("-fx-background-color:#9C9F84;");
         final NumberAxis xAxiss = new NumberAxis();
@@ -752,6 +597,7 @@ public class FXMLDocumentController implements Controller {
         final NumberAxis yAxisss = new NumberAxis();
         xAxisss.setLabel("Température");
         AfficheNebul = new AreaChart<Number, Number>(xAxisss, yAxisss);
+
         VboxComparaison.getChildren().add(AfficheTemp);
         VboxComparaison.getChildren().add(AfficheHum);
         VboxComparaison.getChildren().add(AfficheNebul);
@@ -801,6 +647,13 @@ public class FXMLDocumentController implements Controller {
         radioBtnCourbes.setToggleGroup(groupeRadioAffichage);
         radioBtnTableur.setToggleGroup(groupeRadioAffichage);
         radioBtnTableur.setSelected(true);
+
+        MinMaxMoyenne = new ToggleGroup();
+        System.out.println(MoyRadio);
+        MoyRadio.setToggleGroup(MinMaxMoyenne);
+        MinRadio.setToggleGroup(MinMaxMoyenne);
+        MaxRadio.setToggleGroup(MinMaxMoyenne);
+        MoyRadio.setSelected(true);
         //Interface=1;
 
         tableView.setEditable(true);
@@ -833,7 +686,6 @@ public class FXMLDocumentController implements Controller {
      * permet d'initialiser l'interface permettant de savoir quelles données
      * l'utilisateur a sur sa machine
      */
-    @Override
     public void initInterfaceInformation() {
 
         HBox hboxDataDispo = new HBox();
@@ -845,7 +697,7 @@ public class FXMLDocumentController implements Controller {
         buttonDeleteAll.setStyle("-fx-background-color:transparent;");
         buttonDeleteAll.setGraphic(deleteimg);
         buttonDeleteAll.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
+
             public void handle(ActionEvent e) {
                 System.out.println("Accepted");
             }
@@ -867,7 +719,7 @@ public class FXMLDocumentController implements Controller {
             buttonDelete.setStyle("-fx-background-color:transparent;");
 
             buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
+
                 public void handle(ActionEvent e) {
                     System.out.println("supprimer le mois " + s);
 
@@ -920,7 +772,7 @@ public class FXMLDocumentController implements Controller {
 //                                    MenuItemBuilder.create()
 //                                            .text("Supprimer")
 //                                            .onAction(new EventHandler<ActionEvent>() {
-//                                                @Override
+//                                                
 //                                                public void handle(ActionEvent arg0) {
 //                                                    System.out.println("Menu Item Clicked!");
 //
@@ -942,7 +794,6 @@ public class FXMLDocumentController implements Controller {
      * main france contenant les données nécessaires est bien en marche est
      * combien de temps a fallut pour faire un ping
      */
-    @Override
     public void initInterfaceEtatServeur() {
         double time = Utilitaire.netIsAvailable();
         if (time != -1) {
@@ -966,14 +817,11 @@ public class FXMLDocumentController implements Controller {
 
         ImportData.setOnAction(new EventHandler<ActionEvent>() {
 
-                                   @Override
                                    public void handle(ActionEvent e) {
                                        try {
                                            model.DisplayAlertToImport();
-
                                        } catch (IOException ex) {
-                                           Logger.getLogger(FXMLDocumentController.class
-                                                   .getName()).log(Level.SEVERE, null, ex);
+                                           Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                                        }
                                    }
 
@@ -984,7 +832,6 @@ public class FXMLDocumentController implements Controller {
         VisiteWebSite.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-                    @Override
                     public void handle(ActionEvent e
                     ) {
                         String url = "https://donneespubliques.meteofrance.fr/";
@@ -1012,7 +859,6 @@ public class FXMLDocumentController implements Controller {
         Information.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-                    @Override
                     public void handle(ActionEvent e
                     ) {
 
@@ -1038,14 +884,13 @@ public class FXMLDocumentController implements Controller {
         EtatServeur.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-                    @Override
                     public void handle(ActionEvent e
                     ) {
 
                         Parent root;
                         try {
                             Interface = 4;
-                            root = FXMLLoader.load(getClass().getResource("../views/ServerStateView.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("ServerStateView.fxml"));
                             Scene scene = new Scene(root);
                             Stage s = new Stage();
                             s.setScene(scene);
@@ -1064,7 +909,6 @@ public class FXMLDocumentController implements Controller {
         Close.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-                    @Override
                     public void handle(ActionEvent e
                     ) {
                         if (Interface == 0) {
@@ -1087,7 +931,7 @@ public class FXMLDocumentController implements Controller {
 
         maximize.setOnAction(
                 new EventHandler<ActionEvent>() {
-                    @Override
+
                     public void handle(ActionEvent event
                     ) {
 //                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
@@ -1102,7 +946,7 @@ public class FXMLDocumentController implements Controller {
 
         minimize.setOnAction(
                 new EventHandler<ActionEvent>() {
-                    @Override
+
                     public void handle(ActionEvent event
                     ) {
 //                Stage s = ((Stage) (((MenuItem)maximize).getScene().getWindow()));
@@ -1119,13 +963,13 @@ public class FXMLDocumentController implements Controller {
 
         view.setOnAction(
                 new EventHandler<ActionEvent>() {
-                    @Override
+
                     public void handle(ActionEvent event
                     ) {
                         Interface = 2;
                         Parent root;
                         try {
-                            root = FXMLLoader.load(getClass().getResource("../views/DataComparView.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("DataComparView.fxml"));
                             Scene scene = new Scene(root);
                             Stage s = new Stage();
                             s.setScene(scene);
@@ -1134,6 +978,7 @@ public class FXMLDocumentController implements Controller {
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class
                                     .getName()).log(Level.SEVERE, null, ex);
+
                         }
                     }
                 }
@@ -1146,13 +991,14 @@ public class FXMLDocumentController implements Controller {
         preference.setOnAction(
                 new EventHandler<ActionEvent>() {
 
-                    @Override
+
+
                     public void handle(ActionEvent event
                     ) {
                         Interface = 1;
                         Parent root;
                         try {
-                            root = FXMLLoader.load(getClass().getResource("../views/SettingView.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("SettingView.fxml"));
                             Scene scene = new Scene(root);
                             Stage s = new Stage();
                             s.setScene(scene);
@@ -1174,14 +1020,12 @@ public class FXMLDocumentController implements Controller {
 
         aPropos.setOnAction(
                 new EventHandler<ActionEvent>() {
-
-                    @Override
                     public void handle(ActionEvent event
                     ) {
                         Interface = 1;
                         Parent root;
                         try {
-                            root = FXMLLoader.load(getClass().getResource("../views/AProposView.fxml"));
+                            root = FXMLLoader.load(getClass().getResource("AProposView.fxml"));
                             Scene scene = new Scene(root);
                             Stage s = new Stage();
                             s.setScene(scene);
@@ -1190,6 +1034,7 @@ public class FXMLDocumentController implements Controller {
                         } catch (IOException ex) {
                             Logger.getLogger(FXMLDocumentController.class
                                     .getName()).log(Level.SEVERE, null, ex);
+
                         }
 
                     }
@@ -1394,4 +1239,15 @@ public class FXMLDocumentController implements Controller {
         }
 
     }
+
+    private int MinOrMaxOrMoy(RadioButton MoyRadio, RadioButton MaxRadio, RadioButton MinRadio) {
+        if (MinRadio.isSelected()) {
+            return 1;//pour le min
+        }
+        if (MaxRadio.isSelected()) {
+            return 2;//pour le max
+        }
+        return 0;//par defaut c'est la moyenne
+    }
+
 }

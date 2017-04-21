@@ -196,3 +196,69 @@
 
 
 
+        -----------------------------------
+            /**
+             * <<<<<<< HEAD
+             * simple method that returns for a given date the corresponding mode
+             * mode 0 : if year & month & day are given
+             * 1 : if ONLY year & month are given
+             * 2 : if ONLY year is given
+             *
+             * @param date
+             * @return TRUE si le fichier est a jour FALSE sinon
+             */
+            public boolean isUpdatedMonth(String date) {
+                String lastDate, year, month, lastDay;
+                //fichier n'existe pas
+                if (!Utilitaire.checkIfFileExists(Utilitaire.getCsvFilePathFromDate(date))) {
+                    return false;
+                }
+
+                lastDate = getLatestAvailableDateOnFile(date);
+                System.out.println("lastDate=" + lastDate);
+                lastDay = lastDate.substring(6, 8);
+
+                year = date.substring(0, 4);
+                month = date.substring(4, 6);
+
+                if (date == null) {
+                    return false;
+                }
+
+                int currentYear;
+                String currentDay, currentMonth;
+                ZoneId zoneId = ZoneId.of("Europe/Paris");
+                LocalDateTime localTime = LocalDateTime.now(zoneId);
+
+                currentDay = String.valueOf(localTime.getDayOfMonth());
+                //pour avoir 01 pour le premier jour de moi au lieu de 1
+                currentDay = ("00" + currentDay).substring(currentDay.length());
+
+                //pour avoir 01 pour janvier au lieu de 1
+                currentMonth = String.valueOf(localTime.getMonthValue());
+                currentMonth = ("00" + currentMonth).substring(currentMonth.length());
+
+                currentYear = localTime.getYear();
+
+                //System.out.println("lastDay:"+lastDay+" currentDay:"+currentDay);
+                if (String.valueOf(currentYear).equals(year)
+                        && //si le fichier contient les donnees de l'année courante
+                        String.valueOf(currentMonth).equals(month)
+                        && //et si le fichier contient les donnees mois courant
+                        lastDay.equals(String.valueOf(currentDay)) //Donc on test si la derniere date de ce fichier est celle d'ajourdhui :D
+                        ) {
+                    return true;
+                } else {
+                    int nbDays = Utilitaire.getNumberDaysOfMonth(Integer.parseInt(year), Integer.parseInt(month));
+                    //System.out.println("nbDays:"+nbDays);
+                    if (String.valueOf(nbDays).equals(lastDay)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+            }
+
+
+

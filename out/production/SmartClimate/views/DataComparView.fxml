@@ -54,6 +54,16 @@
                                                 <Insets bottom="30.0" />
                                              </VBox.margin>
                                           </Button>
+                                          <HBox alignment="CENTER" prefHeight="33.0" prefWidth="222.0">
+                                             <VBox.margin>
+                                                <Insets bottom="30.0" />
+                                             </VBox.margin>
+                                             <children>
+                                                <RadioButton fx:id="MoyRadio" mnemonicParsing="false" text="Moy" />
+                                                <RadioButton fx:id="MinRadio" mnemonicParsing="false" text="Min" />
+                                                <RadioButton fx:id="MaxRadio" mnemonicParsing="false" text="Max" />
+                                             </children>
+                                          </HBox>
                                           <ProgressBar fx:id="ProgressComparaison" prefWidth="200.0" progress="0.0" />
                                        </children>
                                     </VBox>

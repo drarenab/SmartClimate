@@ -28,6 +28,7 @@ public class Annee {
     }
 
     public Mois getAndCreateMois(int mois) {
+        System.out.println("getandcreateMois");
         Boolean bool = moisList.containsKey(mois);
         if (!bool) {
             moisList.put(mois, new Mois(mois));
@@ -195,8 +196,35 @@ public class Annee {
         return null;
     }
 
-    public List<Releve> getMoyenneParMois() {
-        return null;
+    public List<DataBean2> getMoyenneParMois(String nomStation,int idStation,int x,int y) {
+        ArrayList<DataBean2> moyenneParAnnee = new ArrayList<>();
+        for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
+            Integer key = entry.getKey();
+            Mois value = entry.getValue();
+            moyenneParAnnee.addAll(value.getMoyennesParJour(nomStation,idStation, Integer.toString(id),x,y));
+
+        }
+        return moyenneParAnnee;
+    }
+     public List<DataBean2> getMinParMois(String nomStation,int idStation,int x,int y) {
+        ArrayList<DataBean2> minParAnnee = new ArrayList<>();
+        for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
+            Integer key = entry.getKey();
+            Mois value = entry.getValue();
+            minParAnnee.addAll(value.getMinParMois(nomStation,idStation, Integer.toString(id),x,y));
+
+        }
+        return minParAnnee;
+    }
+      public List<DataBean2> getMaxParMois(String nomStation,int idStation,int x,int y) {
+        ArrayList<DataBean2> maxParAnnee = new ArrayList<>();
+        for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
+            Integer key = entry.getKey();
+            Mois value = entry.getValue();
+            maxParAnnee.addAll(value.getMaxParMois(nomStation,idStation, Integer.toString(id),x,y));
+
+        }
+        return maxParAnnee;
     }
 
     /*needed for tests : dangerous */

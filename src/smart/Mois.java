@@ -20,6 +20,10 @@ public class Mois {
     private int id;
     private Map<Integer, Jour> joursList;
 
+    public Map<Integer, Jour> getJoursList() {
+        return joursList;
+    }
+
     public Mois(int id) {
         this.id = id;
         joursList = new HashMap<Integer, Jour>();
@@ -173,4 +177,142 @@ public class Mois {
             System.out.println("id:"+jour.getId());
         }
     }
+    
+    
+     /**
+     *
+     * @return un relevé representant la moyenne du mois les valeurs présentent
+     * sont soit la moyenne soit 101 dans le cas ou aucune valeur n'est dispo
+     */
+//    public Releve calculMoyenneMois() {
+//        float temperature = 0;
+//        float humidite = 0;
+//        float nebulosite = 0;
+//        Boolean temp = false, hum = false, neb = false;
+//
+//        for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
+//            Integer key = entry.getKey();
+//            Jour value = entry.getValue();
+//
+//            Releve moyenneJour = value.getMoyenneJour();
+//            temperature += moyenneJour.getTemperature();
+//            humidite += moyenneJour.getHumidite();
+//            nebulosite += moyenneJour.getNebulosite();
+//
+//            if (moyenneJour.getTemperature() != 101) {
+//                temperature += moyenneJour.getTemperature();
+//                temp = true;
+//            }
+//            if (moyenneJour.getHumidite() != 101) {
+//                humidite += moyenneJour.getTemperature();
+//                hum = true;
+//            }
+//            if (moyenneJour.getNebulosite() != 101) {
+//                nebulosite += moyenneJour.getTemperature();
+//                neb = true;
+//            }
+//
+//        }
+//        temperature /= joursList.size();
+//        humidite /= joursList.size();
+//        nebulosite /= joursList.size();
+//        return new Releve(10, (temp) ? temperature : 101, (hum) ? humidite : 101, (neb) ? nebulosite : 101);
+//    }
+     /**
+     *
+     * @return Hashmap comme clé l'id du jour et comme valeur le relevé
+     * representant la moyenne du jour
+     */
+    public ArrayList<DataBean2> getMoyennesParJour(String nomStation,int idStation,String idAnnee,int x,int y) {
+        ArrayList<DataBean2> moyenneParMois = new ArrayList<>();
+        for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
+            Integer key = entry.getKey();
+            Jour value = entry.getValue();
+
+            moyenneParMois.add(value.getMoyenneJour(nomStation,idStation,idAnnee,Integer.toString(id),x,y));
+        }
+        return moyenneParMois;
+    }
+
+    public ArrayList<DataBean2> getMinParMois(String nomStation,int idStation,String idAnnee,int x,int y) {
+        ArrayList<DataBean2> minParMois = new ArrayList<>();
+        for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
+            Integer key = entry.getKey();
+            Jour value = entry.getValue();
+
+            minParMois.add(value.getMinJour(nomStation,idStation,idAnnee,Integer.toString(id),x,y));
+        }
+        return minParMois;
+    }
+    /**
+     *
+     * @return un relevé representant le minimum des donnée du Mois le resultat
+     * est soit la moyenne soit 101 dans le cas ou aucune donnée n'est presente
+     * pour le mois
+     */
+//    public Releve getMinParMois(int idStation,String idAnnee) {//gerer le cas de note manquante
+//        float temperature = 101;
+//        float humidite = 101;
+//        float nebulosite = 101;
+//
+//        for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
+//            Jour value = entry.getValue();
+//
+//            Releve MinMois = value.getMinJour(idStation, idAnnee, Integer.toString(id));
+//            if (MinMois.getTemperature() <= temperature) {
+//                temperature = MinMois.getTemperature();
+//            }
+//            if (MinMois.getHumidite() <= humidite) {
+//                humidite = MinMois.getHumidite();
+//            }
+//            if (MinMois.getNebulosite() <= nebulosite) {
+//                nebulosite = MinMois.getNebulosite();
+//            }
+//
+//        }
+//
+//        return new Releve(10, temperature, humidite, nebulosite);
+//    }
+    public ArrayList<DataBean2> getMaxParMois(String nomStation,int idStation,String idAnnee,int x,int y) {
+        ArrayList<DataBean2> maxParMois = new ArrayList<>();
+        for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
+            Integer key = entry.getKey();
+            Jour value = entry.getValue();
+
+            maxParMois.add(value.getMaxJour(nomStation,idStation,idAnnee,Integer.toString(id),x,y));
+        }
+        return maxParMois;
+    }
+
+    /**
+     *
+     * @return un relevé representant le maximum des donnée du Mois le resultat
+     * est soit la moyenne soit 101 dans le cas ou aucune donnée n'est presente
+     * pour le mois
+     */
+//    public Releve getMaxMois() {//gerer le cas de note manquante
+//        float temperature = -1;
+//        float humidite = -1;
+//        float nebulosite = -1;
+//
+//        for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
+//            Jour value = entry.getValue();
+//
+//            Releve MinMois = value.getMinJour();
+//            if (MinMois.getTemperature() <= temperature) {
+//                temperature = MinMois.getTemperature();
+//            }
+//            if (MinMois.getHumidite() <= humidite) {
+//                humidite = MinMois.getHumidite();
+//            }
+//            if (MinMois.getNebulosite() <= nebulosite) {
+//                nebulosite = MinMois.getNebulosite();
+//            }
+//
+//        }
+//
+//        return new Releve(10, (temperature != -1) ? temperature : 101,
+//                (humidite != -1) ? humidite : 101,
+//                (nebulosite != -1) ? nebulosite : 101);
+//    }
 }
