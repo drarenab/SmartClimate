@@ -150,7 +150,12 @@ public class FXMLDocumentController implements Controller {
         Map errors = model.validateDate(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
         Map errors2 = model.validateDate(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
 
-        if (!errors.get("Year").toString().equals("") || !errors2.get("Year").toString().equals("")) {
+
+        StationComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+        if(StationComparaison.getValue() == null)
+            StationComparaison.setStyle("-fx-background-color: #333333, red , #333333;");
+
+        else if (!errors.get("Year").toString().equals("") || !errors2.get("Year").toString().equals("")) {
             System.out.println("year1 or year 2 errors");
             if (!errors.get("Year").toString().equals("")) {
                 Year1Comparaison.setStyle("-fx-background-color: #333333, red , #333333;");
@@ -206,6 +211,7 @@ public class FXMLDocumentController implements Controller {
 
                 loading.setVisible(true);
                 model.constructChartComparaison(StationComparaison.getValue().toString(),
+
                         Year1Comparaison.getText(),
                         MonthComparaison.getText(),
                         DayComparaison.getText(),
@@ -217,7 +223,6 @@ public class FXMLDocumentController implements Controller {
                         lineChartnebul,
                         MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
 
-                //loading.setVisible(false);
 
             } else {
                 //not logicaly valid date!
@@ -274,6 +279,8 @@ public class FXMLDocumentController implements Controller {
 
     @FXML
     private void handleButtonActionAfficher() throws IOException {
+        //System.out.println("hooooooooooooooooooooooooooooooooooooooooooooolaaaaaaaaaaaaaaa:");
+
         loading.setVisible(true);
         /*
         Test si le formulaire est bien rempli
@@ -283,6 +290,8 @@ public class FXMLDocumentController implements Controller {
         month.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
 //        month.setText("");
         day.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+
+
 //        day.setText("");
 
         Map errors = model.validateDate(year.getText(), month.getText(), day.getText());
@@ -291,7 +300,12 @@ public class FXMLDocumentController implements Controller {
         /*
         test si la année n'est pas vide (champs obligatoire)
          */
-        if (!errors.get("Year").toString().equals("")) {
+
+        Station.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
+        if(Station.getValue() == null)
+            Station.setStyle("-fx-background-color: #333333, red , #333333;");
+
+        else if (!errors.get("Year").toString().equals("")) {
             year.setStyle("-fx-background-color: #333333, red , #333333;");
             year.setPromptText(errors.get("Year").toString());
             /*
@@ -310,38 +324,31 @@ public class FXMLDocumentController implements Controller {
             /*
                 Chart
              */
+
             boolean validated;
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-                loading.setVisible(true);
 
-                model.constructChartAffichage(Station.getValue().toString(),
+                model.Affichage(Station.getValue().toString(),
                         year.getText(),
                         month.getText(),
                         day.getText(),
                         AfficheTemp,
                         AfficheHum,
                         AfficheNebul,
-                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio)
-                );
+                        tableView,
+                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
 
-                loading.setVisible(false);
 
-               // loading.setVisible(false);
-                /*Attention can be throw an exception if data is null ! */
+//                TableView
+//                 */
+//                /*Attention can be throw an exception if data is null ! */
+
                 columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
                 columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
                 columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
                 columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
-
-                model.constructTableView(
-                        Station.getValue().toString(),
-                        year.getText(),
-                        month.getText(),
-                        day.getText(),
-                        tableView,
-                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
 
             } else {
                 //not logicaly valid date!
@@ -563,7 +570,7 @@ public class FXMLDocumentController implements Controller {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
         List L = new ArrayList();
-        loading.setImage( new Image(getClass().getResourceAsStream("Image/loading.png")));
+        loading.setImage(new Image(getClass().getResourceAsStream("Image/loading.png")));
 
         loading.setVisible(false);
         //dataList = model.getAllStations();
@@ -591,11 +598,13 @@ public class FXMLDocumentController implements Controller {
         final NumberAxis xAxiss = new NumberAxis();
         xAxis.setAutoRanging(true);
         final NumberAxis yAxiss = new NumberAxis();
-        xAxiss.setLabel("Température");
+
+        xAxiss.setLabel("Humudité");
         AfficheHum = new AreaChart<Number, Number>(xAxiss, yAxiss);
         final NumberAxis xAxisss = new NumberAxis();
         final NumberAxis yAxisss = new NumberAxis();
-        xAxisss.setLabel("Température");
+
+        xAxisss.setLabel("Nebulosité");
         AfficheNebul = new AreaChart<Number, Number>(xAxisss, yAxisss);
 
         VboxComparaison.getChildren().add(AfficheTemp);
@@ -990,7 +999,6 @@ public class FXMLDocumentController implements Controller {
 
         preference.setOnAction(
                 new EventHandler<ActionEvent>() {
-
 
 
                     public void handle(ActionEvent event

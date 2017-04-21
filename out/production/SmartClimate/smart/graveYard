@@ -262,3 +262,426 @@
 
 
 
+
+
+--------------------------------------------------
+
+    public List<DataBean2> getData(String stationName,
+            String year,
+            String month,
+            String day,
+            int mode,
+            int MinOrMaxOrMoy,
+            boolean importOrNot
+    ) throws IOException {
+
+        Map<Integer, Mois> missingMonths;
+        Map<Integer, Jour> missingDays;
+        Map<Integer, Releve> missingReleve;
+        List<DataBean2> listReleves = new ArrayList<DataBean2>();
+        String stationIdTemp = getStationIdFromName(stationName);
+
+        String stationId = ("00000" + stationIdTemp).substring(String.valueOf(stationIdTemp).length());
+        System.out.println("stationId: " + stationId + " temp:" + stationIdTemp);
+
+        String ordre;
+        boolean result;
+        int yearInt, monthInt, dayInt, stationIdInt, ordreInt, jourIdInt, moisIdInt, anneeIdInt;
+        String jourId, moisId, anneeId;
+        stationIdInt = Integer.parseInt(stationId);
+        int x, y;
+        x = stationList.get(stationIdInt).getPointObj().getX();
+        y = stationList.get(stationIdInt).getPointObj().getY();
+
+        switch (mode) {
+            /**
+             * *******************************************************************************************************
+             */
+            case 0://jour pas besoin de faire la moyenne
+                dayInt = Integer.parseInt(day);
+                monthInt = Integer.parseInt(month);
+                yearInt = Integer.parseInt(year);
+                stationIdInt = Integer.parseInt(stationId);
+                missingReleve = stationList.get(stationIdInt)
+                        .getAndCreateAnnee(yearInt)
+                        .getAndCreateMois(monthInt)
+                        .getAndCreateJour(dayInt)
+                        .getMissingReleves(yearInt, monthInt);
+                if (missingReleve.size() > 0) {
+                    // si on a trouver des relevés qui manque, on essaye de les uploader depuis les fichiers en local
+                    //ATTENTION LE CAST STRING INT
+                    System.out.println("Missing relevées found , trying to upload them from local files size=" + missingReleve.size());
+                    for (Releve releve : missingReleve.values()) {
+                        ordreInt = releve.getOrdre() * 3;
+                        ordre = ("00" + ordreInt).substring(String.valueOf(ordreInt).length());
+                        getDataForDateByCity(
+                                year
+                                        + month
+                                        + day
+                                        + ordre,
+                                stationId
+                        );
+                    }
+
+                    missingReleve.clear();
+
+                    missingReleve = stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getAndCreateMois(monthInt)
+                            .getAndCreateJour(dayInt)
+                            .getMissingReleves(yearInt, monthInt);
+                    /*
+                    stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getAndCreateMois(monthInt)
+                            .getAndCreateJour(dayInt)
+                            .showAll();
+                     */
+
+                    if (missingReleve.size() > 0) {
+                        /**
+                         * MANQUE SI APP EST EN LIGNE*
+                         */
+
+                        if (Utilitaire.netIsAvailable() != -1) {
+                            //si encore on a trouver des relevés qui manque , et si app est enligne on lance le telechargement
+                            System.out.println("Still have missing relevées , trying to download them! size=" + missingReleve.size());
+                            downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
+
+                            System.out.println("Download is done , trying to upload local files ");
+                        } else {
+                            if( importOrNot){
+                                 DisplayAlertToImport();
+                            }
+                            System.out.println("No need to import");
+                        }
+
+                        for (Releve releve : missingReleve.values()) {
+                            ordreInt = releve.getOrdre() * 3;
+                            ordre = ("00" + ordreInt).substring(String.valueOf(ordreInt).length());
+                            getDataForDateByCity(
+                                    year
+                                    + month
+                                    + day
+                                    + ordre,
+                                    stationId
+                            );
+                        }
+
+
+                        if (Utilitaire.netIsAvailable() != -1) {
+                            downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
+                            System.out.println("Download is done , trying to upload local files ");
+                            for (Releve releve : missingReleve.values()) {
+                                ordreInt = releve.getOrdre() * 3;
+                                ordre = ("00" + ordreInt).substring(String.valueOf(ordreInt).length());
+                                getDataForDateByCity(
+                                        year +
+                                                month +
+                                                day +
+                                                ordre,
+                                        stationId
+                                );
+                            }
+
+                            missingReleve = stationList.get(stationIdInt)
+                                    .getAndCreateAnnee(yearInt)
+                                    .getAndCreateMois(monthInt)
+                                    .getAndCreateJour(dayInt)
+                                    .getMissingReleves(yearInt, monthInt);
+
+                            /*
+                            if (missingReleve.size() > 0) {
+                                //si encore on a des relevés qui manque
+                                System.out.println("Attention - Not completed data, returning data even though ! size=" + missingReleve.size());
+                            }
+                            */
+                        } else {
+                            /**AFFICHER IMPORT **/
+
+                            System.out.println("No internet available");
+
+                        }
+                    }
+                }
+
+                System.out.println("Everything looks good, returning data now");
+
+                listReleves = stationList.get(stationIdInt)
+                        .getAndCreateAnnee(yearInt)
+                        .getAndCreateMois(monthInt)
+                        .getAndCreateJour(dayInt)
+                        .getAllReleves(stationName, stationIdInt, yearInt, monthInt, x, y);
+
+                System.out.println("List relevés");
+                /*for (DataBean2 dataBean2 : listReleves) {
+                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
+                }*/
+
+                if (listReleves.isEmpty()) {
+                    System.out.println("Attention, Null data found  ! ");
+                }
+                return listReleves;
+
+            /**
+             * *******************************************************************************************************
+             */
+            case 1:// un mois on fait la moyenne ou le min ou le max
+                monthInt = Integer.parseInt(month);
+                yearInt = Integer.parseInt(year);
+                missingDays = stationList.get(stationIdInt)
+                        .getAndCreateAnnee(yearInt)
+                        .getAndCreateMois(monthInt)
+                        .getMissingData(yearInt);
+
+                if (missingDays.size() > 0) {
+                    // si on a trouver des jours qui manque, on essaye de les uploader depuis les fichiers en local
+                    //ATTENTION LE CAST STRING INT
+                    System.out.println("Missing days found , trying to upload them from local files size=" + missingDays.size());
+                    for (Jour jour : missingDays.values()) {
+                        jourIdInt = jour.getId();
+                        jourId = ("00" + jourIdInt).substring(String.valueOf(jourIdInt).length());
+                        getDataForDateByCity(
+                                year
+                                        + month
+                                        + jourId,
+                                stationId
+                        );
+                    }
+
+                    missingDays.clear();
+
+                    missingDays = stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getAndCreateMois(monthInt)
+                            .getMissingData(yearInt);
+
+                    /*
+                    stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getAndCreateMois(monthInt)
+                            .showAll();
+                     */
+                    if (missingDays.size() > 0) {
+                        /**
+                         * MANQUE SI APP EST EN LIGNE*
+                         */
+
+                        if (Utilitaire.netIsAvailable() != -1) {
+                            //si encore on a trouver des jours qui manque , et si app est enligne on lance le telechargement
+                            System.out.println("Still have missing days , trying to download them! size=" + missingDays.size());
+                            downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
+                        } else {
+                            if( importOrNot){
+                                 DisplayAlertToImport();
+                            }
+                            System.out.println("No need to import");
+                        }
+                        System.out.println("Download is done , trying to upload local files ");
+                        for (Jour jour : missingDays.values()) {
+                            jourIdInt = jour.getId();
+                            jourId = ("00" + jourIdInt).substring(String.valueOf(jourIdInt).length());
+                            getDataForDateByCity(
+                                    year
+                                    + month
+                                    + jourId,
+                                    stationId
+                            );
+                        }
+
+
+                            if (missingDays.size() > 0) {
+                                //si encore on a des jours qui manque
+                                System.out.println("Attention - Not completed data, returning data even though ! size=" + missingDays.size());
+                            /*for (Jour jour : missingDays.values()) {
+                                System.out.println(jour.getId());
+                            }
+                            */
+                            }
+
+                        } else {
+                            /**AFFICHER IMPORT**/
+
+
+                            System.out.println("No internet available");
+                        }
+                    }
+                }
+
+                System.out.println("Everything looks good, returning data now");
+
+                if (MinOrMaxOrMoy == 0) {//moy
+                    listReleves = stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getAndCreateMois(monthInt)
+                            .getMoyennesParJour(stationName,stationIdInt, year,x,y);
+                } else {
+                    if (MinOrMaxOrMoy == 1) {//min
+                        listReleves = stationList.get(stationIdInt)
+                                .getAndCreateAnnee(yearInt)
+                                .getAndCreateMois(monthInt)
+                                .getMinParMois(stationName,stationIdInt,year,x,y);
+                    } else {//max
+                        listReleves = stationList.get(stationIdInt)
+                                .getAndCreateAnnee(yearInt)
+                                .getAndCreateMois(monthInt)
+                                .getMaxParMois(stationName,stationIdInt, year,x,y);
+                    }
+                }
+
+                System.out.println("List jours .. size:" + listReleves.size());
+/*                for (DataBean2 dataBean2 : listReleves) {
+                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
+                }
+  */
+                if (listReleves.isEmpty())
+                    System.out.println("Attention, Null data found  ! ");
+
+        return listReleves;
+
+        /**
+         * *******************************************************************************************************
+         */
+        case 2:
+        yearInt = Integer.parseInt(year);
+        missingMonths = stationList.get(stationIdInt)
+                .getAndCreateAnnee(yearInt)
+                .getMissingData();
+
+        if (missingMonths.size() > 0) {
+            // si on a trouver des mois qui manque, on essaye de les uploader depuis les fichiers en local
+            //ATTENTION LE CAST STRING INT
+            System.out.println("Missing months found , trying to upload them from local files size=" + missingMonths.size());
+            for (Mois mois : missingMonths.values()) {
+                moisIdInt = mois.getId();
+                moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
+                getDataForDateByCity(
+                        year + moisId,
+                        stationId
+                );
+            }
+
+            missingMonths.clear();
+
+            missingMonths = stationList.get(stationIdInt)
+                    .getAndCreateAnnee(yearInt)
+                    .getMissingData();
+
+            stationList.get(stationIdInt)
+                    .getAndCreateAnnee(yearInt)
+                    .showAll();
+
+            if (missingMonths.size() > 0) {
+                /**
+                 * MANQUE SI APP EST EN LIGNE*
+                 */
+                //si encore on a trouver des mois qui manque , et si app est enligne on lance le telechargement
+                if (Utilitaire.netIsAvailable() != -1) {
+                    System.out.println("Still have missing mois , trying to download them! size=" + missingMonths.size());
+
+                    for (Mois mois : missingMonths.values()) {
+                        moisIdInt = mois.getId();
+                        moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
+                        downloadAndUncompress(year + moisId);
+                    }
+
+
+                    System.out.println("Download is done , trying to upload local files ");
+                    for (Mois mois : missingMonths.values()) {
+                        moisIdInt = mois.getId();
+                        moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
+                        getDataForDateByCity(
+                                year +
+                                        moisId
+                                ,
+                                stationId
+                        );
+                    }
+                    missingMonths = stationList.get(stationIdInt)
+                            .getAndCreateAnnee(yearInt)
+                            .getMissingData();
+
+
+                    if (missingMonths.size() > 0) {
+
+                        /**
+                         * MANQUE SI APP EST EN LIGNE*
+                         */
+                        if (Utilitaire.netIsAvailable() != -1) {
+                            //si encore on a trouver des mois qui manque , et si app est enligne on lance le telechargement
+                            System.out.println("Still have missing mois , trying to download them! size=" + missingMonths.size());
+
+                            for (Mois mois : missingMonths.values()) {
+                                moisIdInt = mois.getId();
+                                moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
+                                downloadAndUncompress(year + moisId);
+                            }
+
+                            System.out.println("Download is done , trying to upload local files ");
+                        } else {
+                            if( importOrNot){
+                                 DisplayAlertToImport();
+                            }
+                            System.out.println("No need to import");
+                        }
+                        for (Mois mois : missingMonths.values()) {
+                            moisIdInt = mois.getId();
+                            moisId = ("00" + moisIdInt).substring(String.valueOf(moisIdInt).length());
+                            getDataForDateByCity(
+                                    year
+                                    + moisId,
+                                    stationId
+                            );
+                        }
+
+                        missingMonths = stationList.get(stationIdInt)
+                                .getAndCreateAnnee(yearInt)
+                                .getMissingData();
+
+                        if (missingMonths.size() > 0) {
+                            //si encore on a des mois qui manque
+                            System.out.println("Attention - Not completed data,returning data even though ! size=" + missingMonths.size());
+                            /*System.out.println("missing months :");
+                            for (Mois mois : missingMonths.values()) {
+                                System.out.println(mois.getId());
+                            }*/
+
+                    }
+                } else {
+                    /**IMPORT FICHIER**/
+
+                    System.out.println("No internet available");
+                }
+            }
+        }
+
+        System.out.println("Everything looks good, returning data now");
+        listReleves = stationList.get(stationIdInt)
+                .getAndCreateAnnee(yearInt)
+                .getAllReleves(stationName, stationIdInt, x, y);
+
+        if (MinOrMaxOrMoy == 0) {//moy
+            listReleves = stationList.get(stationIdInt)
+                    .getAndCreateAnnee(yearInt)
+                    .getMoyenneParMois(stationName,stationIdInt,x,y);
+        } else {
+            if (MinOrMaxOrMoy == 1) {//min
+                listReleves = stationList.get(stationIdInt)
+                        .getAndCreateAnnee(yearInt)
+                        .getMinParMois(stationName,stationIdInt,x,y);
+            } else {//max
+                listReleves = stationList.get(stationIdInt)
+                        .getAndCreateAnnee(yearInt)
+                        .getMaxParMois(stationName,stationIdInt,x,y);
+            }
+        }
+
+
+        System.out.println("List mois .. size:" + listReleves.size());
+        if (listReleves.isEmpty())
+            System.out.println("Attention , null data found ! ");
+
+        return listReleves;
+    }
+    return null;
+}

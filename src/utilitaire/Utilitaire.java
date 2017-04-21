@@ -322,10 +322,12 @@ public class Utilitaire {
         Path from = Paths.get(recupp.toURI());//chemin du fichier recupéré
         String[] str = recupp.getPath().split("/");
         String[] dates = str[str.length - 1].split(Pattern.quote("."));
+        System.out.println(dates[1]);
         String directory = Configuration.DATA_DIRECTORY_NAME + "/" + dates[1].substring(0, 4);
 
         wellDone = createDirectory(directory);
-        if (wellDone) {
+        System.out.println("wellDone"+wellDone);
+//        if (wellDone) {
             Path to = Paths.get(directory + "/" + str[str.length - 1]);
             CopyOption[] options = new CopyOption[]{
                 StandardCopyOption.REPLACE_EXISTING,
@@ -341,8 +343,10 @@ public class Utilitaire {
             }
             File newName = new File(getCsvFilePathFromDate(dates[1]));
             File oldName;
-            if (dates.length == 4) { //fichier .gz
-
+            System.out.println(dates[dates.length-1]);
+            System.out.println("copiiiiiiiiiiiiiii");
+            if (dates[dates.length-1].equals("gz")) { //fichier .gz
+System.out.println("copiiiiiiiiiiiiiii");
                 wellDone = decompresserGzip(to.toString());
                 oldName = new File(to.toString().substring(0, to.toString().length() - 3));
 
@@ -351,7 +355,8 @@ public class Utilitaire {
 
             }
             wellDone = oldName.renameTo(newName);
-        }
+//        }
+        System.out.println("");
         return wellDone;
 
     }

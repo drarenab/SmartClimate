@@ -8,7 +8,7 @@
 
 .tab-pane .tab-header-area .tab-header-background {
     /*-fx-opacity: 0;*/
-    -fx-background-color: linear-gradient(to top, #87AAAE 80%, #87AAAE 60%);
+    -fx-background-color: #2B2B2B;
 }
 
 .tab-pane
@@ -22,7 +22,7 @@
 .tab-pane .tab
 {
     
--fx-background-color: #B1B1B1;
+-fx-background-color: #3c3c3c;
 }
 
 .tab-pane .tab:selected
@@ -33,14 +33,12 @@
 .tab .tab-label { 
     -fx-alignment: CENTER;
     
-    -fx-text-fill:#828282;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
+    -fx-text-fill: #96b946;
 }
 
 .tab:selected .tab-label { 
     -fx-alignment: CENTER;
-    -fx-text-fill: #C19E82;
+    -fx-text-fill: #828282;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
