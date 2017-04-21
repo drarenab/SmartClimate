@@ -2,46 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0fbb273-4e5f-4f17-803e-84f58ba92d9e" name="Default" comment="Merge branch 'master' of https://github.com/crowlin04/SmartClimate&#10;&#10;# Conflicts:&#10;#&#9;.gitignore&#10;#&#9;src/coordonnee/DataCity.java&#10;#&#9;src/main/FXMLDocumentController.java&#10;#&#9;src/main/MyModel.java&#10;#&#9;src/smart/Jour.java">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CSS1/CSSComparaison.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CSS1/CSSSplitPane.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CSS1/CSSTabPane.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$1$1.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$1$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$1.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$10.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$10.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$11.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$11.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$12.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$12.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$13.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$13.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$14.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$14.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$15.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$15.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$16.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$16.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$2$1.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$2$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$2.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$3.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$4.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$5.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$6.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$7.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$7.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$8.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$8.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$9.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController$9.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/FXMLDocumentController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/MyModel.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/MyModel.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/smart/Jour.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/smart/Jour.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/utilitaire/Utilitaire.class" afterPath="$PROJECT_DIR$/out/production/SmartClimate/utilitaire/Utilitaire.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/CSS/CSSComparaison.css" afterPath="$PROJECT_DIR$/out/production/SmartClimate/CSS/CSSComparaison.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/CSS/CSSSplitPane.css" afterPath="$PROJECT_DIR$/out/production/SmartClimate/CSS/CSSSplitPane.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/CSS/CSSTabPane.css" afterPath="$PROJECT_DIR$/out/production/SmartClimate/CSS/CSSTabPane.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/main/DataComparView.fxml" afterPath="$PROJECT_DIR$/out/production/SmartClimate/main/DataComparView.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/SmartClimate/smart/graveYard" afterPath="$PROJECT_DIR$/out/production/SmartClimate/smart/graveYard" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CSS/CSSComparaison.css" afterPath="$PROJECT_DIR$/src/CSS/CSSComparaison.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CSS/CSSSplitPane.css" afterPath="$PROJECT_DIR$/src/CSS/CSSSplitPane.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CSS/CSSTabPane.css" afterPath="$PROJECT_DIR$/src/CSS/CSSTabPane.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/DataComparView.fxml" afterPath="$PROJECT_DIR$/src/main/DataComparView.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/FXMLDocumentController.java" afterPath="$PROJECT_DIR$/src/main/FXMLDocumentController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/MyModel.java" afterPath="$PROJECT_DIR$/src/main/MyModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/Jour.java" afterPath="$PROJECT_DIR$/src/smart/Jour.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/smart/graveYard" afterPath="$PROJECT_DIR$/src/smart/graveYard" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utilitaire/Utilitaire.java" afterPath="$PROJECT_DIR$/src/utilitaire/Utilitaire.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -57,43 +19,46 @@
       <file leaf-file-name="FXMLDocumentController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/FXMLDocumentController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="177" column="67" lean-forward="false" selection-start-line="177" selection-start-column="67" selection-end-line="177" selection-end-column="67" />
+            <state relative-caret-position="222">
+              <caret line="424" column="11" lean-forward="true" selection-start-line="424" selection-start-column="11" selection-end-line="424" selection-end-column="11" />
               <folding>
                 <element signature="docComment;class#FXMLDocumentController#0" expanded="false" />
+                <element signature="method#handleButtonActionComparer#0;class#FXMLDocumentController#0" expanded="true" />
                 <element signature="method#handleButtonActionAfficher#0;class#FXMLDocumentController#0" expanded="true" />
-                <element signature="e#12282#12309#0" expanded="false" />
+                <element signature="e#12316#12343#0" expanded="false" />
+                <element signature="method#initialize#0;class#FXMLDocumentController#0" expanded="true" />
                 <element signature="docComment;method#InitInterfacePrincipal#0;class#FXMLDocumentController#0" expanded="false" />
-                <element signature="e#14208#14285#0" expanded="false" />
-                <element signature="e#14948#14975#0" expanded="false" />
+                <element signature="e#15156#15183#0" expanded="false" />
                 <element signature="method#RunTimer#0;class#FXMLDocumentController#0" expanded="true" />
-                <element signature="e#15637#15649#0" expanded="false" />
-                <element signature="class#15783:17345" expanded="false" />
-                <element signature="e#16770#16823#0" expanded="false" />
+                <element signature="e#15842#15854#0" expanded="false" />
+                <element signature="method#run#0;class#15988:17854" expanded="true" />
                 <element signature="docComment;method#initInterfaceSetting#0;class#FXMLDocumentController#0" expanded="false" />
-                <element signature="e#18502#18514#0" expanded="false" />
-                <element signature="class#18648:19328" expanded="false" />
-                <element signature="class#20036:20199" expanded="false" />
+                <element signature="method#initInterfaceSetting#0;class#FXMLDocumentController#0" expanded="true" />
+                <element signature="e#18944#19863#0" expanded="true" />
+                <element signature="method#run#0;class#19157:19837" expanded="true" />
+                <element signature="e#19862#19863#0" expanded="true" />
+                <element signature="method#onChanged#0;class#20601:20764" expanded="true" />
                 <element signature="docComment;method#InitInterfaceComparaison#0;class#FXMLDocumentController#0" expanded="false" />
-                <element signature="class#21254:21371" expanded="false" />
+                <element signature="class#21819:21936" expanded="false" />
                 <element signature="docComment;method#initInterfaceInformation#0;class#FXMLDocumentController#0" expanded="false" />
-                <element signature="class#26216:26366" expanded="false" />
-                <element signature="class#27196:27427" expanded="false" />
-                <element signature="e#28458#28537#0" expanded="false" />
+                <element signature="class#26781:26931" expanded="false" />
+                <element signature="class#27761:27992" expanded="false" />
+                <element signature="e#29023#29102#0" expanded="false" />
                 <element signature="docComment;method#initInterfaceEtatServeur#0;class#FXMLDocumentController#0" expanded="false" />
                 <element signature="docComment;method#CreateMenu#0;class#FXMLDocumentController#0" expanded="false" />
-                <element signature="class#31025:31551" expanded="false" />
-                <element signature="class#31684:32658" expanded="false" />
-                <element signature="class#32801:33582" expanded="false" />
-                <element signature="class#33724:34507" expanded="false" />
-                <element signature="class#34615:35031" expanded="false" />
-                <element signature="class#35304:35661" expanded="false" />
-                <element signature="class#35786:36144" expanded="false" />
-                <element signature="class#36369:37150" expanded="false" />
-                <element signature="class#37373:38152" expanded="false" />
-                <element signature="class#38367:39145" expanded="false" />
+                <element signature="class#31590:32116" expanded="false" />
+                <element signature="class#32249:33223" expanded="false" />
+                <element signature="class#33366:34147" expanded="false" />
+                <element signature="class#34289:35072" expanded="false" />
+                <element signature="class#35180:35596" expanded="false" />
+                <element signature="class#35869:36226" expanded="false" />
+                <element signature="class#36351:36709" expanded="false" />
+                <element signature="class#36934:37715" expanded="false" />
+                <element signature="class#37938:38717" expanded="false" />
+                <element signature="class#38932:39710" expanded="false" />
                 <element signature="docComment;method#ChangeDirection#0;class#FXMLDocumentController#0" expanded="false" />
                 <element signature="docComment;method#AfficherCarte#0;class#FXMLDocumentController#0" expanded="false" />
+                <element signature="method#AfficherCarte#0;class#FXMLDocumentController#0" expanded="true" />
                 <element signature="docComment;method#getTempsActuel#0;class#FXMLDocumentController#0" expanded="false" />
               </folding>
             </state>
@@ -105,7 +70,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="306">
               <caret line="22" column="9" lean-forward="false" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="method#getData#0;class#MyModelTest#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -113,25 +81,37 @@
       <file leaf-file-name="MyModel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/MyModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4301">
-              <caret line="1108" column="0" lean-forward="false" selection-start-line="1108" selection-start-column="0" selection-end-line="1108" selection-end-column="0" />
+            <state relative-caret-position="176">
+              <caret line="769" column="53" lean-forward="false" selection-start-line="769" selection-start-column="27" selection-end-line="769" selection-end-column="53" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#getData#0;class#MyModel#0" expanded="true" />
-                <element signature="method#getInstance#0;class#MyModel#0" expanded="true" />
-                <element signature="method#getStationNames#0;class#MyModel#0" expanded="true" />
-                <element signature="method#constructChartAffichage#0;class#MyModel#0" expanded="true" />
-                <element signature="method#constructChartComparaison#0;class#MyModel#0" expanded="true" />
-                <element signature="method#constructTableView#0;class#MyModel#0" expanded="true" />
+                <element signature="docComment;class#MyModel#0" expanded="false" />
+                <element signature="docComment;field#stationList#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#constructMapVilles#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#getData#0;class#MyModel#0" expanded="false" />
+                <element signature="e#7335#7432#0" expanded="false" />
+                <element signature="e#12453#12548#0" expanded="false" />
+                <element signature="e#16045#16106#0" expanded="false" />
+                <element signature="e#18254#18348#0" expanded="false" />
+                <element signature="docComment;method#getInstance#0;class#MyModel#0" expanded="false" />
+                <element signature="e#23921#23955#0" expanded="false" />
+                <element signature="docComment;method#getStationNames#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#constructChartAffichage#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#constructChartComparaison#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#constructTableView#0;class#MyModel#0" expanded="false" />
                 <element signature="method#getLatestDataForGraphicMap#0;class#MyModel#0" expanded="true" />
-                <element signature="method#getDataForDateByCity#0;class#MyModel#0" expanded="true" />
-                <element signature="method#DisplayAlertToImport#0;class#MyModel#0" expanded="true" />
-                <element signature="method#validateDate#0;class#MyModel#0" expanded="true" />
-                <element signature="method#validateNotFuture#0;class#MyModel#0" expanded="true" />
-                <element signature="method#whichMode#0;class#MyModel#0" expanded="true" />
-                <element signature="method#showEveryThing#0;class#MyModel#0" expanded="true" />
-                <element signature="method#getYearExists#0;class#MyModel#0" expanded="true" />
-                <element signature="method#getMonthsExistsForYear#0;class#MyModel#0" expanded="true" />
+                <element signature="e#32610#32668#0" expanded="false" />
+                <element signature="docComment;method#getDataForDateByCity#0;class#MyModel#0" expanded="false" />
+                <element signature="e#35785#35936#0" expanded="false" />
+                <element signature="e#36350#36402#0" expanded="false" />
+                <element signature="e#38030#38076#0" expanded="false" />
+                <element signature="e#38629#38765#0" expanded="false" />
+                <element signature="e#39293#39342#0" expanded="false" />
+                <element signature="docComment;method#DisplayAlertToImport#0;class#MyModel#0" expanded="false" />
+                <element signature="e#40839#40859#0" expanded="false" />
+                <element signature="docComment;method#validateDate#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#validateNotFuture#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#getYearExists#0;class#MyModel#0" expanded="false" />
+                <element signature="docComment;method#getMonthsExistsForYear#0;class#MyModel#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -191,15 +171,24 @@
             <state relative-caret-position="1836">
               <caret line="244" column="26" lean-forward="false" selection-start-line="244" selection-start-column="26" selection-end-line="244" selection-end-column="26" />
               <folding>
-                <element signature="method#Mois#0;class#Mois#0" expanded="true" />
-                <element signature="method#isUpdated#0;class#Mois#0" expanded="true" />
-                <element signature="method#getMissingData#0;class#Mois#0" expanded="true" />
-                <element signature="method#buildMissingDays#0;class#Mois#0" expanded="true" />
-                <element signature="method#getAllReleves#0;class#Mois#0" expanded="true" />
-                <element signature="method#getAndCreateJour#0;class#Mois#0" expanded="true" />
-                <element signature="method#showAll#0;class#Mois#0" expanded="true" />
-                <element signature="method#getMoyennesParJour#1;class#Mois#0" expanded="true" />
-                <element signature="method#getMaxParMois#0;class#Mois#0" expanded="true" />
+                <element signature="e#0#10550#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#485#486#0" expanded="false" />
+                <element signature="e#517#518#0" expanded="false" />
+                <element signature="e#648#649#0" expanded="false" />
+                <element signature="e#673#674#0" expanded="false" />
+                <element signature="e#748#749#0" expanded="false" />
+                <element signature="e#785#786#0" expanded="false" />
+                <element signature="e#4690#4691#0" expanded="false" />
+                <element signature="e#4732#4733#0" expanded="false" />
+                <element signature="e#4775#4776#0" expanded="false" />
+                <element signature="e#4825#4826#0" expanded="false" />
+                <element signature="e#4873#4874#0" expanded="false" />
+                <element signature="e#4900#4901#0" expanded="false" />
+                <element signature="e#4956#4957#0" expanded="false" />
+                <element signature="e#4983#4984#0" expanded="false" />
+                <element signature="e#5032#5033#0" expanded="false" />
+                <element signature="e#5059#5060#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -210,7 +199,29 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="833">
               <caret line="208" column="53" lean-forward="false" selection-start-line="208" selection-start-column="53" selection-end-line="208" selection-end-column="53" />
-              <folding />
+              <folding>
+                <element signature="e#0#7654#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="method#Annee#0;class#Annee#0" expanded="false" />
+                <element signature="method#getAndCreateMois#0;class#Annee#0" expanded="false" />
+                <element signature="method#isUpdated#0;class#Annee#0" expanded="false" />
+                <element signature="method#getMissingData#0;class#Annee#0" expanded="false" />
+                <element signature="method#showAll#0;class#Annee#0" expanded="false" />
+                <element signature="method#buildMissingMonths#0;class#Annee#0" expanded="false" />
+                <element signature="method#getAllReleves#0;class#Annee#0" expanded="false" />
+                <element signature="method#containsFullMonths#0;class#Annee#0" expanded="false" />
+                <element signature="e#5960#5961#0" expanded="false" />
+                <element signature="e#6001#6002#0" expanded="false" />
+                <element signature="e#6044#6045#0" expanded="false" />
+                <element signature="e#6093#6094#0" expanded="false" />
+                <element signature="e#6133#6134#0" expanded="false" />
+                <element signature="e#6160#6161#0" expanded="false" />
+                <element signature="method#getMoyenneParMois#0;class#Annee#0" expanded="false" />
+                <element signature="method#getMinParMois#0;class#Annee#0" expanded="false" />
+                <element signature="method#getMaxParMois#0;class#Annee#0" expanded="false" />
+                <element signature="e#7622#7623#0" expanded="false" />
+                <element signature="e#7650#7651#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -221,17 +232,20 @@
             <state relative-caret-position="1309">
               <caret line="257" column="59" lean-forward="false" selection-start-line="257" selection-start-column="59" selection-end-line="257" selection-end-column="59" />
               <folding>
-                <element signature="method#getAndCreateReleve#0;class#Jour#0" expanded="true" />
-                <element signature="method#isUpdated#0;class#Jour#0" expanded="true" />
-                <element signature="method#getMissingData#0;class#Jour#0" expanded="true" />
-                <element signature="method#showAll#0;class#Jour#0" expanded="true" />
-                <element signature="method#getMissingReleves#0;class#Jour#0" expanded="true" />
-                <element signature="method#getReleve#0;class#Jour#0" expanded="true" />
-                <element signature="method#addReleve#0;class#Jour#0" expanded="true" />
-                <element signature="method#getLatestReleve#0;class#Jour#0" expanded="true" />
-                <element signature="method#buildMissingReleves#0;class#Jour#0" expanded="true" />
-                <element signature="method#getMinJour#0;class#Jour#0" expanded="true" />
-                <element signature="method#getMaxJour#0;class#Jour#0" expanded="true" />
+                <element signature="e#0#12819#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="method#Jour#0;class#Jour#0" expanded="false" />
+                <element signature="e#709#710#0" expanded="false" />
+                <element signature="e#748#749#0" expanded="false" />
+                <element signature="e#4466#4467#0" expanded="false" />
+                <element signature="e#4491#4492#0" expanded="false" />
+                <element signature="e#4524#4525#0" expanded="false" />
+                <element signature="e#4552#4553#0" expanded="false" />
+                <element signature="e#5485#5486#0" expanded="false" />
+                <element signature="e#5538#5539#0" expanded="false" />
+                <element signature="e#11906#11907#0" expanded="false" />
+                <element signature="e#11940#11941#0" expanded="false" />
+                <element signature="method#getAllReleves#0;class#Jour#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -258,9 +272,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>initInterfaceComp</find>
-      <find>Affichage</find>
-      <find>construct</find>
       <find>setVisi</find>
       <find>initInterFace</find>
       <find>initInterFaceComp</find>
@@ -288,6 +299,9 @@
       <find>ville:</find>
       <find>handleButton</find>
       <find>handleButtonActionC</find>
+      <find>dataList</find>
+      <find>afficherCarte</find>
+      <find>tabVille</find>
     </findStrings>
     <replaceStrings>
       <replace>//$1</replace>
@@ -367,6 +381,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -550,8 +566,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1130,7 +1144,8 @@
       <workItem from="1492674619274" duration="5671000" />
       <workItem from="1492687635563" duration="26241000" />
       <workItem from="1492763569035" duration="10035000" />
-      <workItem from="1492784055128" duration="576000" />
+      <workItem from="1492784055128" duration="778000" />
+      <workItem from="1492795974389" duration="2951000" />
     </task>
     <task id="LOCAL-00001" summary="constructChartAffichage is tested and working with the new conception">
       <created>1492618361046</created>
@@ -1175,7 +1190,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91950000" />
+    <option name="totallyTimeSpent" value="95103000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
@@ -1191,7 +1206,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5880597" sideWeight="0.5058565" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35459942" sideWeight="0.4941435" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.727003" sideWeight="0.4941435" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1232,7 +1247,7 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="16" />
+      <option name="time" value="18" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1246,22 +1261,34 @@
         <state relative-caret-position="10506">
           <caret line="618" column="33" lean-forward="false" selection-start-line="618" selection-start-column="19" selection-end-line="618" selection-end-column="33" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getData#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getInstance#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getStationNames#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructChartAffichage#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructChartComparaison#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructTableView#0;class#MyModel#0" expanded="true" />
+            <element signature="docComment;class#MyModel#0" expanded="false" />
+            <element signature="docComment;field#stationList#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructMapVilles#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getData#0;class#MyModel#0" expanded="false" />
+            <element signature="e#7335#7432#0" expanded="false" />
+            <element signature="e#12453#12548#0" expanded="false" />
+            <element signature="e#16045#16106#0" expanded="false" />
+            <element signature="e#18254#18348#0" expanded="false" />
+            <element signature="docComment;method#getInstance#0;class#MyModel#0" expanded="false" />
+            <element signature="e#23921#23955#0" expanded="false" />
+            <element signature="docComment;method#getStationNames#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructChartAffichage#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructChartComparaison#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructTableView#0;class#MyModel#0" expanded="false" />
             <element signature="method#getLatestDataForGraphicMap#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getDataForDateByCity#0;class#MyModel#0" expanded="true" />
-            <element signature="method#DisplayAlertToImport#0;class#MyModel#0" expanded="true" />
-            <element signature="method#validateDate#0;class#MyModel#0" expanded="true" />
-            <element signature="method#validateNotFuture#0;class#MyModel#0" expanded="true" />
-            <element signature="method#whichMode#0;class#MyModel#0" expanded="true" />
-            <element signature="method#showEveryThing#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getYearExists#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getMonthsExistsForYear#0;class#MyModel#0" expanded="true" />
+            <element signature="e#32610#32668#0" expanded="false" />
+            <element signature="docComment;method#getDataForDateByCity#0;class#MyModel#0" expanded="false" />
+            <element signature="e#35785#35936#0" expanded="false" />
+            <element signature="e#36350#36402#0" expanded="false" />
+            <element signature="e#38030#38076#0" expanded="false" />
+            <element signature="e#38629#38765#0" expanded="false" />
+            <element signature="e#39293#39342#0" expanded="false" />
+            <element signature="docComment;method#DisplayAlertToImport#0;class#MyModel#0" expanded="false" />
+            <element signature="e#40839#40859#0" expanded="false" />
+            <element signature="docComment;method#validateDate#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#validateNotFuture#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getYearExists#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getMonthsExistsForYear#0;class#MyModel#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1310,39 +1337,42 @@
           <caret line="1359" column="13" lean-forward="true" selection-start-line="1359" selection-start-column="13" selection-end-line="1359" selection-end-column="13" />
           <folding>
             <element signature="docComment;class#FXMLDocumentController#0" expanded="false" />
+            <element signature="method#handleButtonActionComparer#0;class#FXMLDocumentController#0" expanded="true" />
             <element signature="method#handleButtonActionAfficher#0;class#FXMLDocumentController#0" expanded="true" />
-            <element signature="e#12282#12309#0" expanded="false" />
+            <element signature="e#12316#12343#0" expanded="false" />
+            <element signature="method#initialize#0;class#FXMLDocumentController#0" expanded="true" />
             <element signature="docComment;method#InitInterfacePrincipal#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="e#14208#14285#0" expanded="false" />
-            <element signature="e#14948#14975#0" expanded="false" />
+            <element signature="e#15156#15183#0" expanded="false" />
             <element signature="method#RunTimer#0;class#FXMLDocumentController#0" expanded="true" />
-            <element signature="e#15637#15649#0" expanded="false" />
-            <element signature="class#15783:17345" expanded="false" />
-            <element signature="e#16770#16823#0" expanded="false" />
+            <element signature="e#15842#15854#0" expanded="false" />
+            <element signature="method#run#0;class#15988:17854" expanded="true" />
             <element signature="docComment;method#initInterfaceSetting#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="e#18502#18514#0" expanded="false" />
-            <element signature="class#18648:19328" expanded="false" />
-            <element signature="class#20036:20199" expanded="false" />
+            <element signature="method#initInterfaceSetting#0;class#FXMLDocumentController#0" expanded="true" />
+            <element signature="e#18944#19863#0" expanded="true" />
+            <element signature="method#run#0;class#19157:19837" expanded="true" />
+            <element signature="e#19862#19863#0" expanded="true" />
+            <element signature="method#onChanged#0;class#20601:20764" expanded="true" />
             <element signature="docComment;method#InitInterfaceComparaison#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="class#21254:21371" expanded="false" />
+            <element signature="class#21819:21936" expanded="false" />
             <element signature="docComment;method#initInterfaceInformation#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="class#26216:26366" expanded="false" />
-            <element signature="class#27196:27427" expanded="false" />
-            <element signature="e#28458#28537#0" expanded="false" />
+            <element signature="class#26781:26931" expanded="false" />
+            <element signature="class#27761:27992" expanded="false" />
+            <element signature="e#29023#29102#0" expanded="false" />
             <element signature="docComment;method#initInterfaceEtatServeur#0;class#FXMLDocumentController#0" expanded="false" />
             <element signature="docComment;method#CreateMenu#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="class#31025:31551" expanded="false" />
-            <element signature="class#31684:32658" expanded="false" />
-            <element signature="class#32801:33582" expanded="false" />
-            <element signature="class#33724:34507" expanded="false" />
-            <element signature="class#34615:35031" expanded="false" />
-            <element signature="class#35304:35661" expanded="false" />
-            <element signature="class#35786:36144" expanded="false" />
-            <element signature="class#36369:37150" expanded="false" />
-            <element signature="class#37373:38152" expanded="false" />
-            <element signature="class#38367:39145" expanded="false" />
+            <element signature="class#31590:32116" expanded="false" />
+            <element signature="class#32249:33223" expanded="false" />
+            <element signature="class#33366:34147" expanded="false" />
+            <element signature="class#34289:35072" expanded="false" />
+            <element signature="class#35180:35596" expanded="false" />
+            <element signature="class#35869:36226" expanded="false" />
+            <element signature="class#36351:36709" expanded="false" />
+            <element signature="class#36934:37715" expanded="false" />
+            <element signature="class#37938:38717" expanded="false" />
+            <element signature="class#38932:39710" expanded="false" />
             <element signature="docComment;method#ChangeDirection#0;class#FXMLDocumentController#0" expanded="false" />
             <element signature="docComment;method#AfficherCarte#0;class#FXMLDocumentController#0" expanded="false" />
+            <element signature="method#AfficherCarte#0;class#FXMLDocumentController#0" expanded="true" />
             <element signature="docComment;method#getTempsActuel#0;class#FXMLDocumentController#0" expanded="false" />
           </folding>
         </state>
@@ -1406,22 +1436,34 @@
         <state relative-caret-position="2465">
           <caret line="145" column="0" lean-forward="true" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getData#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getInstance#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getStationNames#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructChartAffichage#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructChartComparaison#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructTableView#0;class#MyModel#0" expanded="true" />
+            <element signature="docComment;class#MyModel#0" expanded="false" />
+            <element signature="docComment;field#stationList#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructMapVilles#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getData#0;class#MyModel#0" expanded="false" />
+            <element signature="e#7335#7432#0" expanded="false" />
+            <element signature="e#12453#12548#0" expanded="false" />
+            <element signature="e#16045#16106#0" expanded="false" />
+            <element signature="e#18254#18348#0" expanded="false" />
+            <element signature="docComment;method#getInstance#0;class#MyModel#0" expanded="false" />
+            <element signature="e#23921#23955#0" expanded="false" />
+            <element signature="docComment;method#getStationNames#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructChartAffichage#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructChartComparaison#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructTableView#0;class#MyModel#0" expanded="false" />
             <element signature="method#getLatestDataForGraphicMap#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getDataForDateByCity#0;class#MyModel#0" expanded="true" />
-            <element signature="method#DisplayAlertToImport#0;class#MyModel#0" expanded="true" />
-            <element signature="method#validateDate#0;class#MyModel#0" expanded="true" />
-            <element signature="method#validateNotFuture#0;class#MyModel#0" expanded="true" />
-            <element signature="method#whichMode#0;class#MyModel#0" expanded="true" />
-            <element signature="method#showEveryThing#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getYearExists#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getMonthsExistsForYear#0;class#MyModel#0" expanded="true" />
+            <element signature="e#32610#32668#0" expanded="false" />
+            <element signature="docComment;method#getDataForDateByCity#0;class#MyModel#0" expanded="false" />
+            <element signature="e#35785#35936#0" expanded="false" />
+            <element signature="e#36350#36402#0" expanded="false" />
+            <element signature="e#38030#38076#0" expanded="false" />
+            <element signature="e#38629#38765#0" expanded="false" />
+            <element signature="e#39293#39342#0" expanded="false" />
+            <element signature="docComment;method#DisplayAlertToImport#0;class#MyModel#0" expanded="false" />
+            <element signature="e#40839#40859#0" expanded="false" />
+            <element signature="docComment;method#validateDate#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#validateNotFuture#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getYearExists#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getMonthsExistsForYear#0;class#MyModel#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1438,7 +1480,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="24" lean-forward="true" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="method#getData#0;class#MyModelTest#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1447,17 +1492,20 @@
         <state relative-caret-position="1173">
           <caret line="196" column="41" lean-forward="true" selection-start-line="196" selection-start-column="41" selection-end-line="196" selection-end-column="41" />
           <folding>
-            <element signature="method#getAndCreateReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#isUpdated#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMissingData#0;class#Jour#0" expanded="true" />
-            <element signature="method#showAll#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMissingReleves#0;class#Jour#0" expanded="true" />
-            <element signature="method#getReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#addReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#getLatestReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#buildMissingReleves#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMinJour#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMaxJour#0;class#Jour#0" expanded="true" />
+            <element signature="e#0#12819#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#Jour#0;class#Jour#0" expanded="false" />
+            <element signature="e#709#710#0" expanded="false" />
+            <element signature="e#748#749#0" expanded="false" />
+            <element signature="e#4466#4467#0" expanded="false" />
+            <element signature="e#4491#4492#0" expanded="false" />
+            <element signature="e#4524#4525#0" expanded="false" />
+            <element signature="e#4552#4553#0" expanded="false" />
+            <element signature="e#5485#5486#0" expanded="false" />
+            <element signature="e#5538#5539#0" expanded="false" />
+            <element signature="e#11906#11907#0" expanded="false" />
+            <element signature="e#11940#11941#0" expanded="false" />
+            <element signature="method#getAllReleves#0;class#Jour#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1467,15 +1515,24 @@
         <state relative-caret-position="578">
           <caret line="135" column="3" lean-forward="true" selection-start-line="135" selection-start-column="3" selection-end-line="142" selection-end-column="5" />
           <folding>
-            <element signature="method#Mois#0;class#Mois#0" expanded="true" />
-            <element signature="method#isUpdated#0;class#Mois#0" expanded="true" />
-            <element signature="method#getMissingData#0;class#Mois#0" expanded="true" />
-            <element signature="method#buildMissingDays#0;class#Mois#0" expanded="true" />
-            <element signature="method#getAllReleves#0;class#Mois#0" expanded="true" />
-            <element signature="method#getAndCreateJour#0;class#Mois#0" expanded="true" />
-            <element signature="method#showAll#0;class#Mois#0" expanded="true" />
-            <element signature="method#getMoyennesParJour#1;class#Mois#0" expanded="true" />
-            <element signature="method#getMaxParMois#0;class#Mois#0" expanded="true" />
+            <element signature="e#0#10550#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#485#486#0" expanded="false" />
+            <element signature="e#517#518#0" expanded="false" />
+            <element signature="e#648#649#0" expanded="false" />
+            <element signature="e#673#674#0" expanded="false" />
+            <element signature="e#748#749#0" expanded="false" />
+            <element signature="e#785#786#0" expanded="false" />
+            <element signature="e#4690#4691#0" expanded="false" />
+            <element signature="e#4732#4733#0" expanded="false" />
+            <element signature="e#4775#4776#0" expanded="false" />
+            <element signature="e#4825#4826#0" expanded="false" />
+            <element signature="e#4873#4874#0" expanded="false" />
+            <element signature="e#4900#4901#0" expanded="false" />
+            <element signature="e#4956#4957#0" expanded="false" />
+            <element signature="e#4983#4984#0" expanded="false" />
+            <element signature="e#5032#5033#0" expanded="false" />
+            <element signature="e#5059#5060#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1751,7 +1808,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="833">
           <caret line="208" column="53" lean-forward="false" selection-start-line="208" selection-start-column="53" selection-end-line="208" selection-end-column="53" />
-          <folding />
+          <folding>
+            <element signature="e#0#7654#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#Annee#0;class#Annee#0" expanded="false" />
+            <element signature="method#getAndCreateMois#0;class#Annee#0" expanded="false" />
+            <element signature="method#isUpdated#0;class#Annee#0" expanded="false" />
+            <element signature="method#getMissingData#0;class#Annee#0" expanded="false" />
+            <element signature="method#showAll#0;class#Annee#0" expanded="false" />
+            <element signature="method#buildMissingMonths#0;class#Annee#0" expanded="false" />
+            <element signature="method#getAllReleves#0;class#Annee#0" expanded="false" />
+            <element signature="method#containsFullMonths#0;class#Annee#0" expanded="false" />
+            <element signature="e#5960#5961#0" expanded="false" />
+            <element signature="e#6001#6002#0" expanded="false" />
+            <element signature="e#6044#6045#0" expanded="false" />
+            <element signature="e#6093#6094#0" expanded="false" />
+            <element signature="e#6133#6134#0" expanded="false" />
+            <element signature="e#6160#6161#0" expanded="false" />
+            <element signature="method#getMoyenneParMois#0;class#Annee#0" expanded="false" />
+            <element signature="method#getMinParMois#0;class#Annee#0" expanded="false" />
+            <element signature="method#getMaxParMois#0;class#Annee#0" expanded="false" />
+            <element signature="e#7622#7623#0" expanded="false" />
+            <element signature="e#7650#7651#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1790,7 +1869,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="22" column="9" lean-forward="false" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="method#getData#0;class#MyModelTest#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1807,42 +1889,20 @@
         <state relative-caret-position="1309">
           <caret line="257" column="59" lean-forward="false" selection-start-line="257" selection-start-column="59" selection-end-line="257" selection-end-column="59" />
           <folding>
-            <element signature="method#getAndCreateReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#isUpdated#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMissingData#0;class#Jour#0" expanded="true" />
-            <element signature="method#showAll#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMissingReleves#0;class#Jour#0" expanded="true" />
-            <element signature="method#getReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#addReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#getLatestReleve#0;class#Jour#0" expanded="true" />
-            <element signature="method#buildMissingReleves#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMinJour#0;class#Jour#0" expanded="true" />
-            <element signature="method#getMaxJour#0;class#Jour#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/MyModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4301">
-          <caret line="1108" column="0" lean-forward="false" selection-start-line="1108" selection-start-column="0" selection-end-line="1108" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getData#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getInstance#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getStationNames#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructChartAffichage#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructChartComparaison#0;class#MyModel#0" expanded="true" />
-            <element signature="method#constructTableView#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getLatestDataForGraphicMap#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getDataForDateByCity#0;class#MyModel#0" expanded="true" />
-            <element signature="method#DisplayAlertToImport#0;class#MyModel#0" expanded="true" />
-            <element signature="method#validateDate#0;class#MyModel#0" expanded="true" />
-            <element signature="method#validateNotFuture#0;class#MyModel#0" expanded="true" />
-            <element signature="method#whichMode#0;class#MyModel#0" expanded="true" />
-            <element signature="method#showEveryThing#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getYearExists#0;class#MyModel#0" expanded="true" />
-            <element signature="method#getMonthsExistsForYear#0;class#MyModel#0" expanded="true" />
+            <element signature="e#0#12819#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#Jour#0;class#Jour#0" expanded="false" />
+            <element signature="e#709#710#0" expanded="false" />
+            <element signature="e#748#749#0" expanded="false" />
+            <element signature="e#4466#4467#0" expanded="false" />
+            <element signature="e#4491#4492#0" expanded="false" />
+            <element signature="e#4524#4525#0" expanded="false" />
+            <element signature="e#4552#4553#0" expanded="false" />
+            <element signature="e#5485#5486#0" expanded="false" />
+            <element signature="e#5538#5539#0" expanded="false" />
+            <element signature="e#11906#11907#0" expanded="false" />
+            <element signature="e#11940#11941#0" expanded="false" />
+            <element signature="method#getAllReleves#0;class#Jour#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1852,58 +1912,107 @@
         <state relative-caret-position="1836">
           <caret line="244" column="26" lean-forward="false" selection-start-line="244" selection-start-column="26" selection-end-line="244" selection-end-column="26" />
           <folding>
-            <element signature="method#Mois#0;class#Mois#0" expanded="true" />
-            <element signature="method#isUpdated#0;class#Mois#0" expanded="true" />
-            <element signature="method#getMissingData#0;class#Mois#0" expanded="true" />
-            <element signature="method#buildMissingDays#0;class#Mois#0" expanded="true" />
-            <element signature="method#getAllReleves#0;class#Mois#0" expanded="true" />
-            <element signature="method#getAndCreateJour#0;class#Mois#0" expanded="true" />
-            <element signature="method#showAll#0;class#Mois#0" expanded="true" />
-            <element signature="method#getMoyennesParJour#1;class#Mois#0" expanded="true" />
-            <element signature="method#getMaxParMois#0;class#Mois#0" expanded="true" />
+            <element signature="e#0#10550#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#485#486#0" expanded="false" />
+            <element signature="e#517#518#0" expanded="false" />
+            <element signature="e#648#649#0" expanded="false" />
+            <element signature="e#673#674#0" expanded="false" />
+            <element signature="e#748#749#0" expanded="false" />
+            <element signature="e#785#786#0" expanded="false" />
+            <element signature="e#4690#4691#0" expanded="false" />
+            <element signature="e#4732#4733#0" expanded="false" />
+            <element signature="e#4775#4776#0" expanded="false" />
+            <element signature="e#4825#4826#0" expanded="false" />
+            <element signature="e#4873#4874#0" expanded="false" />
+            <element signature="e#4900#4901#0" expanded="false" />
+            <element signature="e#4956#4957#0" expanded="false" />
+            <element signature="e#4983#4984#0" expanded="false" />
+            <element signature="e#5032#5033#0" expanded="false" />
+            <element signature="e#5059#5060#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/MyModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="769" column="53" lean-forward="false" selection-start-line="769" selection-start-column="27" selection-end-line="769" selection-end-column="53" />
+          <folding>
+            <element signature="docComment;class#MyModel#0" expanded="false" />
+            <element signature="docComment;field#stationList#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructMapVilles#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getData#0;class#MyModel#0" expanded="false" />
+            <element signature="e#7335#7432#0" expanded="false" />
+            <element signature="e#12453#12548#0" expanded="false" />
+            <element signature="e#16045#16106#0" expanded="false" />
+            <element signature="e#18254#18348#0" expanded="false" />
+            <element signature="docComment;method#getInstance#0;class#MyModel#0" expanded="false" />
+            <element signature="e#23921#23955#0" expanded="false" />
+            <element signature="docComment;method#getStationNames#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructChartAffichage#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructChartComparaison#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#constructTableView#0;class#MyModel#0" expanded="false" />
+            <element signature="method#getLatestDataForGraphicMap#0;class#MyModel#0" expanded="true" />
+            <element signature="e#32610#32668#0" expanded="false" />
+            <element signature="docComment;method#getDataForDateByCity#0;class#MyModel#0" expanded="false" />
+            <element signature="e#35785#35936#0" expanded="false" />
+            <element signature="e#36350#36402#0" expanded="false" />
+            <element signature="e#38030#38076#0" expanded="false" />
+            <element signature="e#38629#38765#0" expanded="false" />
+            <element signature="e#39293#39342#0" expanded="false" />
+            <element signature="docComment;method#DisplayAlertToImport#0;class#MyModel#0" expanded="false" />
+            <element signature="e#40839#40859#0" expanded="false" />
+            <element signature="docComment;method#validateDate#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#validateNotFuture#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getYearExists#0;class#MyModel#0" expanded="false" />
+            <element signature="docComment;method#getMonthsExistsForYear#0;class#MyModel#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/FXMLDocumentController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="177" column="67" lean-forward="false" selection-start-line="177" selection-start-column="67" selection-end-line="177" selection-end-column="67" />
+        <state relative-caret-position="222">
+          <caret line="424" column="11" lean-forward="true" selection-start-line="424" selection-start-column="11" selection-end-line="424" selection-end-column="11" />
           <folding>
             <element signature="docComment;class#FXMLDocumentController#0" expanded="false" />
+            <element signature="method#handleButtonActionComparer#0;class#FXMLDocumentController#0" expanded="true" />
             <element signature="method#handleButtonActionAfficher#0;class#FXMLDocumentController#0" expanded="true" />
-            <element signature="e#12282#12309#0" expanded="false" />
+            <element signature="e#12316#12343#0" expanded="false" />
+            <element signature="method#initialize#0;class#FXMLDocumentController#0" expanded="true" />
             <element signature="docComment;method#InitInterfacePrincipal#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="e#14208#14285#0" expanded="false" />
-            <element signature="e#14948#14975#0" expanded="false" />
+            <element signature="e#15156#15183#0" expanded="false" />
             <element signature="method#RunTimer#0;class#FXMLDocumentController#0" expanded="true" />
-            <element signature="e#15637#15649#0" expanded="false" />
-            <element signature="class#15783:17345" expanded="false" />
-            <element signature="e#16770#16823#0" expanded="false" />
+            <element signature="e#15842#15854#0" expanded="false" />
+            <element signature="method#run#0;class#15988:17854" expanded="true" />
             <element signature="docComment;method#initInterfaceSetting#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="e#18502#18514#0" expanded="false" />
-            <element signature="class#18648:19328" expanded="false" />
-            <element signature="class#20036:20199" expanded="false" />
+            <element signature="method#initInterfaceSetting#0;class#FXMLDocumentController#0" expanded="true" />
+            <element signature="e#18944#19863#0" expanded="true" />
+            <element signature="method#run#0;class#19157:19837" expanded="true" />
+            <element signature="e#19862#19863#0" expanded="true" />
+            <element signature="method#onChanged#0;class#20601:20764" expanded="true" />
             <element signature="docComment;method#InitInterfaceComparaison#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="class#21254:21371" expanded="false" />
+            <element signature="class#21819:21936" expanded="false" />
             <element signature="docComment;method#initInterfaceInformation#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="class#26216:26366" expanded="false" />
-            <element signature="class#27196:27427" expanded="false" />
-            <element signature="e#28458#28537#0" expanded="false" />
+            <element signature="class#26781:26931" expanded="false" />
+            <element signature="class#27761:27992" expanded="false" />
+            <element signature="e#29023#29102#0" expanded="false" />
             <element signature="docComment;method#initInterfaceEtatServeur#0;class#FXMLDocumentController#0" expanded="false" />
             <element signature="docComment;method#CreateMenu#0;class#FXMLDocumentController#0" expanded="false" />
-            <element signature="class#31025:31551" expanded="false" />
-            <element signature="class#31684:32658" expanded="false" />
-            <element signature="class#32801:33582" expanded="false" />
-            <element signature="class#33724:34507" expanded="false" />
-            <element signature="class#34615:35031" expanded="false" />
-            <element signature="class#35304:35661" expanded="false" />
-            <element signature="class#35786:36144" expanded="false" />
-            <element signature="class#36369:37150" expanded="false" />
-            <element signature="class#37373:38152" expanded="false" />
-            <element signature="class#38367:39145" expanded="false" />
+            <element signature="class#31590:32116" expanded="false" />
+            <element signature="class#32249:33223" expanded="false" />
+            <element signature="class#33366:34147" expanded="false" />
+            <element signature="class#34289:35072" expanded="false" />
+            <element signature="class#35180:35596" expanded="false" />
+            <element signature="class#35869:36226" expanded="false" />
+            <element signature="class#36351:36709" expanded="false" />
+            <element signature="class#36934:37715" expanded="false" />
+            <element signature="class#37938:38717" expanded="false" />
+            <element signature="class#38932:39710" expanded="false" />
             <element signature="docComment;method#ChangeDirection#0;class#FXMLDocumentController#0" expanded="false" />
             <element signature="docComment;method#AfficherCarte#0;class#FXMLDocumentController#0" expanded="false" />
+            <element signature="method#AfficherCarte#0;class#FXMLDocumentController#0" expanded="true" />
             <element signature="docComment;method#getTempsActuel#0;class#FXMLDocumentController#0" expanded="false" />
           </folding>
         </state>

@@ -76,9 +76,8 @@ public class FXMLDocumentController implements Controller {
     static boolean onlineMode = true;
     static boolean userSelectOffline = false;
     static ChoiceBox LocationDefault;
-
     private ArrayList<String> stationNames;
-
+    ArrayList<DataBean2> tabVille=null;
     @FXML
     AnchorPane anchorSeting, AnchorVisu, anchorComp;
     AreaChart<Number, Number> AfficheTemp, AfficheNebul, AfficheHum;
@@ -152,7 +151,7 @@ public class FXMLDocumentController implements Controller {
 
 
         StationComparaison.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-        if(StationComparaison.getValue() == null)
+        if (StationComparaison.getValue() == null)
             StationComparaison.setStyle("-fx-background-color: #333333, red , #333333;");
 
         else if (!errors.get("Year").toString().equals("") || !errors2.get("Year").toString().equals("")) {
@@ -187,14 +186,12 @@ public class FXMLDocumentController implements Controller {
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
-
                 /**
                  * CAN BE PUT INSIDE A METHOD
                  */
                 // si l'utilisateur a saisie l'année et le mois et le jour donc on est sur le mode "day"
                 if (MonthComparaison.getText().length() > 0 && DayComparaison.getText().length() > 0) {
                     showMode = "day";
-
                     yearMonth1 = Year1Comparaison.getText() + MonthComparaison.getText();
                     yearMonth2 = Year2Comparaison.getText() + MonthComparaison.getText();
                     yearMonthDay1 = yearMonth1 + DayComparaison.getText();
@@ -208,10 +205,8 @@ public class FXMLDocumentController implements Controller {
                 else {
                     showMode = "year";
                 }
-
                 loading.setVisible(true);
                 model.constructChartComparaison(StationComparaison.getValue().toString(),
-
                         Year1Comparaison.getText(),
                         MonthComparaison.getText(),
                         DayComparaison.getText(),
@@ -222,8 +217,6 @@ public class FXMLDocumentController implements Controller {
                         lineCharthum,
                         lineChartnebul,
                         MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
-
-
             } else {
                 //not logicaly valid date!
             }
@@ -302,7 +295,7 @@ public class FXMLDocumentController implements Controller {
          */
 
         Station.setStyle("-fx-background-color: #333333, #D9E577 , #333333;");
-        if(Station.getValue() == null)
+        if (Station.getValue() == null)
             Station.setStyle("-fx-background-color: #333333, red , #333333;");
 
         else if (!errors.get("Year").toString().equals("")) {
@@ -415,8 +408,12 @@ public class FXMLDocumentController implements Controller {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         String[] laDate = (dateFormat.format(date)).split("/");
-
-        AfficherCarte();
+        try {
+            tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+      //  AfficherCarte();
 //        if (onlineMode) {
 //            try {
 //                model.downloadAndUncompress(laDate[0] + laDate[1]);
@@ -429,7 +426,7 @@ public class FXMLDocumentController implements Controller {
         /*
         Dans le timer on telecharger si possible a chaque 3 heurs
          */
-        // RunTimer();
+        RunTimer();
     }
 
     private void RunTimer() {
@@ -455,23 +452,29 @@ public class FXMLDocumentController implements Controller {
                          */
                         //verifier continuellement si il y a une connexion internet
                         if (date.getHours() % 3 == 1 && date.getMinutes() == 0 && date.getSeconds() == 0) {
-
-                            if (onlineMode) {
-
-                                //   try {
-                                System.out.println("telechargement des dernieres données");
-                                //model.downloadAndUncompress(laDate[0] + laDate[1]);
-//
-//                                } catch (IOException ex) {
-//                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//                                }
-
-                            } else {
-                                System.out.println("no connection ! users must import by her self data if he want !");
+                            try {
+                                tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+
+//                            if (onlineMode) {
+//
+//                                //   try {
+//                                System.out.println("telechargement des dernieres données");
+//                                //model.downloadAndUncompress(laDate[0] + laDate[1]);
+////
+////                                } catch (IOException ex) {
+////                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+////                                }
+//
+//
+//                            } else {
+//                                System.out.println("no connection ! users must import by her self data if he want !");
+//                            }
                         }
 
-//                        AfficherCarte();
+                            AfficherCarte();
 
                     }
                 });
@@ -536,11 +539,12 @@ public class FXMLDocumentController implements Controller {
         LocationDefault.setStyle(
                 "-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
         List L = new ArrayList();
-//        dataList = model.getLatestAvailableData();
+        //dataList = model.getLatestAvailableData()
+        stationNames = (ArrayList<String>) model.getStationNames();
         for (int i = 0;
-             i < dataList.size();
+             i < stationNames.size();
              i++) {
-            L.add(i, dataList.get(i).getCity().getNom());
+            L.add(i, stationNames.get(i));
         }
         ObservableList<String> observableList = FXCollections.observableList(L);
 
@@ -1104,7 +1108,7 @@ public class FXMLDocumentController implements Controller {
         int t;
         /*Constrution de la table des villes avec leurs données*/
 
-        ArrayList<DataBean2> tabVille = null;
+
         String X = "°C";
         StackPane stack = new StackPane();
         Text nomVille = new Text();
@@ -1113,11 +1117,7 @@ public class FXMLDocumentController implements Controller {
         /*C is a choiceBox who contain the name of all station*/
         nomVillle = (LocationDefault != null) ? LocationDefault.getValue().toString() : "BREST-GUIPAVAS";
 //      tabVille = model.getLatestAvailableData();
-        try {
-            tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        /**HERE**/
         /*Affichage sur l'interface principal le nom de la ville selectionnée par défaut et la derniere date connu
         avec les temératures,humidité et nébulosité adéquat +image representatif de la nébulosité*/
         nomVille.setText(nomVillle);
@@ -1257,5 +1257,4 @@ public class FXMLDocumentController implements Controller {
         }
         return 0;//par defaut c'est la moyenne
     }
-
 }
