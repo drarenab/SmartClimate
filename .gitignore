@@ -1,10 +1,14 @@
 nbproject/**
 src/junit/**
 mylibs/**
-/build/
+build/**
 /dist/
 *.csv.gz
 *.csv
 donnees/**
+<<<<<<< HEAD
+test/**l
+=======
 test/**
 
+>>>>>>> 98d7682377e66f44011b9f0b8c3f877b069c100c

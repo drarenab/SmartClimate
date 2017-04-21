@@ -5,15 +5,11 @@
  */
 package smart;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import coordonnee.DataBean2;
-import coordonnee.aDate;
 import utilitaire.Utilitaire;
 
 /**
@@ -137,11 +133,11 @@ public class Mois {
         }
     }
 
-    public List<DataBean2> getAllReleves(int idStation, int annee) {
+    public List<DataBean2> getAllReleves(String stationName,int idStation, int annee,int x,int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Jour jour : joursList.values()) {
-            tempList.addAll(jour.getAllReleves(idStation,annee,id));
+            tempList.addAll(jour.getAllReleves(stationName,idStation,annee,id,x,y));
         }
         return tempList;
     }
@@ -227,24 +223,24 @@ public class Mois {
      * @return Hashmap comme clé l'id du jour et comme valeur le relevé
      * representant la moyenne du jour
      */
-    public ArrayList<DataBean2> getMoyennesParJour(int idStation,String idAnnee) {
+    public ArrayList<DataBean2> getMoyennesParJour(String nomStation,int idStation,String idAnnee,int x,int y) {
         ArrayList<DataBean2> moyenneParMois = new ArrayList<>();
         for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
             Integer key = entry.getKey();
             Jour value = entry.getValue();
 
-            moyenneParMois.add(value.getMoyenneJour(idStation,idAnnee,Integer.toString(id)));
+            moyenneParMois.add(value.getMoyenneJour(nomStation,idStation,idAnnee,Integer.toString(id),x,y));
         }
         return moyenneParMois;
     }
 
-    public ArrayList<DataBean2> getMinParMois(int idStation,String idAnnee) {
+    public ArrayList<DataBean2> getMinParMois(String nomStation,int idStation,String idAnnee,int x,int y) {
         ArrayList<DataBean2> minParMois = new ArrayList<>();
         for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
             Integer key = entry.getKey();
             Jour value = entry.getValue();
 
-            minParMois.add(value.getMinJour(idStation,idAnnee,Integer.toString(id)));
+            minParMois.add(value.getMinJour(nomStation,idStation,idAnnee,Integer.toString(id),x,y));
         }
         return minParMois;
     }
@@ -277,13 +273,13 @@ public class Mois {
 //
 //        return new Releve(10, temperature, humidite, nebulosite);
 //    }
-    public ArrayList<DataBean2> getMaxParMois(int idStation,String idAnnee) {
+    public ArrayList<DataBean2> getMaxParMois(String nomStation,int idStation,String idAnnee,int x,int y) {
         ArrayList<DataBean2> maxParMois = new ArrayList<>();
         for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
             Integer key = entry.getKey();
             Jour value = entry.getValue();
 
-            maxParMois.add(value.getMaxJour(idStation,idAnnee,Integer.toString(id)));
+            maxParMois.add(value.getMaxJour(nomStation,idStation,idAnnee,Integer.toString(id),x,y));
         }
         return maxParMois;
     }

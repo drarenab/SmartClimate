@@ -10,12 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import coordonnee.DataBean2;
-import coordonnee.DataCity;
-import coordonnee.aDate;
 import utilitaire.Utilitaire;
-
-import javax.rmi.CORBA.Util;
 
 /**
  * @author SEIF
@@ -163,10 +158,15 @@ public class Jour {
             latestReleve = currentDate[0] / 3;
         }
 
+        if (!today)
+            latestReleve = 7;
+        else
+            latestReleve = currentDate[0] / 3;
+
         for (int i = 0; i <= latestReleve; i++) {
-            if (!releveExists(i)) {
+            if (!releveExists(i))
                 missingList.put(i, new Releve(i, -1, -1, -1));
-            }
+
         }
 
         return missingList;
@@ -185,6 +185,46 @@ public class Jour {
     public boolean addReleve(int ordre, float temperature, float humidite, float nebulosite) {
         return relevesList.put(ordre, new Releve(ordre, temperature, humidite, nebulosite)) != null;
     }
+
+    public DataBean2 getLatestReleve(String nomStation, int idStation, int annnee, int mois, int x, int y) {
+        Releve releveTemp = relevesList.get(0);
+        for(Releve releve : relevesList.values()) {
+            releveTemp = releve;
+        }
+        System.out.println("nomStation:"+nomStation +" id:"+idStation+" empty?:"+relevesList.isEmpty());
+        float temperature,humidite,nebulosite;
+        String ordre;
+        if(relevesList.isEmpty()) {
+            temperature = 1000;
+            humidite = 1000;
+            nebulosite = 1000;
+            ordre = "X";
+        }
+        else {
+            temperature = releveTemp.getTemperature() ;
+            humidite = releveTemp.getHumidite();
+            nebulosite = releveTemp.getNebulosite();
+            ordre = String.valueOf(releveTemp.getOrdre());
+        }
+
+        DataBean2 dataBean2 = new DataBean2(
+                nomStation
+                , idStation
+                , temperature
+                , humidite
+                , nebulosite
+                , new aDate(String.valueOf(annnee)
+                                , String.valueOf(mois)
+                                , String.valueOf(id)
+                                , String.valueOf(ordre)
+                )
+                ,x
+                ,y
+                );
+
+        return dataBean2;
+    }
+
 
     public void buildMissingReleves(int year, int month) {
         boolean isCurrentDay = Utilitaire.isCurrentDate(year, month, id, 0);
@@ -208,7 +248,7 @@ public class Jour {
      * @param idMois
      * @return un releve representant la moyenne des données d'un jour
      */
-    public DataBean2 getMoyenneJour(int idStation, String idAnnee, String idMois) {//gerer le cas de note manquante  //probleme faire null au lieu de 101
+    public DataBean2 getMoyenneJour(String nomStation,int idStation, String idAnnee, String idMois,int x,int y) {//gerer le cas de note manquante  //probleme faire null au lieu de 101
         float temperature = 0;
         float humidite = 0;
         float nebulosite = 0;
@@ -232,8 +272,8 @@ public class Jour {
         humidite /= relevesList.size();
         nebulosite /= relevesList.size();
 
-        return new DataBean2(idStation, (temp) ? temperature : 101, (hum) ? humidite : 101, (neb) ? nebulosite : 101,
-                new aDate(idAnnee, idMois, Integer.toString(id), Integer.toString(4)));
+        return new DataBean2(nomStation,idStation, (temp) ? temperature : 101, (hum) ? humidite : 101, (neb) ? nebulosite : 101,
+                new aDate(idAnnee, idMois, Integer.toString(id), Integer.toString(4)),x,y);
 
 //        return new Releve(10, (temp) ? temperature : 101, (hum) ? humidite : 101, (neb) ? nebulosite : 101);
     }
@@ -243,7 +283,7 @@ public class Jour {
      * @return Les valeurs min de l'humidité la température et la nébulosité
      * d'un jour Si aucune valeur dispo retourne un relevé avec 101 partout
      */
-    public DataBean2 getMinJour(int idStation, String idAnnee, String idMois) {//gerer le cas de note manquante
+    public DataBean2 getMinJour(String nomStation,int idStation, String idAnnee, String idMois,int x,int y) {//gerer le cas de note manquante
         float temperature = 101;
         float humidite = 101;
         float nebulosite = 101;
@@ -261,8 +301,9 @@ public class Jour {
             }
 
         }
-        return new DataBean2(idStation, temperature, humidite, nebulosite,
-                new aDate(idAnnee, idMois, Integer.toString(id), Integer.toString(4)));
+        return new DataBean2(nomStation,idStation, temperature, humidite, nebulosite,
+                new aDate(idAnnee, idMois, Integer.toString(id), Integer.toString(4)
+                ),x,y);
 
     }
 
@@ -272,7 +313,7 @@ public class Jour {
      * d'un jour Si aucune valeur dispo retourne un relevé avec 101 la ou il
      * n'ya pas de données
      */
-    public DataBean2 getMaxJour(int idStation, String idAnnee, String idMois) {//gerer le cas de note manquante
+    public DataBean2 getMaxJour(String nomStation,int idStation, String idAnnee, String idMois,int x,int y) {//gerer le cas de note manquante
         float temperature = -1;
         float humidite = -1;
         float nebulosite = -1;
@@ -290,10 +331,18 @@ public class Jour {
             }
 
         }
-        return new DataBean2(idStation, (temperature != -1) ? temperature : 101,
-                (humidite != -1) ? humidite : 101,
-                (nebulosite != -1) ? nebulosite : 101,
-                new aDate(idAnnee, idMois, Integer.toString(id), Integer.toString(4)));
+        return new DataBean2(nomStation
+                ,idStation
+                ,(temperature != -1) ? temperature : 101
+                ,(humidite != -1) ? humidite : 101
+                ,(nebulosite != -1) ? nebulosite : 101
+                ,new aDate(idAnnee
+                        , idMois
+                        , Integer.toString(id)
+                        , Integer.toString(4))
+                ,x
+                ,y
+        );
 
 //        return new Releve(10, (temperature != -1) ? temperature : 101,
 //                (humidite != -1) ? humidite : 101,
@@ -304,11 +353,12 @@ public class Jour {
         return relevesList;
     }
 
-    public List<DataBean2> getAllReleves(int idStation, int annee, int mois) {
+    public List<DataBean2> getAllReleves(String nomStation, int idStation, int annee, int mois, int x, int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Releve releve : relevesList.values()) {
             DataBean2 dataBean = new DataBean2(
+                    nomStation,
                     idStation,
                     releve.getTemperature(),
                     releve.getHumidite(),
@@ -318,7 +368,9 @@ public class Jour {
                             String.valueOf(mois),
                             String.valueOf(id),
                             String.valueOf(releve.getOrdre())
-                    )
+                    ),
+                    x,
+                    y
             );
 
             tempList.add(dataBean);

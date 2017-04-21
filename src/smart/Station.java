@@ -5,8 +5,6 @@
  */
 package smart;
 
-import coordonnee.Point;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +56,10 @@ public class Station {
     
     public String getPoint() {
         return point.getX() +"x"+point.getY();
+    }
+
+    public Point getPointObj() {
+        return this.point;
     }
     
     public String getNom() {

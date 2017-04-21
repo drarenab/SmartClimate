@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import coordonnee.DataBean2;
 import utilitaire.Utilitaire;
 
 /**
@@ -138,11 +137,11 @@ public class Annee {
         }
     }
 
-    public List<DataBean2> getAllReleves(int idStation) {
+    public List<DataBean2> getAllReleves(String stationName,int idStation,int x,int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Mois mois : moisList.values()) {
-            tempList.addAll(mois.getAllReleves(idStation,id));
+            tempList.addAll(mois.getAllReleves(stationName,idStation,id,x,y));
         }
         return tempList;
     }
@@ -197,32 +196,32 @@ public class Annee {
         return null;
     }
 
-    public List<DataBean2> getMoyenneParMois(int idStation) {
+    public List<DataBean2> getMoyenneParMois(String nomStation,int idStation,int x,int y) {
         ArrayList<DataBean2> moyenneParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            moyenneParAnnee.addAll(value.getMoyennesParJour(idStation, Integer.toString(id)));
+            moyenneParAnnee.addAll(value.getMoyennesParJour(nomStation,idStation, Integer.toString(id),x,y));
 
         }
         return moyenneParAnnee;
     }
-     public List<DataBean2> getMinParMois(int idStation) {
+     public List<DataBean2> getMinParMois(String nomStation,int idStation,int x,int y) {
         ArrayList<DataBean2> minParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            minParAnnee.addAll(value.getMinParMois(idStation, Integer.toString(id)));
+            minParAnnee.addAll(value.getMinParMois(nomStation,idStation, Integer.toString(id),x,y));
 
         }
         return minParAnnee;
     }
-      public List<DataBean2> getMaxParMois(int idStation) {
+      public List<DataBean2> getMaxParMois(String nomStation,int idStation,int x,int y) {
         ArrayList<DataBean2> maxParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            maxParAnnee.addAll(value.getMaxParMois(idStation, Integer.toString(id)));
+            maxParAnnee.addAll(value.getMaxParMois(nomStation,idStation, Integer.toString(id),x,y));
 
         }
         return maxParAnnee;

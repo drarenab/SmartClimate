@@ -12,11 +12,10 @@ package utilitaire;
  * only a month , or a whole year !
  *
  */
-import meteo.*;
-import coordonnee.Point;
-import coordonnee.Ville;
-import coordonnee.DataCity;
-import coordonnee.aDate;
+import main.*;
+import smart.Point;
+import smart.Ville;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,24 +35,13 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ProgressBar;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+
 import org.apache.commons.io.FileUtils;
 import main.*;
         
@@ -132,7 +120,7 @@ public class Utilitaire {
         boolean result = false;
         // if the directory does not exist, create it
         if (!theDir.exists()) {
-            //System.out.println("creating directory: " + directory);
+            ////System.out.println("creating directory: " + directory);
             try {
                 theDir.mkdir();
                 result = true;
@@ -140,7 +128,7 @@ public class Utilitaire {
                 //handle it
             }
             if (result) {
-                //System.out.println("DIR created");
+                ////System.out.println("DIR created");
             }
         }
         return result;
@@ -198,12 +186,12 @@ public class Utilitaire {
         }
 
         for (File file : file1.listFiles()) {
-            // //System.out.println("name:" + file.getName());
+            // ////System.out.println("name:" + file.getName());
             if (Integer.parseInt(file.getName().substring(0, 6)) > maxFileName) {
                 maxFileName = Integer.parseInt(file.getName().substring(0, 6));
             }
         }
-        //System.out.println("pathDate:" + maxFileName);
+        ////System.out.println("pathDate:" + maxFileName);
         if (maxFileName == 0) {
             return null;
         } else {
@@ -253,7 +241,7 @@ public class Utilitaire {
 
             //Creation d'un obj url qui pointe vers l'url qui se trouve dans la classe Configuration
             newUrl = Configuration.DATA_GZIP_URL.replace("#", date);
-            //System.out.println("url:" + newUrl);
+            ////System.out.println("url:" + newUrl);
             url = new URL(newUrl);
 
             //le chemin de fichier ou on va telecharger les donnés
@@ -292,7 +280,7 @@ public class Utilitaire {
         //on garde le meme nom pour le fichier decompresser sauf .gz
         String outputFile = inputFile.substring(0, inputFile.length() - 3);
 
-        //System.out.println("output file : " + outputFile);
+        ////System.out.println("output file : " + outputFile);
         try {
             //initialiser notre flux d'entrer par le fichier gzip déja telecharger
             FileInputStream fileIn = new FileInputStream(inputFile);
@@ -309,9 +297,9 @@ public class Utilitaire {
             gZIPInputStream.close();
             fileOutputStream.close();
             File temp = new File(inputFile);
-            //System.out.println("Le fichier a été decompressé correctement ! ");
+            ////System.out.println("Le fichier a été decompressé correctement ! ");
             if (temp.delete()) {
-                //System.out.println("le fichier '" + inputFile + "' a été supprimer");
+                ////System.out.println("le fichier '" + inputFile + "' a été supprimer");
                 return true;
             }
 
@@ -451,6 +439,30 @@ System.out.println("copiiiiiiiiiiiiiii");
 
         return lastDay.getDayOfMonth();
     }
+
+
+    /**
+     * Cette Methode retourne la date exacte des donnée les plus recents
+     * yyyymmjjhh
+     */
+    public static double netIsAvailable() {
+        try {
+            final URL url = new URL("http://donneespubliques.meteofrance.fr");
+            long startTime = System.nanoTime();
+            final URLConnection conn = url.openConnection();
+            conn.setConnectTimeout(1000);
+            conn.connect();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1000000;  //divide by 1000000 to get milliseconds.
+
+            return duration;
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            return -1;
+        }
+    }
+
     
     /**
      * This method tells if the date given on parameters corresponds to the CURRENT DATE ( TODAY)
@@ -479,7 +491,7 @@ System.out.println("copiiiiiiiiiiiiiii");
         currentYear = currentDate[3];
         
         
-        System.out.println("isCurrentDate: given year="+year+" current="+currentYear);
+        //System.out.println("isCurrentDate: given year="+year+" current="+currentYear);
         if(mode==0)
             return currentYear == year
                     &&currentMonth == month
@@ -492,5 +504,18 @@ System.out.println("copiiiiiiiiiiiiiii");
         else
             return false;
 }
+
+
+    public static int whichMode(String year, String month, String day) {
+        if (year.length() > 0 && month.length() > 0 && day.length() > 0)
+            return 0;
+        else if (year.length() > 0 && month.length() > 0)
+            return 1;
+        else if (year.length() > 0)
+            return 2;
+
+        else return -1; // invalid date !
+    }
+
 }
 
