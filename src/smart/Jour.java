@@ -220,11 +220,11 @@ public class Jour {
                 temp = true;
             }
             if (entry.getValue().getHumidite() != 101) {
-                humidite += entry.getValue().getTemperature();
+                humidite += entry.getValue().getHumidite();
                 hum = true;
             }
             if (entry.getValue().getNebulosite() != 101) {
-                nebulosite += entry.getValue().getTemperature();
+                nebulosite += entry.getValue().getNebulosite();
                 neb = true;
             }
         }

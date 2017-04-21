@@ -406,7 +406,12 @@ System.out.println("copiiiiiiiiiiiiiii");
                 Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return (file.delete());
+        Boolean fileIsDeleted =file.delete();
+        File DirectoryIsEmpty=new File(getYearFilePathFromDate(date.substring(0,4)));
+        if(DirectoryIsEmpty.isDirectory() && DirectoryIsEmpty.listFiles().length==0){
+            DirectoryIsEmpty.delete();
+        }
+        return (fileIsDeleted);
     }
     
     /**

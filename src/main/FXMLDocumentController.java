@@ -286,6 +286,8 @@ public class FXMLDocumentController implements Controller {
         /*
         test si la année n'est pas vide (champs obligatoire)
          */
+        
+        
         if (!errors.get("Year").toString().equals("")) {
             year.setStyle("-fx-background-color: #333333, red , #333333;");
             year.setPromptText(errors.get("Year").toString());
@@ -310,7 +312,8 @@ public class FXMLDocumentController implements Controller {
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-                
+                        System.out.println("station"+Station.getValue().equals(null));
+
                 model.Affichage(Station.getValue().toString(),
                          year.getText(),
                          month.getText(),
@@ -681,6 +684,9 @@ public class FXMLDocumentController implements Controller {
      */
     public void initInterfaceInformation() {
 
+                ArrayList<String> listYear = model.getYearExists();
+
+        
         HBox hboxDataDispo = new HBox();
         Text textDataDispo = new Text("Data Dispo");
         ImageView deleteimg = new ImageView(
@@ -693,17 +699,20 @@ public class FXMLDocumentController implements Controller {
 
             public void handle(ActionEvent e) {
                 System.out.println("Accepted");
+                for (int i = 0; i < listYear.size(); i++) {
+                   Utilitaire.deleteCSVFile(listYear.get(i));
+                   initInterfaceInformation();
+                }
             }
         });
 
         hboxDataDispo.getChildren().addAll(textDataDispo, buttonDeleteAll);
         final TreeItem<HBox> dispoData = new TreeItem<>(hboxDataDispo);
         dispoData.setExpanded(true);
-        ArrayList<String> listYear = model.getYearExists();
         for (int i = 0; i < listYear.size(); i++) {
             String s = listYear.get(i);
             HBox hboxYear = new HBox();
-            Text textYear = new Text(listYear.get(i));
+            Text textYear = new Text(s);
             Button buttonDelete = new Button();
             ImageView deleteimg1 = new ImageView(
                     new Image(getClass().getResourceAsStream("Image/delete.png"),
@@ -714,10 +723,10 @@ public class FXMLDocumentController implements Controller {
             buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
 
                 public void handle(ActionEvent e) {
-                    System.out.println("supprimer le mois " + s);
+                    System.out.println("supprimer l'année " + s);
 
                     Utilitaire.deleteCSVFile(s);
-
+                    initInterfaceInformation();
                 }
             });
 
@@ -728,6 +737,10 @@ public class FXMLDocumentController implements Controller {
 
             for (int j = 0; j < listMonth.size(); j++) {
                 HBox hboxMonth = new HBox();
+                
+                String str=listMonth.get(j).substring(5,11);
+                System.out.println(listMonth.get(j));
+                System.out.println(str);
                 Text textMonth = new Text(listMonth.get(j).substring(9, 11));
                 Button buttonDeleteMonth = new Button();
                 ImageView deleteimg2 = new ImageView(
@@ -735,6 +748,15 @@ public class FXMLDocumentController implements Controller {
                                 20, 20, true, false));
                 buttonDeleteMonth.setGraphic(deleteimg2);
                 buttonDeleteMonth.setStyle("-fx-background-color:transparent;");
+                buttonDeleteMonth.setOnAction(new EventHandler<ActionEvent>() {
+
+                public void handle(ActionEvent e) {
+                    System.out.println("supprimer le mois " + str);
+
+                    Utilitaire.deleteCSVFile(str);
+                    initInterfaceInformation();
+                }
+            });
                 hboxMonth.getChildren().addAll(textMonth, buttonDeleteMonth);
                 oneYear.getChildren().add(j, new TreeItem(hboxMonth));
             }
@@ -742,42 +764,6 @@ public class FXMLDocumentController implements Controller {
             dispoData.getChildren().add(i, oneYear);
 
         }
-
-//        final TreeItem<String> dispoData = new TreeItem<>("Data Disponible");
-//        dispoData.setExpanded(true);
-//        ArrayList<String> listYear = model.getYearExists();
-//        for (int i = 0; i < listYear.size(); i++) {
-//
-//            final TreeItem<String> oneYear = new TreeItem<>(listYear.get(i));
-//
-//            ArrayList<String> listMonth = model.getMonthsExistsForYear(listYear.get(i));
-//
-//            for (int j = 0; j < listMonth.size(); j++) {
-//                oneYear.getChildren().add(j, new TreeItem(listMonth.get(j).substring(9, 11)));
-//            }
-//
-//            dispoData.getChildren().add(i, oneYear);
-//
-//        }
-//        ContextMenu menucontext
-//                    = ContextMenuBuilder.create()
-//                            .items(
-//                                    MenuItemBuilder.create()
-//                                            .text("Supprimer")
-//                                            .onAction(new EventHandler<ActionEvent>() {
-//                                                
-//                                                public void handle(ActionEvent arg0) {
-//                                                    System.out.println("Menu Item Clicked!");
-//
-//
-//                                                }
-//                                            }
-//
-//                                            )
-//                                            .build()
-//                            )
-//                            .build();
-//
         treeView.setRoot(dispoData);
 //        treeView.setContextMenu(menucontext);
     }
