@@ -1125,7 +1125,6 @@ public class MyModel {
 
 
     public void Affichage(String station,
-<<<<<<< HEAD
                           String year,
                           String month,
                           String day,
@@ -1137,19 +1136,6 @@ public class MyModel {
                           boolean offlineMode,
                           String kelvin_celcius
     ) throws IOException {
-=======
-            String year,
-            String month,
-            String day,
-            AreaChart<Number, Number> AfficheTemp,
-            AreaChart<Number, Number> AfficheHum,
-            AreaChart<Number, Number> AfficheNebul,
-            TableView<DataBean> tableView,
-            int MinOrMaxOrMoy,
-            ImageView loading) throws IOException {
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
-
-        loading.setVisible(false);
         constructChartAffichage(station,
                 year,
                 month,
@@ -1169,7 +1155,6 @@ public class MyModel {
                 day,
                 tableView,
                 MinOrMaxOrMoy,
-<<<<<<< HEAD
                 false,
                 offlineMode,
                 kelvin_celcius
@@ -1235,11 +1220,6 @@ public class MyModel {
                 if (Integer.parseInt(dateLine) > latestDate) {
                     latestDate = Integer.parseInt(dateLine);
                 }
-=======
-                false);
-//        loading.setVisible(false);
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
-
                 line = br.readLine();
             }
 

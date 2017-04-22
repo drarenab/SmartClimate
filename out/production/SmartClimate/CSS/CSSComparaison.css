@@ -50,12 +50,12 @@
 
 .menu-item {
     /*-fx-background-color: transparent;*/
-    -fx-background-color:#333333;
+    -fx-background-color: linear-gradient(to top, #87AAAE 100%, #87AAAE 80%); ;
     -fx-padding: 0.333333em 0.41777em 0.333333em 0.41777em;  /* 4 5 4 5 */
 }
 .menu-item > .left-container {
     -fx-padding: 0.458em 0.791em 0.458em 0.458em;
-    -fx-background-color: #333333;
+     -fx-background-color: linear-gradient(to top, #87AAAE 100%, #87AAAE 80%); ;
 
 
 }
@@ -69,7 +69,7 @@
 }
 .menu-item:focused {
     -fx-background: -fx-selection-bar;
-    -fx-background-color: #333333;/*-fx-background;*/
+   -fx-background-color: linear-gradient(to top, #87AAAE 100%, #87AAAE 80%); ;/*-fx-background;*/
     -fx-text-fill:  -fx-text-background-color;
 }
 .menu-item:focused > .label {
@@ -78,7 +78,7 @@
 
 .menu-item > .right-container {
     -fx-padding: 0em 0em 0em 0.5em;
-    -fx-background-color: #333333;
+    -fx-background-color: linear-gradient(to top, #87AAAE 100%, #87AAAE 80%); 
 
 
 }

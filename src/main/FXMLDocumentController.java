@@ -16,10 +16,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import abstraction.Controller;
-import com.jfoenix.controls.JFXProgressBar;
-import com.jfoenix.controls.JFXScrollPane;
 import coordonnee.DataCity;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -200,10 +196,6 @@ public class FXMLDocumentController implements Controller {
                 else {
                     showMode = "year";
                 }
-<<<<<<< HEAD
-=======
-                loading.setVisible(false);
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
                 model.constructChartComparaison(StationComparaison.getValue().toString(),
                         Year1Comparaison.getText(),
                         MonthComparaison.getText(),
@@ -273,11 +265,6 @@ public class FXMLDocumentController implements Controller {
 
     @FXML
     private void handleButtonActionAfficher() throws IOException {
-<<<<<<< HEAD
-=======
-        //System.out.println("hooooooooooooooooooooooooooooooooooooooooooooolaaaaaaaaaaaaaaa:");
-
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
         /*
         Test si le formulaire est bien rempli
          */
@@ -338,14 +325,10 @@ public class FXMLDocumentController implements Controller {
                         AfficheNebul,
                         tableView,
                         MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio),
-<<<<<<< HEAD
                         userSelectOffline,
                         kelvin_celcius
                 );
 
-=======
-                        loading);
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
 
 //                TableView
 //                 */
@@ -422,12 +405,9 @@ public class FXMLDocumentController implements Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
-<<<<<<< HEAD
         System.out.println("tabVille size :"+tabVille+" last:"+tabVille.get(tabVille.size()-1));
       //  AfficherCarte();
-=======
-        //  AfficherCarte();
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
+
 //        if (onlineMode) {
 //            try {
 //                model.downloadAndUncompress(laDate[0] + laDate[1]);
@@ -1125,13 +1105,10 @@ public class FXMLDocumentController implements Controller {
         nomVille.setText(nomVillle);
         Text DateActuelle = new Text();
         DateActuelle.setFill(Color.CHOCOLATE);
-<<<<<<< HEAD
-        System.out.println("xxx:"+tabVille.get(0).getDate().getTime());
-=======
         System.out.println(tabVille.get(0).getNomStation());
         System.out.println(tabVille.get(0).getDate().getTime());
         System.out.println(tabVille.get(0).getDate().getDay());
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
+
         String date = tabVille.get(0).getDate().getDay() + "/"
                 + tabVille.get(0).getDate().getMonth() + "/"
 
@@ -1145,11 +1122,8 @@ public class FXMLDocumentController implements Controller {
         Humidite.setFill(Color.CHOCOLATE);
         Text nebulosite = new Text("nébulosité: ");
         nebulosite.setFill(Color.CHOCOLATE);
-
-<<<<<<< HEAD
         float temperatureTemp;
-=======
->>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
+
         for (int i = 0; i < tabVille.size(); i++) {
 
             if (tabVille.get(i).getNomStation().equals(nomVillle)) {
