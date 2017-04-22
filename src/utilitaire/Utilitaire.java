@@ -328,7 +328,12 @@ public class Utilitaire {
         wellDone = createDirectory(directory);
         System.out.println("wellDone"+wellDone);
 //        if (wellDone) {
-            Path to = Paths.get(directory + "/" + str[str.length - 1]);
+                                                                                System.out.println(recupp.getPath());
+                                                                                System.out.println(str[str.length - 1]);
+                                                                                System.out.println(directory);
+                                                                                System.out.println(dates[1]);        String nameChemin = str[str.length - 1].substring(str[str.length - 1].indexOf("synop"));
+            Path to = Paths.get(directory + "/" +nameChemin
+            );
             CopyOption[] options = new CopyOption[]{
                 StandardCopyOption.REPLACE_EXISTING,
                 StandardCopyOption.COPY_ATTRIBUTES

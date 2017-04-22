@@ -137,11 +137,11 @@ public class Annee {
         }
     }
 
-    public List<DataBean2> getAllReleves(String stationName,int idStation,int x,int y) {
+    public List<DataBean2> getAllReleves(String kelvin_celcius,String stationName,int idStation,int x,int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Mois mois : moisList.values()) {
-            tempList.addAll(mois.getAllReleves(stationName,idStation,id,x,y));
+            tempList.addAll(mois.getAllReleves(kelvin_celcius,stationName,idStation,id,x,y));
         }
         return tempList;
     }
@@ -196,32 +196,32 @@ public class Annee {
         return null;
     }
 
-    public List<DataBean2> getMoyenneParMois(String nomStation,int idStation,int x,int y) {
+    public List<DataBean2> getMoyenneParMois(String kelvin_celcius,String nomStation,int idStation,int x,int y) {
         ArrayList<DataBean2> moyenneParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            moyenneParAnnee.addAll(value.getMoyennesParJour(nomStation,idStation, Integer.toString(id),x,y));
+            moyenneParAnnee.addAll(value.getMoyennesParJour(kelvin_celcius,nomStation,idStation, Integer.toString(id),x,y));
 
         }
         return moyenneParAnnee;
     }
-     public List<DataBean2> getMinParMois(String nomStation,int idStation,int x,int y) {
+     public List<DataBean2> getMinParMois(String kelvin_celcius,String nomStation,int idStation,int x,int y) {
         ArrayList<DataBean2> minParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            minParAnnee.addAll(value.getMinParMois(nomStation,idStation, Integer.toString(id),x,y));
+            minParAnnee.addAll(value.getMinParMois(kelvin_celcius,nomStation,idStation, Integer.toString(id),x,y));
 
         }
         return minParAnnee;
     }
-      public List<DataBean2> getMaxParMois(String nomStation,int idStation,int x,int y) {
+      public List<DataBean2> getMaxParMois(String kelvin_celcius,String nomStation,int idStation,int x,int y) {
         ArrayList<DataBean2> maxParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            maxParAnnee.addAll(value.getMaxParMois(nomStation,idStation, Integer.toString(id),x,y));
+            maxParAnnee.addAll(value.getMaxParMois(kelvin_celcius,nomStation,idStation, Integer.toString(id),x,y));
 
         }
         return maxParAnnee;

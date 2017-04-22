@@ -10,7 +10,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -64,7 +63,6 @@
                                                 <RadioButton fx:id="MaxRadio" mnemonicParsing="false" text="Max" />
                                              </children>
                                           </HBox>
-                                          <ImageView fx:id="loading" fitHeight="115.0" fitWidth="119.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="BASELINE_LEFT" maxHeight="1.7976931348623157E308">

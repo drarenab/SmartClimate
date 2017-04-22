@@ -173,7 +173,9 @@ public class MyModel {
                                    String day,
                                    int mode,
                                    int MinOrMaxOrMoy,
-                                   boolean importOrNot
+                                   boolean importOrNot,
+                                   boolean offlineMode,
+                                   String kelvin_celcius
     ) throws IOException {
 
         Map<Integer, Mois> missingMonths;
@@ -243,14 +245,14 @@ public class MyModel {
                          * MANQUE SI APP EST EN LIGNE*
                          */
 
-                        if (Utilitaire.netIsAvailable() != -1) {
+                        if ((Utilitaire.netIsAvailable() != -1) && !offlineMode) {
                             //si encore on a trouver des relevés qui manque , et si app est enligne on lance le telechargement
                             System.out.println("Still have missing relevées , trying to download them! size=" + missingReleve.size());
                             downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
 
                             System.out.println("Download is done , trying to upload local files ");
                         } else {
-                            if( importOrNot){
+                            if (importOrNot) {
                                 DisplayAlertToImport();
                             }
                             System.out.println("No need to import");
@@ -287,12 +289,12 @@ public class MyModel {
                         .getAndCreateAnnee(yearInt)
                         .getAndCreateMois(monthInt)
                         .getAndCreateJour(dayInt)
-                        .getAllReleves(stationName,stationIdInt, yearInt, monthInt,x,y);
+                        .getAllReleves(kelvin_celcius, stationName, stationIdInt, yearInt, monthInt, x, y);
 
-                System.out.println("List relevés");
-                for (DataBean2 dataBean2 : listReleves) {
-                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
-                }
+//                System.out.println("List relevés");
+//                for (DataBean2 dataBean2 : listReleves) {
+//                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
+//                }
 
                 if (listReleves.isEmpty()) {
                     System.out.println("Attention, Null data found  ! ");
@@ -342,12 +344,12 @@ public class MyModel {
                         /**
                          * MANQUE SI APP EST EN LIGNE*
                          */
-                        if (Utilitaire.netIsAvailable() != -1) {
+                        if ((Utilitaire.netIsAvailable() != -1) && !offlineMode) {
                             //si encore on a trouver des jours qui manque , et si app est enligne on lance le telechargement
                             System.out.println("Still have missing days , trying to download them! size=" + missingDays.size());
                             downloadAndUncompress(String.valueOf(year) + String.valueOf(month));
                         } else {
-                            if( importOrNot){
+                            if (importOrNot) {
                                 DisplayAlertToImport();
                             }
                             System.out.println("No need to import");
@@ -391,25 +393,25 @@ public class MyModel {
                     listReleves = stationList.get(stationIdInt)
                             .getAndCreateAnnee(yearInt)
                             .getAndCreateMois(monthInt)
-                            .getMoyennesParJour(stationName,stationIdInt, year,x,y);
+                            .getMoyennesParJour(kelvin_celcius, stationName, stationIdInt, year, x, y);
                 } else {
                     if (MinOrMaxOrMoy == 1) {//min
                         listReleves = stationList.get(stationIdInt)
                                 .getAndCreateAnnee(yearInt)
                                 .getAndCreateMois(monthInt)
-                                .getMinParMois(stationName,stationIdInt, year,x,y);
+                                .getMinParMois(kelvin_celcius, stationName, stationIdInt, year, x, y);
                     } else {//max
                         listReleves = stationList.get(stationIdInt)
                                 .getAndCreateAnnee(yearInt)
                                 .getAndCreateMois(monthInt)
-                                .getMaxParMois(stationName,stationIdInt, year,x,y);
+                                .getMaxParMois(kelvin_celcius, stationName, stationIdInt, year, x, y);
                     }
                 }
 
                 System.out.println("List jours .. size:" + listReleves.size());
-                for (DataBean2 dataBean2 : listReleves) {
-                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
-                }
+//                for (DataBean2 dataBean2 : listReleves) {
+//                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
+//                }
                 if (listReleves.isEmpty()) {
                     System.out.println("Attention, Null data found  ! ");
                 }
@@ -451,7 +453,7 @@ public class MyModel {
                         /**
                          * MANQUE SI APP EST EN LIGNE*
                          */
-                        if (Utilitaire.netIsAvailable() != -1) {
+                        if ((Utilitaire.netIsAvailable() != -1) && !offlineMode) {
                             //si encore on a trouver des mois qui manque , et si app est enligne on lance le telechargement
                             System.out.println("Still have missing mois , trying to download them! size=" + missingMonths.size());
 
@@ -463,7 +465,7 @@ public class MyModel {
 
                             System.out.println("Download is done , trying to upload local files ");
                         } else {
-                            if( importOrNot){
+                            if (importOrNot) {
                                 DisplayAlertToImport();
                             }
                             System.out.println("No need to import");
@@ -498,28 +500,28 @@ public class MyModel {
                 System.out.println("Everything looks good, returning data now");
                 listReleves = stationList.get(stationIdInt)
                         .getAndCreateAnnee(yearInt)
-                        .getAllReleves(stationName,stationIdInt,x,y);
+                        .getAllReleves(kelvin_celcius, stationName, stationIdInt, x, y);
 
                 if (MinOrMaxOrMoy == 0) {//moy
                     listReleves = stationList.get(stationIdInt)
                             .getAndCreateAnnee(yearInt)
-                            .getMoyenneParMois(stationName,stationIdInt,x,y);
+                            .getMoyenneParMois(kelvin_celcius, stationName, stationIdInt, x, y);
                 } else {
                     if (MinOrMaxOrMoy == 1) {//min
                         listReleves = stationList.get(stationIdInt)
                                 .getAndCreateAnnee(yearInt)
-                                .getMinParMois(stationName,stationIdInt,x,y);
+                                .getMinParMois(kelvin_celcius, stationName, stationIdInt, x, y);
                     } else {//max
                         listReleves = stationList.get(stationIdInt)
                                 .getAndCreateAnnee(yearInt)
-                                .getMaxParMois(stationName,stationIdInt,x,y);
+                                .getMaxParMois(kelvin_celcius, stationName, stationIdInt, x, y);
                     }
                 }
 
-                System.out.println("List mois .. size:" + listReleves.size());
-                for (DataBean2 dataBean2 : listReleves) {
-                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
-                }
+//                System.out.println("List mois .. size:" + listReleves.size());
+//                for (DataBean2 dataBean2 : listReleves) {
+//                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
+//                }
                 if (listReleves.isEmpty()) {
                     System.out.println("Attention , null data found ! ");
                 }
@@ -591,14 +593,16 @@ public class MyModel {
      * @throws IOException
      */
     public boolean constructChartAffichage(String station,
-            String year,
-            String month,
-            String day,
-            AreaChart<Number, Number> AfficheTemp,
-            AreaChart<Number, Number> AfficheHum,
-            AreaChart<Number, Number> AfficheNebul,
-            int MinOrMaxOrMoy
-            ,boolean importOrNot
+                                           String year,
+                                           String month,
+                                           String day,
+                                           AreaChart<Number, Number> AfficheTemp,
+                                           AreaChart<Number, Number> AfficheHum,
+                                           AreaChart<Number, Number> AfficheNebul,
+                                           int MinOrMaxOrMoy
+            , boolean importOrNot
+            , boolean offlineMode
+            , String kelvin_celcius
     ) throws IOException {
 
         int mode = whichMode(year, month, day);
@@ -608,7 +612,8 @@ public class MyModel {
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
         XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
 
-        ArrayList<DataBean2> Resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy, importOrNot);
+        ArrayList<DataBean2> Resultat = (ArrayList<DataBean2>) getData(station, year, month, day,
+                mode, MinOrMaxOrMoy, importOrNot, offlineMode,kelvin_celcius);
 
         if (Resultat == null) {
             return false;
@@ -621,9 +626,9 @@ public class MyModel {
 
         for (int i = 0; i < Resultat.size(); i++) {
 
-            series.getData().add(new XYChart.Data<>(i+1, Resultat.get(i).getTemperature()));
-            series1.getData().add(new XYChart.Data<>(i+1, Resultat.get(i).getHumidite()));
-            series2.getData().add(new XYChart.Data<>(i+1, Resultat.get(i).getNebulosite()));
+            series.getData().add(new XYChart.Data<>(i + 1, Resultat.get(i).getTemperature()));
+            series1.getData().add(new XYChart.Data<>(i + 1, Resultat.get(i).getHumidite()));
+            series2.getData().add(new XYChart.Data<>(i + 1, Resultat.get(i).getNebulosite()));
 
         }
         S.add(series);
@@ -669,7 +674,9 @@ public class MyModel {
                                              LineChart<Number, Number> lineCharttemp,
                                              LineChart<Number, Number> lineCharthum,
                                              LineChart<Number, Number> lineChartnebul,
-                                             int MinOrMaxOrMoy
+                                             int MinOrMaxOrMoy,
+                                             boolean offlineMode,
+                                             String kelvin_celcius
     ) throws IOException {
 
         int mode = whichMode(year1, month1, day1);
@@ -685,8 +692,10 @@ public class MyModel {
         XYChart.Series<Number, Number> series11 = new XYChart.Series<>();
         XYChart.Series<Number, Number> series12 = new XYChart.Series<>();
 
-        ArrayList<DataBean2> Resultat1 = (ArrayList<DataBean2>) getData(station, year1, month1, day1, mode, MinOrMaxOrMoy, true);
-        ArrayList<DataBean2> Resultat2 = (ArrayList<DataBean2>) getData(station, year2, month2, day2, mode, MinOrMaxOrMoy, true);
+        ArrayList<DataBean2> Resultat1 = (ArrayList<DataBean2>) getData(station, year1, month1, day1,
+                mode, MinOrMaxOrMoy, true, offlineMode,kelvin_celcius);
+        ArrayList<DataBean2> Resultat2 = (ArrayList<DataBean2>) getData(station, year2, month2, day2,
+                mode, MinOrMaxOrMoy, true, offlineMode,kelvin_celcius);
         if (Resultat1 == null || Resultat2 == null) {
             return false;
         }
@@ -744,17 +753,20 @@ public class MyModel {
      * @throws IOException
      */
     public boolean constructTableView(String station,
-            String year,
-            String month,
-            String day,
-            TableView<DataBean> tableView,
-            int MinOrMaxOrMoy,
-            boolean importOrNot
+                                      String year,
+                                      String month,
+                                      String day,
+                                      TableView<DataBean> tableView,
+                                      int MinOrMaxOrMoy,
+                                      boolean importOrNot,
+                                      boolean offlineMode,
+                                      String kelvin_celcius
 
     ) throws IOException {
         int mode = whichMode(year, month, day);
 
-        ArrayList<DataBean2> resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode, MinOrMaxOrMoy, importOrNot);
+        ArrayList<DataBean2> resultat = (ArrayList<DataBean2>) getData(station, year, month, day, mode,
+                MinOrMaxOrMoy, importOrNot, offlineMode,kelvin_celcius);
         ArrayList<DataBean> listDataBean = new ArrayList<DataBean>();
         if (resultat != null) {
             for (DataBean2 dataBean2 : resultat) {
@@ -767,7 +779,7 @@ public class MyModel {
     }
 
 
-    public List<DataBean2> getLatestDataForGraphicMap() throws IOException {
+    public List<DataBean2> getLatestDataForGraphicMap(boolean offlineMode) throws IOException {
 //        int[] currentDate = Utilitaire.getCurrentDate();
 //        String year = String.valueOf(currentDate[3]);
 //
@@ -790,7 +802,6 @@ public class MyModel {
 //            //           dataList.addAll(getData(stationName,year,month,day,mode));
 //        }
 //        return dataList;
-
         int[] currentDate = Utilitaire.getCurrentDate();
         int intYear = currentDate[3];
         int intMonth = currentDate[2];
@@ -804,10 +815,20 @@ public class MyModel {
         DataBean2 dataBean;
         List<DataBean2> dataList = new ArrayList<>();
         List<DataBean2> tempList;
-        if (Utilitaire.netIsAvailable() != -1)
+
+        if ((Utilitaire.netIsAvailable() != -1) && !offlineMode) {
             downloadAndUncompress(year + month);
 
-        getDataForDateByCity(year + month + day, "all");
+        } else {
+            DisplayAlertToImport();
+        }
+
+        /**UPLOADER LA DERNEIRE DATE QUI EXISTE EN LOCAL SI TELECHARGEMENT HAS FAILED**/
+        String file = Utilitaire.getLatesttAvailableFile();
+        //System.out.println("damnFile:"+file);
+        String date = this.getLatestAvailableDateOnFile(file);
+
+        getDataForDateByCity(date, "all");
         for (Station station : stationList.values()) {
             dataBean = station
                     .getAndCreateAnnee(intYear)
@@ -1047,8 +1068,6 @@ public class MyModel {
     }
 
 
-
-
     private int whichMode(String year, String month, String day) {
         if (year.length() > 0 && month.length() > 0 && day.length() > 0)
             return 0;
@@ -1098,14 +1117,17 @@ public class MyModel {
 
 
     public void Affichage(String station,
-            String year,
-            String month,
-            String day,
-            AreaChart<Number, Number> AfficheTemp,
-            AreaChart<Number, Number> AfficheHum,
-            AreaChart<Number, Number> AfficheNebul,
-            TableView<DataBean> tableView,
-            int MinOrMaxOrMoy) throws IOException {
+                          String year,
+                          String month,
+                          String day,
+                          AreaChart<Number, Number> AfficheTemp,
+                          AreaChart<Number, Number> AfficheHum,
+                          AreaChart<Number, Number> AfficheNebul,
+                          TableView<DataBean> tableView,
+                          int MinOrMaxOrMoy,
+                          boolean offlineMode,
+                          String kelvin_celcius
+    ) throws IOException {
 
         constructChartAffichage(station,
                 year,
@@ -1115,7 +1137,9 @@ public class MyModel {
                 AfficheHum,
                 AfficheNebul,
                 MinOrMaxOrMoy,
-                true
+                true,
+                offlineMode,
+                kelvin_celcius
         );
 
         constructTableView(station,
@@ -1124,8 +1148,88 @@ public class MyModel {
                 day,
                 tableView,
                 MinOrMaxOrMoy,
-                false);
+                false,
+                offlineMode,
+                kelvin_celcius
+        );
 
+    }
+
+    /**
+     * This method returns the latest available data localy
+     *
+     * @return latest available data that we have localy if exists null if no
+     * data found localy
+     */
+
+    public ArrayList<DataCity> getLatestAvailableData() {
+        ArrayList<DataCity> liste = null;
+        String file = Utilitaire.getLatesttAvailableFile();
+        //System.out.println("damnFile:"+file);
+        String date = this.getLatestAvailableDateOnFile(file);
+
+        if (date != null) {
+            this.getDataForDateByCity(date, "all");
+        }
+
+        return liste;
+    }
+
+    /**
+     * Cette methode retourne la date des donner la plus recente inclut dans un
+     * fichier
+     *
+     * @param date sous la forme de yyyymm correspond au nom du fichier qu'on
+     *             veux chercher dedans
+     * @return la date la plus recente dans le fichier qui correspond a @date
+     */
+    private String getLatestAvailableDateOnFile(String date) {
+        File f;
+        FileReader fr;
+        BufferedReader br;
+        String line;
+        int latestDate = 0;
+        String dateLine;
+        String filePath;
+
+        try {
+            filePath = utilitaire.Utilitaire.getCsvFilePathFromDate(date);
+            if (!utilitaire.Utilitaire.checkIfFileExists(filePath)) {
+                return null;
+            }
+
+            f = new File(filePath);
+            fr = new FileReader(f);
+            br = new BufferedReader(fr);
+            line = br.readLine();
+
+            if (line.startsWith("numer_sta")) {
+                line = br.readLine();
+            }
+
+            while (line != null) {
+                dateLine = line.split(";")[1].substring(0, 10);
+
+                if (Integer.parseInt(dateLine) > latestDate) {
+                    latestDate = Integer.parseInt(dateLine);
+                }
+
+                line = br.readLine();
+            }
+
+            fr.close();
+            br.close();
+            return String.valueOf(latestDate);
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Utilitaire.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Utilitaire.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

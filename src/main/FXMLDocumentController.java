@@ -124,10 +124,6 @@ public class FXMLDocumentController implements Controller {
     VBox v, VboxPrincipal, v1, v2, VboxComparaison;
     @FXML
     RadioButton MoyRadio, MaxRadio, MinRadio;
-    //@FXML
-    //ProgressBar ProgressComparaison;
-    @FXML
-    ImageView loading;
 
     @FXML
     private void handleButtonActionComparer() throws IOException {
@@ -205,7 +201,6 @@ public class FXMLDocumentController implements Controller {
                 else {
                     showMode = "year";
                 }
-                loading.setVisible(true);
                 model.constructChartComparaison(StationComparaison.getValue().toString(),
                         Year1Comparaison.getText(),
                         MonthComparaison.getText(),
@@ -216,7 +211,10 @@ public class FXMLDocumentController implements Controller {
                         lineCharttemp,
                         lineCharthum,
                         lineChartnebul,
-                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
+                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio),
+                        userSelectOffline,
+                        kelvin_celcius
+                );
             } else {
                 //not logicaly valid date!
             }
@@ -272,9 +270,6 @@ public class FXMLDocumentController implements Controller {
 
     @FXML
     private void handleButtonActionAfficher() throws IOException {
-        //System.out.println("hooooooooooooooooooooooooooooooooooooooooooooolaaaaaaaaaaaaaaa:");
-
-        loading.setVisible(true);
         /*
         Test si le formulaire est bien rempli
          */
@@ -331,7 +326,10 @@ public class FXMLDocumentController implements Controller {
                         AfficheHum,
                         AfficheNebul,
                         tableView,
-                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio));
+                        MinOrMaxOrMoy(MoyRadio, MaxRadio, MinRadio),
+                        userSelectOffline,
+                        kelvin_celcius
+                );
 
 
 //                TableView
@@ -409,10 +407,11 @@ public class FXMLDocumentController implements Controller {
         Date date = new Date();
         String[] laDate = (dateFormat.format(date)).split("/");
         try {
-            tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap();
+            tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap(userSelectOffline);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("tabVille size :"+tabVille+" last:"+tabVille.get(tabVille.size()-1));
       //  AfficherCarte();
 //        if (onlineMode) {
 //            try {
@@ -453,7 +452,7 @@ public class FXMLDocumentController implements Controller {
                         //verifier continuellement si il y a une connexion internet
                         if (date.getHours() % 3 == 1 && date.getMinutes() == 0 && date.getSeconds() == 0) {
                             try {
-                                tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap();
+                                tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap(userSelectOffline);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -500,7 +499,12 @@ public class FXMLDocumentController implements Controller {
         kelvin.setToggleGroup(kelvinCelcius);
 
         celcius.setToggleGroup(kelvinCelcius);
-        celcius.setSelected(true);
+
+        if(kelvin_celcius.equals("celcius"))
+            celcius.setSelected(true);
+
+        else if(kelvin_celcius.equals("kelvin"))
+            kelvin.setSelected(true);
 
         ToggleGroup onOffLine = new ToggleGroup();
         online.setToggleGroup(onOffLine);
@@ -574,9 +578,7 @@ public class FXMLDocumentController implements Controller {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
         List L = new ArrayList();
-        loading.setImage(new Image(getClass().getResourceAsStream("Image/loading.png")));
 
-        loading.setVisible(false);
         //dataList = model.getAllStations();
         stationNames = (ArrayList) model.getStationNames();
         for (int i = 0; i < stationNames.size(); i++) {
@@ -1123,9 +1125,12 @@ public class FXMLDocumentController implements Controller {
         nomVille.setText(nomVillle);
         Text DateActuelle = new Text();
         DateActuelle.setFill(Color.CHOCOLATE);
+        System.out.println("xxx:"+tabVille.get(0).getDate().getTime());
         String date = tabVille.get(0).getDate().getDay() + "/"
                 + tabVille.get(0).getDate().getMonth() + "/"
-                + tabVille.get(0).getDate().getYear() + " a " + Integer.parseInt(tabVille.get(0).getDate().getTime()) * 3 + " Heures";
+
+                + tabVille.get(0).getDate().getYear() + " a " +
+                Integer.parseInt(tabVille.get(0).getDate().getTime()) * 3 + " Heures";
 
         DateActuelle.setText(date);
         Text Temp = new Text("temperature: ");
@@ -1135,12 +1140,16 @@ public class FXMLDocumentController implements Controller {
         Text nebulosite = new Text("nébulosité: ");
         nebulosite.setFill(Color.CHOCOLATE);
 
-
+        float temperatureTemp;
         for (int i = 0; i < tabVille.size(); i++) {
 
             if (tabVille.get(i).getNomStation().equals(nomVillle)) {
                 if (tabVille.get(i).getTemperature() != 101) {
-                    Temp.setText("Température: " + Float.toString((int) Math.ceil(tabVille.get(i).getTemperature())));
+                    temperatureTemp = tabVille.get(i).getTemperature();
+                    if(kelvin_celcius.equals("kelvin")) {
+                        temperatureTemp = (float)(temperatureTemp + 273.15);
+                    }
+                    Temp.setText("Température: " + Float.toString((int) Math.ceil(temperatureTemp)));
                 } else {
                     Temp.setText("Température: " + "N/A");
                 }
@@ -1208,7 +1217,7 @@ public class FXMLDocumentController implements Controller {
 
             temp = tabVille.get(i).getTemperature();
             if (kelvin_celcius.equals("kelvin")) {
-                temp = tabVille.get(i).getTemperature() + 237.15;
+                temp = tabVille.get(i).getTemperature() + 273.15;
                 X = "k";
             }
 
