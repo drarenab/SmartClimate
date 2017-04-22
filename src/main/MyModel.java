@@ -47,6 +47,7 @@ import javafx.scene.control.ButtonType;
 
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -699,10 +700,17 @@ public class MyModel {
         if (Resultat1 == null || Resultat2 == null) {
             return false;
         }
-
+        series0.setName(Resultat1.get(0).getDate().getYear());
+        series01.setName(Resultat1.get(0).getDate().getYear());
+        series02.setName(Resultat1.get(0).getDate().getYear());
+        
+        series1.setName(Resultat2.get(0).getDate().getYear());
+        series11.setName(Resultat2.get(0).getDate().getYear());
+        series12.setName(Resultat2.get(0).getDate().getYear());
         for (int i = 0; i < Resultat1.size(); i++) {
 
             series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
+            
             series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
             series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
 
@@ -1117,6 +1125,7 @@ public class MyModel {
 
 
     public void Affichage(String station,
+<<<<<<< HEAD
                           String year,
                           String month,
                           String day,
@@ -1128,7 +1137,19 @@ public class MyModel {
                           boolean offlineMode,
                           String kelvin_celcius
     ) throws IOException {
+=======
+            String year,
+            String month,
+            String day,
+            AreaChart<Number, Number> AfficheTemp,
+            AreaChart<Number, Number> AfficheHum,
+            AreaChart<Number, Number> AfficheNebul,
+            TableView<DataBean> tableView,
+            int MinOrMaxOrMoy,
+            ImageView loading) throws IOException {
+>>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
 
+        loading.setVisible(false);
         constructChartAffichage(station,
                 year,
                 month,
@@ -1148,6 +1169,7 @@ public class MyModel {
                 day,
                 tableView,
                 MinOrMaxOrMoy,
+<<<<<<< HEAD
                 false,
                 offlineMode,
                 kelvin_celcius
@@ -1213,6 +1235,10 @@ public class MyModel {
                 if (Integer.parseInt(dateLine) > latestDate) {
                     latestDate = Integer.parseInt(dateLine);
                 }
+=======
+                false);
+//        loading.setVisible(false);
+>>>>>>> 975238cc59b4cf10212ed733f90d0538cd13a67b
 
                 line = br.readLine();
             }
