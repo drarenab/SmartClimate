@@ -120,16 +120,13 @@ public class Utilitaire {
         boolean result = false;
         // if the directory does not exist, create it
         if (!theDir.exists()) {
-            ////System.out.println("creating directory: " + directory);
             try {
                 theDir.mkdir();
                 result = true;
             } catch (SecurityException se) {
                 //handle it
             }
-            if (result) {
-                ////System.out.println("DIR created");
-            }
+           
         }
         return result;
     }
@@ -186,12 +183,10 @@ public class Utilitaire {
         }
 
         for (File file : file1.listFiles()) {
-            // ////System.out.println("name:" + file.getName());
             if (Integer.parseInt(file.getName().substring(0, 6)) > maxFileName) {
                 maxFileName = Integer.parseInt(file.getName().substring(0, 6));
             }
         }
-        ////System.out.println("pathDate:" + maxFileName);
         if (maxFileName == 0) {
             return null;
         } else {
@@ -241,7 +236,6 @@ public class Utilitaire {
 
             //Creation d'un obj url qui pointe vers l'url qui se trouve dans la classe Configuration
             newUrl = Configuration.DATA_GZIP_URL.replace("#", date);
-            ////System.out.println("url:" + newUrl);
             url = new URL(newUrl);
 
             //le chemin de fichier ou on va telecharger les donnés
@@ -251,13 +245,7 @@ public class Utilitaire {
 
             //utilisation de la methode copyURLToFile de apache , qui telecharger et sauvegarde un fichier
             FileUtils.copyURLToFile(url, saveFile);
-            /*
-            long endTime = System.nanoTime();
-            long duration = (endTime - startTime) / 1000000;  //divide by 1000000 to get milliseconds.
-            if (ProgressComparaison != null) {
-                ProgressComparaison.setProgress(duration);
-            }
-            */
+            
             return true;
         } catch (MalformedURLException ex) {
             Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
@@ -280,7 +268,6 @@ public class Utilitaire {
         //on garde le meme nom pour le fichier decompresser sauf .gz
         String outputFile = inputFile.substring(0, inputFile.length() - 3);
 
-        ////System.out.println("output file : " + outputFile);
         try {
             //initialiser notre flux d'entrer par le fichier gzip déja telecharger
             FileInputStream fileIn = new FileInputStream(inputFile);
@@ -297,9 +284,7 @@ public class Utilitaire {
             gZIPInputStream.close();
             fileOutputStream.close();
             File temp = new File(inputFile);
-            ////System.out.println("Le fichier a été decompressé correctement ! ");
             if (temp.delete()) {
-                ////System.out.println("le fichier '" + inputFile + "' a été supprimer");
                 return true;
             }
 
@@ -322,16 +307,10 @@ public class Utilitaire {
         Path from = Paths.get(recupp.toURI());//chemin du fichier recupéré
         String[] str = recupp.getPath().split("/");
         String[] dates = str[str.length - 1].split(Pattern.quote("."));
-        System.out.println(dates[1]);
         String directory = Configuration.DATA_DIRECTORY_NAME + "/" + dates[1].substring(0, 4);
 
         wellDone = createDirectory(directory);
-        System.out.println("wellDone"+wellDone);
-//        if (wellDone) {
-                                                                                System.out.println(recupp.getPath());
-                                                                                System.out.println(str[str.length - 1]);
-                                                                                System.out.println(directory);
-                                                                                System.out.println(dates[1]);        String nameChemin = str[str.length - 1].substring(str[str.length - 1].indexOf("synop"));
+       String nameChemin = str[str.length - 1].substring(str[str.length - 1].indexOf("synop"));
             Path to = Paths.get(directory + "/" +nameChemin
             );
             CopyOption[] options = new CopyOption[]{
@@ -348,10 +327,7 @@ public class Utilitaire {
             }
             File newName = new File(getCsvFilePathFromDate(dates[1]));
             File oldName;
-            System.out.println(dates[dates.length-1]);
-            System.out.println("copiiiiiiiiiiiiiii");
             if (dates[dates.length-1].equals("gz")) { //fichier .gz
-System.out.println("copiiiiiiiiiiiiiii");
                 wellDone = decompresserGzip(to.toString());
                 oldName = new File(to.toString().substring(0, to.toString().length() - 3));
 
@@ -360,8 +336,6 @@ System.out.println("copiiiiiiiiiiiiiii");
 
             }
             wellDone = oldName.renameTo(newName);
-//        }
-        System.out.println("");
         return wellDone;
 
     }
@@ -496,7 +470,6 @@ System.out.println("copiiiiiiiiiiiiiii");
         currentYear = currentDate[3];
         
         
-        //System.out.println("isCurrentDate: given year="+year+" current="+currentYear);
         if(mode==0)
             return currentYear == year
                     &&currentMonth == month
@@ -520,6 +493,25 @@ System.out.println("copiiiiiiiiiiiiiii");
             return 2;
 
         else return -1; // invalid date !
+    }
+    
+    /**
+     * @param nebul
+     * @return une chaine de caractére qui represente le nom de l'image associé
+     * a la nébulosité d'une station donnée
+     */
+    public static String getTempsActuel(float nebul) {
+
+        if (nebul < 33) {
+            return "ensoleille";
+        } else if (nebul < 66) {
+            return "nuageux";
+        } else if (nebul <= 100) {
+            return "pluvieux";
+        } else {
+            return "NA";
+        }
+
     }
 
 }

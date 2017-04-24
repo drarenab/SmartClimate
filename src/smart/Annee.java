@@ -28,7 +28,6 @@ public class Annee {
     }
 
     public Mois getAndCreateMois(int mois) {
-        System.out.println("getandcreateMois");
         Boolean bool = moisList.containsKey(mois);
         if (!bool) {
             moisList.put(mois, new Mois(mois));
@@ -52,13 +51,7 @@ public class Annee {
         } else {
             lastMonth = 12;
         }
-        /*
-        if(jourExists(lastDay))
-            return joursList.get(lastDay).isUpdated(year, id);
-        else
-            return false;
-         */
-        System.out.println("lastMonth:" + lastMonth);
+
         for (int i = 1; i <= lastMonth; i++) {
             if (!moisExists(i) || !getMois(i).isUpdated(id)) {
                 //si le jour n'existe pas , ou bien le jour exist mais il contient pas touts les relevés
@@ -93,7 +86,6 @@ public class Annee {
         Map<Integer, Mois> missingMois = new HashMap<Integer, Mois>();
         Map<Integer, Jour> misssingJours;
         Mois missingMonth;
-        System.out.println("lastMonth:" + lastMonth);
         for (int i = 1; i <= lastMonth; i++) {
             if (moisExists(i)) {
                 //si le mois exist

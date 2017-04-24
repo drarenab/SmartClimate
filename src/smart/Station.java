@@ -34,7 +34,6 @@ public class Station {
     {   Boolean bool = anneeList.containsKey(annee);
         if(!bool)
             anneeList.put(annee,new Annee(annee));
-        System.out.println("where is a problem");
         return (anneeList.get(annee));
     }
 
@@ -82,7 +81,6 @@ public class Station {
         
         lastYear = Utilitaire.getCurrentDate()[3];
        
-        System.out.println("lastMonth:" + lastYear);
         for (int i = 1996; i <= lastYear; i++) {
             if (!anneeExists(i) || !getAnnee(i).isUpdated()) {
                 //si le jour n'existe pas , ou bien le jour exist mais il contient pas touts les relevés

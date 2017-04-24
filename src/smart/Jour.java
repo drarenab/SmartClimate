@@ -191,7 +191,6 @@ public class Jour {
         for(Releve releve : relevesList.values()) {
             releveTemp = releve;
         }
-        System.out.println("nomStation:"+nomStation +" id:"+idStation+" empty?:"+relevesList.isEmpty());
         float temperature,humidite,nebulosite;
         String ordre;
 
@@ -357,9 +356,7 @@ public class Jour {
                 ,y
         );
 
-//        return new Releve(10, (temperature != -1) ? temperature : 101,
-//                (humidite != -1) ? humidite : 101,
-//                (nebulosite != -1) ? nebulosite : 101);
+
     }
 
     public Map<Integer, Releve> getReleves() {
