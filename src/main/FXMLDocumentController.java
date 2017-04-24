@@ -1,12 +1,10 @@
 package main;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 import abstraction.Controller;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,7 +31,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.awt.Desktop;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,7 +38,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.chart.AreaChart;
@@ -49,9 +45,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
-
 import javafx.scene.paint.Color;
 import smart.DataBean;
 import smart.DataBean2;
@@ -120,6 +114,377 @@ public class FXMLDocumentController implements Controller {
     @FXML
     RadioButton MoyRadio, MaxRadio, MinRadio;
 
+    public void initialize(URL url, ResourceBundle rb) {
+        model = MyModel.getInstance();
+        model.showEveryThing();
+        CreateMenu();
+        switch (Interface) {
+            case 0: {
+
+                try {
+                    InitInterfacePrincipal();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
+            case 1:
+                initInterfaceSetting();
+                break;
+            case 2:
+                InitInterfaceComparaison();
+                break;
+            case 3:
+                //informations sur les donnée
+                initInterfaceInformation();
+                break;
+            case 4:
+                //etat serveur
+                initInterfaceEtatServeur();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+     /**
+     * permet d'initialiser l'interface principale
+     */
+    @Override
+    public void InitInterfacePrincipal() throws IOException {
+
+        //au debut on verifie si il y a une connexion et on initialise online_offline
+        //onLine_offLine = "offLine";
+        VboxPrincipal.getChildren().add(0, menuBar);
+        menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
+        //Coordonne.ConstructTabVille();
+
+        /*
+        on telecharger si possible le dernier fichier a chaque execution du programme
+         */
+        onlineMode = Utilitaire.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        String[] laDate = (dateFormat.format(date)).split("/");
+        try {
+            tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap(userSelectOffline);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RunTimer();
+    }
+
+    /**
+     * permet d'initialiser l'interface setting
+     */
+    public void initInterfaceSetting() {
+        VboxPrincipal.getChildren().add(0, menuBar);
+        menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
+
+        Image img = new Image(Meteo.class
+                .getResourceAsStream("Image/BackgroundSetting2.jpg"));
+        BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        anchorSeting.setBackground(new Background(background));
+
+        ToggleGroup kelvinCelcius = new ToggleGroup();
+        kelvin.setToggleGroup(kelvinCelcius);
+
+        celcius.setToggleGroup(kelvinCelcius);
+
+        if (kelvin_celcius.equals("celcius")) {
+            celcius.setSelected(true);
+        } else if (kelvin_celcius.equals("kelvin")) {
+            kelvin.setSelected(true);
+        }
+
+        ToggleGroup onOffLine = new ToggleGroup();
+        online.setToggleGroup(onOffLine);
+        online.setSelected(true);
+        offline.setToggleGroup(onOffLine);
+
+        Timer timer = new Timer();
+        TimerTask t = new TimerTask() {
+
+            public void run() {
+                // some code
+//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
+                Platform.runLater(new Runnable() {
+
+                    public void run() {
+                        onlineMode = Utilitaire.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
+                        if (online != null & userSelectOffline == false) {
+                            if (onlineMode) {
+                                online.setSelected(true);
+                            } else {
+                                offline.setSelected(true);
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        timer.schedule(t, 01, 1000);
+
+        //au debut on verifie si il y a une connexion et on initialise online_offline
+        LocationDefault = new ChoiceBox();
+
+        LocationDefault.setStyle(
+                "-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
+        List L = new ArrayList();
+        //dataList = model.getLatestAvailableData()
+        stationNames = (ArrayList<String>) model.getStationNames();
+        for (int i = 0;
+                i < stationNames.size();
+                i++) {
+            L.add(i, stationNames.get(i));
+        }
+        ObservableList<String> observableList = FXCollections.observableList(L);
+
+        observableList.addListener(
+                new ListChangeListener() {
+
+            public void onChanged(ListChangeListener.Change change
+            ) {
+
+            }
+        });
+        LocationDefault.getItems()
+                .clear();
+        LocationDefault.setItems(observableList);
+
+        LocationDefault.setValue(L.get(L.indexOf("BREST-GUIPAVAS")));
+        HboxLocation.getChildren()
+                .add(1, LocationDefault);
+        //Interface=0;
+    }
+
+    /**
+     * permet d'initialiser l'interface d'affichage et de comparaison des
+     * données
+     */
+    public void InitInterfaceComparaison() {
+        VboxPrincipal.getChildren().add(0, menuBar);
+        menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
+        List L = new ArrayList();
+
+        //dataList = model.getAllStations();
+        stationNames = (ArrayList) model.getStationNames();
+        for (int i = 0; i < stationNames.size(); i++) {
+            L.add(i, stationNames.get(i));
+        }
+
+        ObservableList<String> observableList = FXCollections.observableList(L);
+        observableList.addListener(new ListChangeListener() {
+
+            public void onChanged(ListChangeListener.Change change) {
+            }
+        });
+
+        StationComparaison.setItems(observableList);
+        Station.setItems(observableList);
+
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Température");
+
+        AfficheTemp = new AreaChart<Number, Number>(xAxis, yAxis);
+        //AfficheTemp.setStyle("-fx-background-color:#9C9F84;");
+        final NumberAxis xAxiss = new NumberAxis();
+        xAxis.setAutoRanging(true);
+        final NumberAxis yAxiss = new NumberAxis();
+
+        xAxiss.setLabel("Humudité");
+        AfficheHum = new AreaChart<Number, Number>(xAxiss, yAxiss);
+        final NumberAxis xAxisss = new NumberAxis();
+        final NumberAxis yAxisss = new NumberAxis();
+
+        xAxisss.setLabel("Nebulosité");
+        AfficheNebul = new AreaChart<Number, Number>(xAxisss, yAxisss);
+
+        VboxComparaison.getChildren().add(AfficheTemp);
+        VboxComparaison.getChildren().add(AfficheHum);
+        VboxComparaison.getChildren().add(AfficheNebul);
+
+        /*
+        Partie comparaison
+         */
+        final NumberAxis xAxis1 = new NumberAxis();
+        final NumberAxis yAxis1 = new NumberAxis();
+        lineCharttemp = new LineChart<Number, Number>(xAxis1, yAxis1);
+
+        final NumberAxis xAxis2 = new NumberAxis();
+        final NumberAxis yAxis2 = new NumberAxis();
+        lineCharthum = new LineChart<Number, Number>(xAxis2, yAxis2);
+
+        final NumberAxis xAxis3 = new NumberAxis();
+        final NumberAxis yAxis3 = new NumberAxis();
+        lineChartnebul = new LineChart<Number, Number>(xAxis3, yAxis3);
+
+        /*
+        Mettre lineChart de humidité et nébulosité par defaut invisible
+         */
+        lineCharttemp.setVisible(true);
+        lineCharthum.setVisible(false);
+        lineChartnebul.setVisible(false);
+        /*
+        ScrollPane scrollPaneTemp, scrollPaneHum, scrollPaneNeb;
+        scrollPaneTemp = new ScrollPane();
+        scrollPaneTemp.setContent(lineCharttemp);
+        scrollPaneHum = new ScrollPane();
+        scrollPaneHum.setContent(lineCharthum);
+        scrollPaneNeb = new ScrollPane();
+        scrollPaneNeb.setContent(lineChartnebul);
+         */
+
+        stack3.getChildren().addAll(lineCharttemp, lineCharthum, lineChartnebul);
+
+        groupeChart = new ToggleGroup();
+        RadioBtnTemp.setToggleGroup(groupeChart);
+        RadioBtnHum.setToggleGroup(groupeChart);
+        RadioBtnNebul.setToggleGroup(groupeChart);
+
+        RadioBtnTemp.setSelected(true);
+
+        VboxComparaison.setVisible(false);
+        groupeRadioAffichage = new ToggleGroup();
+        radioBtnCourbes.setToggleGroup(groupeRadioAffichage);
+        radioBtnTableur.setToggleGroup(groupeRadioAffichage);
+        radioBtnTableur.setSelected(true);
+
+        MinMaxMoyenne = new ToggleGroup();
+        MoyRadio.setToggleGroup(MinMaxMoyenne);
+        MinRadio.setToggleGroup(MinMaxMoyenne);
+        MaxRadio.setToggleGroup(MinMaxMoyenne);
+        MoyRadio.setSelected(true);
+        //Interface=1;
+
+        tableView.setEditable(true);
+        tabPane.getStylesheets().add("/CSS/CSSTabPane.css");
+
+        AnchorVisu.getStylesheets().add("/CSS/CSSSplitPane.css");
+        anchorComp.getStylesheets().add("/CSS/CSSSplitPane.css");
+        ImageView image_view_btn_right = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/right1.png"),
+                        35, 35, true, false));
+        rightVisu.setGraphic(image_view_btn_right);
+
+        ImageView image_view_btn_left = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/left1.png"),
+                        35, 35, true, false));
+        leftVisu.setGraphic(image_view_btn_left);
+        image_view_btn_right = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/right1.png"),
+                        35, 35, true, false));
+        rightComp.setGraphic(image_view_btn_right);
+
+        image_view_btn_left = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/left1.png"),
+                        35, 35, true, false));
+        leftComp.setGraphic(image_view_btn_left);
+    }
+
+    /**
+     * permet d'initialiser l'interface permettant de savoir quelles données
+     * l'utilisateur a sur sa machine
+     */
+    public void initInterfaceInformation() {
+
+        ArrayList<String> listYear = model.getYearExists();
+
+        HBox hboxDataDispo = new HBox();
+        Text textDataDispo = new Text("Data Dispo");
+        ImageView deleteimg = new ImageView(
+                new Image(getClass().getResourceAsStream("Image/delete.png"),
+                        20, 20, true, false));
+        Button buttonDeleteAll = new Button();
+        buttonDeleteAll.setStyle("-fx-background-color:transparent;");
+        buttonDeleteAll.setGraphic(deleteimg);
+        buttonDeleteAll.setOnAction(new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent e) {
+                for (int i = 0; i < listYear.size(); i++) {
+                    Utilitaire.deleteCSVFile(listYear.get(i));
+                    initInterfaceInformation();
+                }
+            }
+        });
+
+        hboxDataDispo.getChildren().addAll(textDataDispo, buttonDeleteAll);
+        final TreeItem<HBox> dispoData = new TreeItem<>(hboxDataDispo);
+        dispoData.setExpanded(true);
+        for (int i = 0; i < listYear.size(); i++) {
+            String s = listYear.get(i);
+            HBox hboxYear = new HBox();
+            Text textYear = new Text(s);
+            Button buttonDelete = new Button();
+            ImageView deleteimg1 = new ImageView(
+                    new Image(getClass().getResourceAsStream("Image/delete.png"),
+                            20, 20, true, false));
+            buttonDelete.setGraphic(deleteimg1);
+            buttonDelete.setStyle("-fx-background-color:transparent;");
+
+            buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
+
+                public void handle(ActionEvent e) {
+                    Utilitaire.deleteCSVFile(s);
+                    initInterfaceInformation();
+                }
+            });
+
+            hboxYear.getChildren().addAll(textYear, buttonDelete);
+            final TreeItem<HBox> oneYear = new TreeItem<>(hboxYear);
+
+            ArrayList<String> listMonth = model.getMonthsExistsForYear(listYear.get(i));
+
+            for (int j = 0; j < listMonth.size(); j++) {
+                HBox hboxMonth = new HBox();
+
+                String str = listMonth.get(j).substring(5, 11);
+
+                Text textMonth = new Text(listMonth.get(j).substring(9, 11));
+                Button buttonDeleteMonth = new Button();
+                ImageView deleteimg2 = new ImageView(
+                        new Image(getClass().getResourceAsStream("Image/delete.png"),
+                                20, 20, true, false));
+                buttonDeleteMonth.setGraphic(deleteimg2);
+                buttonDeleteMonth.setStyle("-fx-background-color:transparent;");
+                buttonDeleteMonth.setOnAction(new EventHandler<ActionEvent>() {
+
+                    public void handle(ActionEvent e) {
+
+                        Utilitaire.deleteCSVFile(str);
+                        initInterfaceInformation();
+                    }
+                });
+                hboxMonth.getChildren().addAll(textMonth, buttonDeleteMonth);
+                oneYear.getChildren().add(j, new TreeItem(hboxMonth));
+            }
+
+            dispoData.getChildren().add(i, oneYear);
+
+        }
+        treeView.setRoot(dispoData);
+//        treeView.setContextMenu(menucontext);
+    }
+
+    /**
+     * permet d'initialiser l'interface permettant de savoir si le serveur de
+     * main france contenant les données nécessaires est bien en marche est
+     * combien de temps a fallut pour faire un ping
+     */
+    public void initInterfaceEtatServeur() {
+        double time = Utilitaire.netIsAvailable();
+        if (time != -1) {
+            etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
+        } else {
+            etatConnexion.setText("Hors service ");
+        }
+    }
+    
     @FXML
     private void handleButtonActionComparer() throws IOException {
         String latestDate1 = "", latestDate2 = "";
@@ -146,14 +511,11 @@ public class FXMLDocumentController implements Controller {
             StationComparaison.setStyle("-fx-background-color:#000000,linear-gradient(#ed2d2d, #d60000),"
                     + "linear-gradient(#426ab7, #263e75),linear-gradient(#395cab, #223768);");
         } else if (!errors.get("Year").toString().equals("") || !errors2.get("Year").toString().equals("")) {
-            System.out.println("year1 or year 2 errors");
             if (!errors.get("Year").toString().equals("")) {
                 Year1Comparaison.setStyle("-fx-background-color: #C9E2E9, red , #C9E2E9;");
-                System.out.println("year1");
                 Year1Comparaison.setPromptText(errors.get("Year").toString());
             }
             if (!errors2.get("Year").toString().equals("")) {
-                System.out.println("year1 or year 2 errors");
                 Year2Comparaison.setStyle("-fx-background-color: #C9E2E9, red , #C9E2E9;");
                 Year2Comparaison.setPromptText(errors.get("Year").toString());
             }
@@ -310,10 +672,11 @@ public class FXMLDocumentController implements Controller {
             validated = model.validateNotFuture(year.getText(), month.getText(), day.getText());
             String yearMonth = "", yearMonthDay = "";
             if (validated) {
-
+                String kelCel = (kelvin_celcius.equals("kelvin")) ? " K" : " °C";
                 columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
                 columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
-                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
+                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature" + kelCel));
+                columnTemp.setText(columnTemp.getText() + kelCel);
                 columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
 
                 model.Affichage(Station.getValue().toString(),
@@ -329,7 +692,6 @@ public class FXMLDocumentController implements Controller {
                         kelvin_celcius
                 );
 
-
 //                TableView
 //                 */
 //                /*Attention can be throw an exception if data is null ! */
@@ -340,96 +702,20 @@ public class FXMLDocumentController implements Controller {
 
     }
 
-    public void initialize(URL url, ResourceBundle rb) {
-        model = MyModel.getInstance();
-        model.showEveryThing();
-        CreateMenu();
-        switch (Interface) {
-            case 0: {
-                System.out.println("Affichage menu");
-
-                try {
-                    InitInterfacePrincipal();
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            break;
-            case 1:
-                initInterfaceSetting();
-                break;
-            case 2:
-                InitInterfaceComparaison();
-                break;
-            case 3:
-                //informations sur les donnée
-                initInterfaceInformation();
-                break;
-            case 4:
-                //etat serveur
-                initInterfaceEtatServeur();
-                break;
-            default:
-                break;
-        }
-
-    }
-
+    
     /**
-     * *****************Private
-     * Methode***************************************************************
+     * *****************Private Methode***************************************************************
      */
+   
     /**
-     * permet d'initialiser l'interface principale
+     * Permet de lancer le thread qui se charge d'afficher la carte et
+     * telecharger les données chaque 3 heures
      */
-    @Override
-    public void InitInterfacePrincipal() throws IOException {
-        
-        
-        //au debut on verifie si il y a une connexion et on initialise online_offline
-        //onLine_offLine = "offLine";
-        VboxPrincipal.getChildren().add(0, menuBar);
-        menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #E1E6FA 10%, #ABC8E2 100%);");
-        //Coordonne.ConstructTabVille();
-
-        /*
-        on telecharger si possible le dernier fichier a chaque execution du programme
-         */
-        onlineMode = Utilitaire.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        String[] laDate = (dateFormat.format(date)).split("/");
-        try {
-            tabVille = (ArrayList<DataBean2>) model.getLatestDataForGraphicMap(userSelectOffline);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("tabVille size :"+tabVille+" last:"+tabVille.get(tabVille.size()-1));
-      //  AfficherCarte();
-
-//        if (onlineMode) {
-//            try {
-//                model.downloadAndUncompress(laDate[0] + laDate[1]);
-//            } catch (IOException ex) {
-//                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        } else {
-//            System.out.println("no connection ! users must import by theirselves data if they want !");
-//        }
-        /*
-        Dans le timer on telecharger si possible a chaque 3 heurs
-         */
-        RunTimer();
-    }
-
     private void RunTimer() {
         Timer timer = new Timer();
         TimerTask t = new TimerTask() {
 
             public void run() {
-                // some code
-//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
                 Platform.runLater(new Runnable() {
 
                     public void run() {
@@ -452,20 +738,6 @@ public class FXMLDocumentController implements Controller {
                                 e.printStackTrace();
                             }
 
-//                            if (onlineMode) {
-//
-//                                //   try {
-//                                System.out.println("telechargement des dernieres données");
-//                                //model.downloadAndUncompress(laDate[0] + laDate[1]);
-////
-////                                } catch (IOException ex) {
-////                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-////                                }
-//
-//
-//                            } else {
-//                                System.out.println("no connection ! users must import by her self data if he want !");
-//                            }
                         }
 
                         AfficherCarte();
@@ -476,323 +748,6 @@ public class FXMLDocumentController implements Controller {
         };
 
         timer.schedule(t, 01, 1000);
-    }
-
-    /**
-     * permet d'initialiser l'interface setting
-     */
-    public void initInterfaceSetting() {
-        VboxPrincipal.getChildren().add(0, menuBar);
-        menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
-
-        Image img = new Image(Meteo.class
-                .getResourceAsStream("Image/BackgroundSetting2.jpg"));
-        BackgroundImage background = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        anchorSeting.setBackground(new Background(background));
-
-        ToggleGroup kelvinCelcius = new ToggleGroup();
-        kelvin.setToggleGroup(kelvinCelcius);
-
-        celcius.setToggleGroup(kelvinCelcius);
-
-        if(kelvin_celcius.equals("celcius"))
-            celcius.setSelected(true);
-
-        else if(kelvin_celcius.equals("kelvin"))
-            kelvin.setSelected(true);
-
-        ToggleGroup onOffLine = new ToggleGroup();
-        online.setToggleGroup(onOffLine);
-        online.setSelected(true);
-        offline.setToggleGroup(onOffLine);
-
-        Timer timer = new Timer();
-        TimerTask t = new TimerTask() {
-
-            public void run() {
-                // some code
-//                           AfficheInterfacePrincipal.Afficher(stackPane/*,kelvin_celcius*/);
-                Platform.runLater(new Runnable() {
-
-                    public void run() {
-                        onlineMode = Utilitaire.netIsAvailable() != -1; // verifier chaque seconde si il ya une connexion internet
-                        if (online != null & userSelectOffline == false) {
-                            if (onlineMode) {
-                                System.out.println("online");
-                                online.setSelected(true);
-                            } else {
-                                System.out.println("offline");
-                                offline.setSelected(true);
-                            }
-                        }
-                    }
-                });
-            }
-        };
-
-        timer.schedule(t, 01, 1000);
-
-        //au debut on verifie si il y a une connexion et on initialise online_offline
-        LocationDefault = new ChoiceBox();
-
-        LocationDefault.setStyle(
-                "-fx-background-color: #7B8D8E/*#74828F*/;-fx-background-radius:20;-fx-border-width:3;");
-        List L = new ArrayList();
-        //dataList = model.getLatestAvailableData()
-        stationNames = (ArrayList<String>) model.getStationNames();
-        for (int i = 0;
-                i < stationNames.size();
-                i++) {
-            L.add(i, stationNames.get(i));
-        }
-        ObservableList<String> observableList = FXCollections.observableList(L);
-
-        observableList.addListener(
-                new ListChangeListener() {
-
-            public void onChanged(ListChangeListener.Change change
-            ) {
-
-            }
-        });
-        LocationDefault.getItems()
-                .clear();
-        LocationDefault.setItems(observableList);
-
-        LocationDefault.setValue(L.get(L.indexOf("BREST-GUIPAVAS")));
-        HboxLocation.getChildren()
-                .add(1, LocationDefault);
-        //Interface=0;
-    }
-
-    /**
-     * permet d'initialiser l'interface d'affichage et de comparaison des
-     * données
-     */
-    public void InitInterfaceComparaison() {
-        VboxPrincipal.getChildren().add(0, menuBar);
-        menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
-        List L = new ArrayList();
-
-        //dataList = model.getAllStations();
-        stationNames = (ArrayList) model.getStationNames();
-        for (int i = 0; i < stationNames.size(); i++) {
-            L.add(i, stationNames.get(i));
-        }
-
-        ObservableList<String> observableList = FXCollections.observableList(L);
-        observableList.addListener(new ListChangeListener() {
-
-            public void onChanged(ListChangeListener.Change change) {
-            }
-        });
-
-        StationComparaison.setItems(observableList);
-        Station.setItems(observableList);
-
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Température");
-
-        AfficheTemp = new AreaChart<Number, Number>(xAxis, yAxis);
-        //AfficheTemp.setStyle("-fx-background-color:#9C9F84;");
-        final NumberAxis xAxiss = new NumberAxis();
-        xAxis.setAutoRanging(true);
-        final NumberAxis yAxiss = new NumberAxis();
-
-        xAxiss.setLabel("Humudité");
-        AfficheHum = new AreaChart<Number, Number>(xAxiss, yAxiss);
-        final NumberAxis xAxisss = new NumberAxis();
-        final NumberAxis yAxisss = new NumberAxis();
-
-        xAxisss.setLabel("Nebulosité");
-        AfficheNebul = new AreaChart<Number, Number>(xAxisss, yAxisss);
-
-        VboxComparaison.getChildren().add(AfficheTemp);
-        VboxComparaison.getChildren().add(AfficheHum);
-        VboxComparaison.getChildren().add(AfficheNebul);
-
-        /*
-        Partie comparaison
-         */
-        final NumberAxis xAxis1 = new NumberAxis();
-        final NumberAxis yAxis1 = new NumberAxis();
-        lineCharttemp = new LineChart<Number, Number>(xAxis1, yAxis1);
-
-        final NumberAxis xAxis2 = new NumberAxis();
-        final NumberAxis yAxis2 = new NumberAxis();
-        lineCharthum = new LineChart<Number, Number>(xAxis2, yAxis2);
-
-        final NumberAxis xAxis3 = new NumberAxis();
-        final NumberAxis yAxis3 = new NumberAxis();
-        lineChartnebul = new LineChart<Number, Number>(xAxis3, yAxis3);
-
-        /*
-        Mettre lineChart de humidité et nébulosité par defaut invisible
-         */
-        lineCharttemp.setVisible(true);
-        lineCharthum.setVisible(false);
-        lineChartnebul.setVisible(false);
-        /*
-        ScrollPane scrollPaneTemp, scrollPaneHum, scrollPaneNeb;
-        scrollPaneTemp = new ScrollPane();
-        scrollPaneTemp.setContent(lineCharttemp);
-        scrollPaneHum = new ScrollPane();
-        scrollPaneHum.setContent(lineCharthum);
-        scrollPaneNeb = new ScrollPane();
-        scrollPaneNeb.setContent(lineChartnebul);
-         */
-
-        stack3.getChildren().addAll(lineCharttemp, lineCharthum, lineChartnebul);
-
-        groupeChart = new ToggleGroup();
-        RadioBtnTemp.setToggleGroup(groupeChart);
-        RadioBtnHum.setToggleGroup(groupeChart);
-        RadioBtnNebul.setToggleGroup(groupeChart);
-
-        RadioBtnTemp.setSelected(true);
-
-        VboxComparaison.setVisible(false);
-        groupeRadioAffichage = new ToggleGroup();
-        radioBtnCourbes.setToggleGroup(groupeRadioAffichage);
-        radioBtnTableur.setToggleGroup(groupeRadioAffichage);
-        radioBtnTableur.setSelected(true);
-
-        MinMaxMoyenne = new ToggleGroup();
-        System.out.println(MoyRadio);
-        MoyRadio.setToggleGroup(MinMaxMoyenne);
-        MinRadio.setToggleGroup(MinMaxMoyenne);
-        MaxRadio.setToggleGroup(MinMaxMoyenne);
-        MoyRadio.setSelected(true);
-        //Interface=1;
-
-        tableView.setEditable(true);
-        tabPane.getStylesheets().add("/CSS/CSSTabPane.css");
-        System.out.println("styleSheet");
-
-        AnchorVisu.getStylesheets().add("/CSS/CSSSplitPane.css");
-        anchorComp.getStylesheets().add("/CSS/CSSSplitPane.css");
-        ImageView image_view_btn_right = new ImageView(
-                new Image(getClass().getResourceAsStream("Image/right1.png"),
-                        35, 35, true, false));
-        rightVisu.setGraphic(image_view_btn_right);
-
-        ImageView image_view_btn_left = new ImageView(
-                new Image(getClass().getResourceAsStream("Image/left1.png"),
-                        35, 35, true, false));
-        leftVisu.setGraphic(image_view_btn_left);
-        image_view_btn_right = new ImageView(
-                new Image(getClass().getResourceAsStream("Image/right1.png"),
-                        35, 35, true, false));
-        rightComp.setGraphic(image_view_btn_right);
-
-        image_view_btn_left = new ImageView(
-                new Image(getClass().getResourceAsStream("Image/left1.png"),
-                        35, 35, true, false));
-        leftComp.setGraphic(image_view_btn_left);
-    }
-
-    /**
-     * permet d'initialiser l'interface permettant de savoir quelles données
-     * l'utilisateur a sur sa machine
-     */
-    public void initInterfaceInformation() {
-
-        ArrayList<String> listYear = model.getYearExists();
-
-        HBox hboxDataDispo = new HBox();
-        Text textDataDispo = new Text("Data Dispo");
-        ImageView deleteimg = new ImageView(
-                new Image(getClass().getResourceAsStream("Image/delete.png"),
-                        20, 20, true, false));
-        Button buttonDeleteAll = new Button();
-        buttonDeleteAll.setStyle("-fx-background-color:transparent;");
-        buttonDeleteAll.setGraphic(deleteimg);
-        buttonDeleteAll.setOnAction(new EventHandler<ActionEvent>() {
-
-            public void handle(ActionEvent e) {
-                System.out.println("Accepted");
-                for (int i = 0; i < listYear.size(); i++) {
-                    Utilitaire.deleteCSVFile(listYear.get(i));
-                    initInterfaceInformation();
-                }
-            }
-        });
-
-        hboxDataDispo.getChildren().addAll(textDataDispo, buttonDeleteAll);
-        final TreeItem<HBox> dispoData = new TreeItem<>(hboxDataDispo);
-        dispoData.setExpanded(true);
-        for (int i = 0; i < listYear.size(); i++) {
-            String s = listYear.get(i);
-            HBox hboxYear = new HBox();
-            Text textYear = new Text(s);
-            Button buttonDelete = new Button();
-            ImageView deleteimg1 = new ImageView(
-                    new Image(getClass().getResourceAsStream("Image/delete.png"),
-                            20, 20, true, false));
-            buttonDelete.setGraphic(deleteimg1);
-            buttonDelete.setStyle("-fx-background-color:transparent;");
-
-            buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
-
-                public void handle(ActionEvent e) {
-                    System.out.println("supprimer l'année " + s);
-
-                    Utilitaire.deleteCSVFile(s);
-                    initInterfaceInformation();
-                }
-            });
-
-            hboxYear.getChildren().addAll(textYear, buttonDelete);
-            final TreeItem<HBox> oneYear = new TreeItem<>(hboxYear);
-
-            ArrayList<String> listMonth = model.getMonthsExistsForYear(listYear.get(i));
-
-            for (int j = 0; j < listMonth.size(); j++) {
-                HBox hboxMonth = new HBox();
-
-                String str = listMonth.get(j).substring(5, 11);
-                System.out.println(listMonth.get(j));
-                System.out.println(str);
-                Text textMonth = new Text(listMonth.get(j).substring(9, 11));
-                Button buttonDeleteMonth = new Button();
-                ImageView deleteimg2 = new ImageView(
-                        new Image(getClass().getResourceAsStream("Image/delete.png"),
-                                20, 20, true, false));
-                buttonDeleteMonth.setGraphic(deleteimg2);
-                buttonDeleteMonth.setStyle("-fx-background-color:transparent;");
-                buttonDeleteMonth.setOnAction(new EventHandler<ActionEvent>() {
-
-                    public void handle(ActionEvent e) {
-                        System.out.println("supprimer le mois " + str);
-
-                        Utilitaire.deleteCSVFile(str);
-                        initInterfaceInformation();
-                    }
-                });
-                hboxMonth.getChildren().addAll(textMonth, buttonDeleteMonth);
-                oneYear.getChildren().add(j, new TreeItem(hboxMonth));
-            }
-
-            dispoData.getChildren().add(i, oneYear);
-
-        }
-        treeView.setRoot(dispoData);
-//        treeView.setContextMenu(menucontext);
-    }
-
-    /**
-     * permet d'initialiser l'interface permettant de savoir si le serveur de
-     * main france contenant les données nécessaires est bien en marche est
-     * combien de temps a fallut pour faire un ping
-     */
-    public void initInterfaceEtatServeur() {
-        double time = Utilitaire.netIsAvailable();
-        if (time != -1) {
-            etatConnexion.setText("En marche " + Double.toString(time) + " Milli Secondes");
-        } else {
-            etatConnexion.setText("Hors service ");
-        }
     }
 
     /**
@@ -1105,15 +1060,11 @@ public class FXMLDocumentController implements Controller {
         nomVille.setText(nomVillle);
         Text DateActuelle = new Text();
         DateActuelle.setFill(Color.CHOCOLATE);
-        System.out.println(tabVille.get(0).getNomStation());
-        System.out.println(tabVille.get(0).getDate().getTime());
-        System.out.println(tabVille.get(0).getDate().getDay());
 
         String date = tabVille.get(0).getDate().getDay() + "/"
                 + tabVille.get(0).getDate().getMonth() + "/"
-
-                + tabVille.get(0).getDate().getYear() + " a " +
-                Integer.parseInt(tabVille.get(0).getDate().getTime()) * 3 + " Heures";
+                + tabVille.get(0).getDate().getYear() + " a "
+                + Integer.parseInt(tabVille.get(0).getDate().getTime()) * 3 + " Heures";
 
         DateActuelle.setText(date);
         Text Temp = new Text("temperature: ");
@@ -1129,8 +1080,8 @@ public class FXMLDocumentController implements Controller {
             if (tabVille.get(i).getNomStation().equals(nomVillle)) {
                 if (tabVille.get(i).getTemperature() != 101) {
                     temperatureTemp = tabVille.get(i).getTemperature();
-                    if(kelvin_celcius.equals("kelvin")) {
-                        temperatureTemp = (float)(temperatureTemp + 273.15);
+                    if (kelvin_celcius.equals("kelvin")) {
+                        temperatureTemp = (float) (temperatureTemp + 273.15);
                     }
                     Temp.setText("Température: " + Float.toString((int) Math.ceil(temperatureTemp)));
                 } else {
@@ -1149,7 +1100,7 @@ public class FXMLDocumentController implements Controller {
                 }
                 /*Affichage de l'image representatif de la nébulosité*/
 
-                String s = "Image/".concat(getTempsActuel(tabVille.get(i).getNebulosite())).concat(".png");
+                String s = "Image/".concat(Utilitaire.getTempsActuel(tabVille.get(i).getNebulosite())).concat(".png");
 
                 Image tempactuel = new Image(Meteo.class
                         .getResourceAsStream(s));
@@ -1206,10 +1157,10 @@ public class FXMLDocumentController implements Controller {
 
             t = (int) Math.ceil(temp);
             Text text;
-            if (t != 101) {
-                text = new Text(Integer.toString(t) + X);
+            if (kelvin_celcius.equals("kelvin")) {
+                text = (t != 375) ? new Text(Integer.toString(t) + X) : new Text("N/A");
             } else {
-                text = new Text("N/A");
+                text = (t != 101) ? new Text(Integer.toString(t) + X) : new Text("N/A");
             }
 
             text.setFill(Color.CHOCOLATE);
@@ -1217,29 +1168,17 @@ public class FXMLDocumentController implements Controller {
         }
 
         stack.getChildren().addAll(imgview, gridPane);
-//        V.getChildren().set(1,H);
         VboxPrincipal.getChildren().set(2, stack);
     }
-
+   
     /**
-     * @param nebul
-     * @return une chaine de caractére qui represente le nom de l'image associé
-     * a la nébulosité d'une station donnée
+     *
+     * @param MoyRadio
+     * @param MaxRadio
+     * @param MinRadio
+     * @return un entier representant quel radio button est selectionné min,max
+     * ou bien moyenne
      */
-    private String getTempsActuel(float nebul) {
-
-        if (nebul < 33) {
-            return "ensoleille";
-        } else if (nebul < 66) {
-            return "nuageux";
-        } else if (nebul <= 100) {
-            return "pluvieux";
-        } else {
-            return "NA";
-        }
-
-    }
-
     private int MinOrMaxOrMoy(RadioButton MoyRadio, RadioButton MaxRadio, RadioButton MinRadio) {
         if (MinRadio.isSelected()) {
             return 1;//pour le min
