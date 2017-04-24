@@ -532,7 +532,6 @@ public class MyModel {
         return null;
     }
 
-
     /**********************************************************************************************************/
 
 
@@ -703,14 +702,14 @@ public class MyModel {
         series0.setName(Resultat1.get(0).getDate().getYear());
         series01.setName(Resultat1.get(0).getDate().getYear());
         series02.setName(Resultat1.get(0).getDate().getYear());
-        
+
         series1.setName(Resultat2.get(0).getDate().getYear());
         series11.setName(Resultat2.get(0).getDate().getYear());
         series12.setName(Resultat2.get(0).getDate().getYear());
         for (int i = 0; i < Resultat1.size(); i++) {
 
             series0.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getTemperature()));
-            
+
             series01.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getHumidite()));
             series02.getData().add(new XYChart.Data<>(i, Resultat1.get(i).getNebulosite()));
 
@@ -998,7 +997,7 @@ public class MyModel {
             // ... user chose CANCEL or closed the dialog
             /*
             Que faire dans ce cas la ????
-            
+
              */
 
             System.out.println("user select cancel ! ");
