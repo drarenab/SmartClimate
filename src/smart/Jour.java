@@ -195,9 +195,9 @@ public class Jour {
         String ordre;
 
         if(relevesList.isEmpty()) {
-            temperature = 1000;
-            humidite = 1000;
-            nebulosite = 1000;
+            temperature = 101;
+            humidite = 101;
+            nebulosite = 101;
             ordre = "8";
         }
         else {
