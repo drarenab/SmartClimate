@@ -13,8 +13,9 @@ import java.util.Map;
 import utilitaire.Utilitaire;
 
 /**
- * 
- * @author karim
+ * This class is a secondary part of our Model , an object of this class represents a Month
+ * which it contains Map  of Different objects of type : Jour that reprensts Data for one Day
+ *
  */
 public class Mois {
 

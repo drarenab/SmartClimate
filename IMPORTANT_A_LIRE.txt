@@ -1,0 +1,4 @@
+Lancer le jar qui se trouve dans le dossier : "/jar/myjar" depuis le terminal ou une ligne de commande en utilisant 
+la commande : java -jar smartClimate.jar 
+
+IMPORTANT : Veuiller rien deplacer dans le dossier "/jar/myjar" sinon l'application ne va pas se lancer  

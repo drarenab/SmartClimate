@@ -6,8 +6,6 @@
 package main;
 
 import abstraction.Model;
-import coordonnee.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,6 +38,13 @@ import javafx.stage.Stage;
 import utilitaire.Utilitaire;
 
 /**
+ * This class represents the main point of the Model , it contains a Map of stations
+ * and two parts of methods
+ * Public part : they are the methods that can be accessed from the controller
+ * Private part: they are the methods that are used by the public methods to insure the good operation of the app
+ *
+ * This class uses the design pattern singleton to insure that one instance of the
+ * model can be available on all the app
  * @author karim
  */
 public class MyModel implements Model {
@@ -48,6 +53,8 @@ public class MyModel implements Model {
     /*for singleton*/
     private static volatile Model instance = null;
 
+
+    /*******************************************PRIVATE METHODS *******************************************************/
     private MyModel() {
         constructMapVilles();
     }
@@ -92,12 +99,6 @@ public class MyModel implements Model {
             Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fr.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return false;
     }
@@ -167,7 +168,7 @@ public class MyModel implements Model {
     ) {
         // EX: date=20140231 (31 fevrier 2014) ==> va chercher si le dossier 2014 exist et si'il contient le fichier 201402 , et si ce dernier fichier contient
         //les données de la date demander
-        //System.out.println("Recuperation des donnée de la ville => " + cityId + " et la date =>" + date);
+
         String fileName = Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
         String idVille;
         float nebu, temperature, himudite;
@@ -175,7 +176,7 @@ public class MyModel implements Model {
         int jour, mois, annee, ordre;
 
         //si le fichier de donnée correspondant n'existe pas
-        // System.out.println("file exist" + fileName);
+
         if (!Utilitaire.checkIfFileExists(fileName)) {
 
             return false;
@@ -187,12 +188,8 @@ public class MyModel implements Model {
             FileReader dataFR = new FileReader(dateFile);
             BufferedReader dataBR = new BufferedReader(dataFR);
             String line, dateLine, splitedLine[];
-
-            ArrayList<DataCity> listDonnees = new ArrayList<DataCity>();
-
             Pattern pattern = Pattern.compile(date + ".*");
             line = dataBR.readLine();
-            Ville ville;
             //sauter la premiere ligne si elle contient un string , pour éviter les erreurs
             if (line.startsWith("numer_sta")) {
                 line = dataBR.readLine();
@@ -210,28 +207,25 @@ public class MyModel implements Model {
                     Matcher match = pattern.matcher(dateLine);
                     //si on a trouver la date qu'on cherche
                     if (match.find()) {
-                        //
+
                         // si on a bien matcher une date
                         //recuperation des données apartir du fichier
-                        //System.out.print("Match found, ");
+
                         temperature = (float) (!splitedLine[7].equals("mq") ? Float.parseFloat(splitedLine[7]) - 273.15 : 101.0);
                         nebu = !splitedLine[14].equals("mq") ? Float.parseFloat(splitedLine[14]) : 101;
                         himudite = !splitedLine[9].equals("mq") ? Float.parseFloat(splitedLine[9]) : 101;
                         //                                 annéé                           mois                            jour                            heure
-                        //adate = new aDate(splitedLine[1].substring(0, 4), splitedLine[1].substring(4, 6), splitedLine[1].substring(6, 8), splitedLine[1].substring(8, 10));
+
 
                         annee = Integer.parseInt(splitedLine[1].substring(0, 4));
                         mois = Integer.parseInt(splitedLine[1].substring(4, 6));
                         jour = Integer.parseInt(splitedLine[1].substring(6, 8));
                         ordre = Integer.parseInt(splitedLine[1].substring(8, 10));
 
-                        //System.out.print("Match found ordre=" + ordre);
-                        //noter j'ai pa mis le nom de la ville a rajouter
-                        //ville = getVilleFromId(Integer.parseInt(idVille));
-                        //attention si anneee or mois or jour n'existe pas !
+
                         addReleve(Integer.parseInt(idVille), annee, mois, jour, ordre / 3, temperature, himudite, nebu);
 
-                        //listDonnees.add(new DataCity(ville, temperature, himudite, nebu, adate));
+
                     }
 
                 }
@@ -328,7 +322,7 @@ public class MyModel implements Model {
      * by : -ConstructChartAffichage() -ConstructChartComparaison()
      * -ConstructTableView()
      *
-     * @param stationName name of station given by the user 
+     * @param stationName name of station given by the user
      * @param year year of the data that will be returned
      * @param month month of data that will be returned
      * @param day day of data that will be returned
@@ -666,10 +660,10 @@ public class MyModel implements Model {
                     }
                 }
 
-//                System.out.println("List mois .. size:" + listReleves.size());
-//                for (DataBean2 dataBean2 : listReleves) {
-//                    System.out.println("station:" + dataBean2.getIdStation() + "ordre: " + dataBean2.getDate().getTime() + " temperature:" + dataBean2.getTemperature());
-//                }
+
+
+
+
                 if (listReleves.isEmpty()) {
                     System.out.println("Attention , null data found ! ");
                 }
@@ -900,7 +894,7 @@ public class MyModel implements Model {
             return false;
         }
 
-        //return false;
+
     }
 
     /**
@@ -914,28 +908,28 @@ public class MyModel implements Model {
      */
     @Override
     public List<DataBean2> getLatestDataForGraphicMap(boolean offlineMode) throws IOException {
-//        int[] currentDate = Utilitaire.getCurrentDate();
-//        String year = String.valueOf(currentDate[3]);
-//
-//        String month = ("00" + currentDate[2]).substring(String.valueOf(currentDate[2]).length());
-//        String day = ("00" + currentDate[1]).substring(String.valueOf(currentDate[1]).length());
-//
-//        String stationName;
-//        List<DataBean2> dataList = new ArrayList<>();
-//        List<DataBean2> tempList;
-//        int mode = 0;
-//        DataBean2 dataBean;
-//        for (Station station : stationList.values()) {
-//            stationName = station.getNom();
-//            tempList = getData(stationName, year, month, day, mode);
-//            if (tempList.size() > 0) {
-//                dataBean = tempList.get(tempList.size() - 1);
-//                dataList.add(dataBean);
-//            }
-//            System.out.println("getting data for : " + stationName + "--" + year + "/" + month + "/" + day);
-//            //           dataList.addAll(getData(stationName,year,month,day,mode));
-//        }
-//        return dataList;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         int[] currentDate = Utilitaire.getCurrentDate();
         int intYear = currentDate[3];
         int intMonth = currentDate[2];
@@ -961,7 +955,7 @@ public class MyModel implements Model {
          * UPLOADER LA DERNEIRE DATE QUI EXISTE EN LOCAL SI TELECHARGEMENT HAS FAILED*
          */
         String file = Utilitaire.getLatesttAvailableFile();
-        //System.out.println("damnFile:"+file);
+
         String date = this.getLatestAvailableDateOnFile(file);
 
         getDataForDateByCity(date, "all");
@@ -976,7 +970,7 @@ public class MyModel implements Model {
                              intMonth,
                              station.getPointObj().getX(),
                              station.getPointObj().getY());
-            //  System.out.println("loop:"+station.getNom()+" id:"+station.getId());
+
             dataList.add(dataBean);
         }
 
@@ -1006,7 +1000,7 @@ public class MyModel implements Model {
 
             errorYear = "Year must be defined";
         } else {
-            //verification syntaxique
+
             if (!day.matches("(0[1-9]|[12][0-9]|3[01])?")) {
                 errorDay = "Day in incorrect format ";
             }
@@ -1194,6 +1188,9 @@ public class MyModel implements Model {
         return list;
     }
 
+    /**
+     * @return a List of String containing all station names
+     */
     @Override
     public List<String> getStationNames() {
         List<String> tempList = new ArrayList<>();

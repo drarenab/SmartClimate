@@ -6,11 +6,9 @@
 package smart;
 
 /**
- * 
- * @author karim
- * 
+ * Represents coordinates some objects on a graphical map
+ * it is used to determine stations positions on the graphical map on the Principal view
  */
-
 public class Point {
     
     private int x;

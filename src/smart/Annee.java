@@ -15,7 +15,9 @@ import java.util.Map;
 import utilitaire.Utilitaire;
 
 /**
- * @author SEIF
+ * This class is a secondary part of our Model , an object of this class represents a Year
+ * which it contains Map  of Different objects of type : Mois that reprensts Data for one Month
+ *
  */
 public class Annee {
 

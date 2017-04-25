@@ -1,7 +1,0 @@
-design done
-model 
-progression bar
-last date interface principal 
-affichage allert en bas des interface (optionnel)
-
-

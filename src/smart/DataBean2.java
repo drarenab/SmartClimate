@@ -1,7 +1,9 @@
 package smart;
 
 /**
- * Created by AZ PC on 18/04/2017.
+ * This class represents one Releve of a station,  on a certain date and time , it contains extra information than the
+ * Releve Class about coordinates : x,y (used to determine the place of each city on the map) , and the date of the info
+ * it is used as a way to communicate between the methods of our Model
  */
 public class DataBean2 {
     private String nomStation;

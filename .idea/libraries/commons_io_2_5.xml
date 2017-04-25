@@ -4,7 +4,6 @@
       <root url="jar://$PROJECT_DIR$/src/lib/commons-io-2.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/src/lib/hamcrest-core-1.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/src/lib/junit-4.12.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/lib/jfoenix.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

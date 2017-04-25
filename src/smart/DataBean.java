@@ -6,9 +6,8 @@
 package smart;
 
 /**
- *
- * @author SEIF
- * @author karim
+ * this class looks the same as the Class Releve, it contains extra information about the date
+ * it is used to fill the tableView with data
  */
 public class DataBean {
 
@@ -17,10 +16,6 @@ public class DataBean {
     String humidite;
     String nebulosite;
     String temperature;
-
-    public String getIdVille() {
-        return idVille;
-    }
 
     public void setIdVille(String idVille) {
         this.idVille = idVille;

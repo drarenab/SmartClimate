@@ -1,9 +1,5 @@
 package main;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,7 +12,6 @@ import java.util.logging.Logger;
 
 import abstraction.Controller;
 import abstraction.Model;
-import coordonnee.DataCity;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -45,7 +40,6 @@ import javafx.geometry.VPos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.cell.PropertyValueFactory;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import javafx.scene.paint.Color;
@@ -54,14 +48,14 @@ import smart.DataBean2;
 import utilitaire.*;
 
 /**
- * @author karim
+ * This class is the Controller part of the MVC
+    it is the intermediate between the Views and the Model
+
+ * it contains methods to intialise the different views
+ * and event listeners for different actions from the views
  */
 public class FXMLDocumentController implements Controller {
-
-    private List<DataCity> dataList;
     private Model model;
-    private String showMode;
-    private ArrayList<XYChart.Series> chartList;
     static int Interface = 0;
     static String kelvin_celcius = "celcius";
     static boolean onlineMode = true;
@@ -296,7 +290,6 @@ public class FXMLDocumentController implements Controller {
         xAxis.setLabel("Température");
 
         AfficheTemp = new AreaChart<Number, Number>(xAxis, yAxis);
-        //AfficheTemp.setStyle("-fx-background-color:#9C9F84;");
         final NumberAxis xAxiss = new NumberAxis();
         xAxis.setAutoRanging(true);
         final NumberAxis yAxiss = new NumberAxis();
@@ -465,7 +458,6 @@ public class FXMLDocumentController implements Controller {
 
         }
         treeView.setRoot(dispoData);
-//        treeView.setContextMenu(menucontext);
     }
 
     /**
@@ -531,31 +523,13 @@ public class FXMLDocumentController implements Controller {
             boolean validated1, validated2;
             validated1 = model.validateNotFuture(Year1Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
             validated2 = model.validateNotFuture(Year2Comparaison.getText(), MonthComparaison.getText(), DayComparaison.getText());
-            String yearMonth1 = "", yearMonth2 = "", yearMonthDay1 = "", yearMonthDay2 = "";
+            String yearMonth1 = "", yearMonth2 = "";
             if (validated1 && validated2) {
-                // progressComparaison.setVisible(true);
                 AfficheTemp.setTitle("Températures");
                 AfficheHum.setTitle("Humidité");
                 AfficheNebul.setTitle("Nébulosité");
-                /**
-                 * CAN BE PUT INSIDE A METHOD
-                 */
-                // si l'utilisateur a saisie l'année et le mois et le jour donc on est sur le mode "day"
-                if (MonthComparaison.getText().length() > 0 && DayComparaison.getText().length() > 0) {
-                    showMode = "day";
-                    yearMonth1 = Year1Comparaison.getText() + MonthComparaison.getText();
-                    yearMonth2 = Year2Comparaison.getText() + MonthComparaison.getText();
-                    yearMonthDay1 = yearMonth1 + DayComparaison.getText();
-                    yearMonthDay2 = yearMonth2 + DayComparaison.getText();
-                } // si l'utilisateur a saisie que le mois alors on est sur le mode "month"
-                else if (MonthComparaison.getText().length() > 0) {
-                    showMode = "month";
-                    yearMonth1 = Year1Comparaison.getText() + MonthComparaison.getText();
-                    yearMonth2 = Year2Comparaison.getText() + MonthComparaison.getText();
-                } // si l'utilisateur a saisie que l'année alors on est sur le mode "year"
-                else {
-                    showMode = "year";
-                }
+
+
                 model.constructChartComparaison(StationComparaison.getValue().toString(),
                         Year1Comparaison.getText(),
                         MonthComparaison.getText(),
@@ -617,7 +591,6 @@ public class FXMLDocumentController implements Controller {
 
         }
         if (offline.isSelected()) {
-            //onLine_offLine = "offLine";
             onlineMode = false;
             userSelectOffline = true;
         }
@@ -629,14 +602,12 @@ public class FXMLDocumentController implements Controller {
         Test si le formulaire est bien rempli
          */
         year.setStyle("-fx-background-color: #C9E2E9, #D9E577 , #C9E2E9;");
-//        year.setText("");
+
         month.setStyle("-fx-background-color: #C9E2E9, #D9E577 , #C9E2E9;");
-//        month.setText("");
+
         day.setStyle("-fx-background-color: #C9E2E9, #D9E577 , #C9E2E9;");
 
-//        day.setText("");
         Map errors = model.validateDate(year.getText(), month.getText(), day.getText());
-        String latestDate, latest;
 
         /*
         test si la année n'est pas vide (champs obligatoire)
@@ -1050,7 +1021,6 @@ public class FXMLDocumentController implements Controller {
         String nomVillle;
         /*C is a choiceBox who contain the name of all station*/
         nomVillle = (LocationDefault != null) ? LocationDefault.getValue().toString() : "BREST-GUIPAVAS";
-//      tabVille = model.getLatestAvailableData();
         /**
          * HERE*
          */
@@ -1132,7 +1102,6 @@ public class FXMLDocumentController implements Controller {
         gridPane.setMaxSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         gridPane.setMinSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
         gridPane.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-        // gridPane.gridLinesVisibleProperty().set(true);
 
         for (int i = 0; i < 20; i++) {
             ColumnConstraints column1 = new ColumnConstraints(10.0, 496.0, 496.0, Priority.SOMETIMES, HPos.CENTER, false);

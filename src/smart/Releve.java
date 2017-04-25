@@ -6,8 +6,8 @@
 package smart;
 
 /**
- *
- * @author SEIF
+ * This class is the last part of the Model chain , each object of this class represents information about temperature,
+ * humidite, nebulosite for a station on a precise time of a day of the year
  */
 public class Releve {
     private int ordre;
@@ -21,16 +21,16 @@ public class Releve {
         this.humidite = humidite;
         this.nebulosite = nebulosite;
     }
-    
-    
+
+
     public String toString() {
-        return 
-                "ordre: "+ordre+
-                " temperature: "+temperature+
-                " humidite: "+humidite+
-                " nebulosite: "+nebulosite;
+        return
+                "ordre: " + ordre +
+                        " temperature: " + temperature +
+                        " humidite: " + humidite +
+                        " nebulosite: " + nebulosite;
     }
-    
+
     public int getOrdre() {
         return ordre;
     }
@@ -62,6 +62,5 @@ public class Releve {
     public void setNebulosite(float nebulosite) {
         this.nebulosite = nebulosite;
     }
-     
-    
+
 }

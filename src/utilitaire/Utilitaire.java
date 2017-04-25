@@ -6,10 +6,6 @@
 package utilitaire;
 
 import main.*;
-import smart.Point;
-import smart.Ville;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,81 +35,10 @@ import org.apache.commons.io.FileUtils;
 import main.*;
         
 /**
- *
- * @author karim
+ * This class contains methods that are helpful to use by the other classes
+ * like : downloading data and uncompressing it
  */
 public class Utilitaire {
-    public static Map<Integer, Ville> villes;
-
-    //*********************************public static SECTION ********************************************************// 
-     /**
-     * COnstruire la map qui contient la correspondance idVille => nomVille
-     *
-     * @return true if succesfully charged false if not
-     */
-    public static boolean constructMapVilles() {
-        FileReader fr = null;
-        String line;
-        try {
-            File file = new File(Configuration.CITY_FILE_NAME);
-            fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            line = br.readLine();
-            line = br.readLine();
-
-            villes = new HashMap<Integer, Ville>();
-
-            while (line != null) {
-                villes.put(Integer.parseInt(line.split(";")[0]),
-                        new Ville(line.split(";")[1],
-                                Integer.parseInt(line.split(";")[0]),
-                                new Point(Integer.parseInt(line.split(";")[2]), Integer.parseInt(line.split(";")[3]))
-                        ));
-                line = br.readLine();
-            }
-
-            br.close();
-            return true;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fr.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Utilitaire.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return false;
-    }
-    /**
-     * permet d'avoir l'id d'une station a partir de son nom
-     * @param name
-     * @return un entier representant l'id de la station
-     */
-    public static int getIdFromNameVille(String name) {
-        Integer key = null;
-
-        for (Map.Entry<Integer, Ville> entry : villes.entrySet()) {
-
-            Ville value = entry.getValue();
-
-            if (value.getNom().compareTo(name) == 0) {
-                key = entry.getKey();
-            }
-        }
-        return key;
-
-    }
-    /**
-     * permet d'avoir l'objet ville a partir de son id
-     * @param id
-     * @return un objet de type ville
-     */
-    public static Ville getVilleFromId(int id) {
-        return (villes.get(id));
-    }
     /**
      * Permet de crée un dossier en local
      * @param directory
@@ -216,7 +141,6 @@ public class Utilitaire {
      * Methode static qui telecharger et sauvegarde un fichier depuis un URL
      *
      * @param date la date de telechargement (yyyymm)
-     * @param outputfile le nom de fichier apres le telechargement(*.csv.gz)
      */
     public static boolean downLoadCsvByDate(String date) throws IOException {
 //        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -269,7 +193,6 @@ public class Utilitaire {
      * le fichier decompressé
      *
      * @param inputFile le nom de fichier qui va etre decompresser
-     * @param outputFile le nom de fichier resultat apres la decompression
      */
     public static boolean decompresserGzip(String inputFile) {
         byte[] buffer = new byte[1024];
@@ -347,8 +270,6 @@ public class Utilitaire {
         return wellDone;
 
     }
-
-    //*********************************PUBLIC SECTION ********************************************************// 
     
     /**
      * supprimer le fichier de la date selectionner par l'utilisateur
@@ -483,24 +404,6 @@ public class Utilitaire {
             return false;
 }
 
-    /**
-     * permet de savoir si l'utilisateur veux les données pour un mois un jour ou une année entiere
-     * @param year
-     * @param month
-     * @param day
-     * @return 0 pour un jour, 1 pour un mois, 2 pour une année
-     */
-    public static int whichMode(String year, String month, String day) {
-        if (year.length() > 0 && month.length() > 0 && day.length() > 0)
-            return 0;
-        else if (year.length() > 0 && month.length() > 0)
-            return 1;
-        else if (year.length() > 0)
-            return 2;
-
-        else return -1; // invalid date !
-    }
-    
     /**
      * @param nebul
      * @return une chaine de caractére qui represente le nom de l'image associé

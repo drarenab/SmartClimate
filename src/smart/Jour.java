@@ -13,8 +13,9 @@ import java.util.Map;
 import utilitaire.Utilitaire;
 
 /**
- * @author SEIF
- * @author karim
+ *  This class is a secondary part of our Model , an object of this class represents a Jour
+ * which it contains Map  of Different objects of type : Releve , each Releve contains data such us
+ * temperature, humidite , nebulosite ..
  */
 public class Jour {
 
@@ -310,7 +311,7 @@ public class Jour {
         return new DataBean2(nomStation,idStation, (temp) ? temperature : 101, (hum) ? humidite : 101, (neb) ? nebulosite : 101,
                 new aDate(idAnnee, idMois, Integer.toString(id), Integer.toString(4)),x,y);
 
-//        return new Releve(10, (temp) ? temperature : 101, (hum) ? humidite : 101, (neb) ? nebulosite : 101);
+
     }
 
     /**
