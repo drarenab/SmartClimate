@@ -729,7 +729,6 @@ public class MyModel implements Model {
             series.getData().add(new XYChart.Data<>(i + 1, Resultat.get(i).getTemperature()));
             series1.getData().add(new XYChart.Data<>(i + 1, Resultat.get(i).getHumidite()));
             series2.getData().add(new XYChart.Data<>(i + 1, Resultat.get(i).getNebulosite()));
-
         }
         S.add(series);
         S.add(series1);

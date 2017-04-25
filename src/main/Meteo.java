@@ -7,8 +7,10 @@ package main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -18,18 +20,19 @@ import javafx.stage.StageStyle;
  * @author karim
  */
 public class Meteo extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("PrincipalView.fxml"));
-        
+
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
         stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setX(100);
+        stage.setY(60);
         stage.show();
-        
-        
+
     }
 
     /**
@@ -38,5 +41,5 @@ public class Meteo extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

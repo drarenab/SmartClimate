@@ -5,13 +5,6 @@
  */
 package utilitaire;
 
-/**
- * TODO yearMode,MonthMode,DayMode
- *
- * if data doesn't exist or not updated we download it , and it depends if it is
- * only a month , or a whole year !
- *
- */
 import main.*;
 import smart.Point;
 import smart.Ville;
@@ -50,7 +43,6 @@ import main.*;
  * @author karim
  */
 public class Utilitaire {
-    //public static ArrayList<VilleTemp> listDonnée;
     public static Map<Integer, Ville> villes;
 
     //*********************************public static SECTION ********************************************************// 
@@ -95,7 +87,11 @@ public class Utilitaire {
         }
         return false;
     }
-
+    /**
+     * permet d'avoir l'id d'une station a partir de son nom
+     * @param name
+     * @return un entier representant l'id de la station
+     */
     public static int getIdFromNameVille(String name) {
         Integer key = null;
 
@@ -110,11 +106,19 @@ public class Utilitaire {
         return key;
 
     }
-
+    /**
+     * permet d'avoir l'objet ville a partir de son id
+     * @param id
+     * @return un objet de type ville
+     */
     public static Ville getVilleFromId(int id) {
         return (villes.get(id));
     }
-
+    /**
+     * Permet de crée un dossier en local
+     * @param directory
+     * @return true si le dossier a bien était crée false si il existe deja 
+     */
     public static boolean createDirectory(String directory) {
         File theDir = new File(directory);
         boolean result = false;
@@ -141,7 +145,11 @@ public class Utilitaire {
     public static String getCsvFilePathFromDate(String date) {
         return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4) + "/" + date.substring(0, 6) + ".csv";
     }
-    
+   /**
+    * donne le chemin du dossier contenant les données de toute une année
+    * @param date
+    * @return 
+    */
      public static String getYearFilePathFromDate(String date) {
         return Configuration.DATA_DIRECTORY_NAME + "/" + date.substring(0, 4);
     }
@@ -341,14 +349,6 @@ public class Utilitaire {
     }
 
     //*********************************PUBLIC SECTION ********************************************************// 
-    /**
-     * this method returns for a given year all month files that doesn't exist
-     * EX: inside folder 2014 if we have all months files except 201401.csv,
-     * then method will return it
-     *
-     * @param year corresponds to the year folder we'll look at
-     * @return a list of missed months
-     */
     
     /**
      * supprimer le fichier de la date selectionner par l'utilisateur
@@ -483,7 +483,13 @@ public class Utilitaire {
             return false;
 }
 
-
+    /**
+     * permet de savoir si l'utilisateur veux les données pour un mois un jour ou une année entiere
+     * @param year
+     * @param month
+     * @param day
+     * @return 0 pour un jour, 1 pour un mois, 2 pour une année
+     */
     public static int whichMode(String year, String month, String day) {
         if (year.length() > 0 && month.length() > 0 && day.length() > 0)
             return 0;

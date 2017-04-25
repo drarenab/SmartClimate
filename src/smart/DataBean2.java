@@ -92,9 +92,9 @@ public class DataBean2 {
     public DataBean toDataBean() {
         DataBean dataBean = new DataBean();
         dataBean.setDate(date.toString());
-        dataBean.setHumidite(String.valueOf(humidite));
-        dataBean.setNebulosite(String.valueOf(nebulosite));
-        dataBean.setTemperature(String.format("%.1f",temperature));
+        dataBean.setHumidite((humidite!=101)?String.format("%.1f",humidite):"N/A");
+        dataBean.setNebulosite((nebulosite!=101)?String.format("%.1f",nebulosite):"N/A");
+        dataBean.setTemperature((temperature!=101)?String.format("%.1f",temperature):"N/A");
         dataBean.setIdVille(String.valueOf(idStation));
         return dataBean;
 

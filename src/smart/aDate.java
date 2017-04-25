@@ -9,8 +9,7 @@ package smart;
  *
  * @author SEIF
  */
-//verification de validité de la date!
-//comparer deux dates
+
 public class aDate {
     private String day;//dd
     private String month;//mm
