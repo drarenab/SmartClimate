@@ -26,17 +26,20 @@ public class Station {
         this.point = point;
         anneeList = new HashMap<Integer,Annee>();
     }
-
-    public Station() {
-    }
-    
+    /**
+     * donne une année demandé en paramétre si elle existe sinon elle le crée
+     * @param annee
+     * @return un objet de type année
+     */
     public Annee getAndCreateAnnee(int annee) 
     {   Boolean bool = anneeList.containsKey(annee);
         if(!bool)
             anneeList.put(annee,new Annee(annee));
         return (anneeList.get(annee));
     }
-
+    /**
+     * permet de builder les années manquantes
+     */
     public void buildMissingYears() {
         int[] currentDate = Utilitaire.getCurrentDate();
         int latestYear = currentDate[3];
@@ -48,7 +51,7 @@ public class Station {
             anneeList.put(j, annee);
         }
     }
-
+    
     public Annee getAnnee(int annee) {
         return anneeList.get(annee);
     }
@@ -89,26 +92,14 @@ public class Station {
         }
         return true;
     }
-
+    /**
+     * permet de savoir si une année existe dans la structure ou pas
+     * @param annee
+     * @return true si l'année existe, false sinon
+     */
     public boolean anneeExists(int annee) {
         return anneeList.containsKey(annee);
     }
-    
-    public boolean addReleve(int annee,int mois,int jour,int ordre, float temperature, float humidite, float nebulosite) 
-    {   
-       return true;
-    }
-    
-    public List<Releve> getReleves(int annee,int mois,int jour) {
-        return null;
-    }
-    
-    public List<Releve> getMoyennesParMois(int mois) {
-        return null;
-    }
-    
-    public List<Releve> getMoyennesParJour(int mois) {
-        return null;
-    }
+   
 }
     

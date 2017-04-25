@@ -330,15 +330,7 @@ public class FXMLDocumentController implements Controller {
         lineCharttemp.setVisible(true);
         lineCharthum.setVisible(false);
         lineChartnebul.setVisible(false);
-        /*
-        ScrollPane scrollPaneTemp, scrollPaneHum, scrollPaneNeb;
-        scrollPaneTemp = new ScrollPane();
-        scrollPaneTemp.setContent(lineCharttemp);
-        scrollPaneHum = new ScrollPane();
-        scrollPaneHum.setContent(lineCharthum);
-        scrollPaneNeb = new ScrollPane();
-        scrollPaneNeb.setContent(lineChartnebul);
-         */
+        
 
         stack3.getChildren().addAll(lineCharttemp, lineCharthum, lineChartnebul);
 
@@ -675,8 +667,8 @@ public class FXMLDocumentController implements Controller {
                 String kelCel = (kelvin_celcius.equals("kelvin")) ? " K" : " °C";
                 columnHum.setCellValueFactory(new PropertyValueFactory<DataBean, String>("humidite"));
                 columnNebul.setCellValueFactory(new PropertyValueFactory<DataBean, String>("nebulosite"));
-                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature" + kelCel));
-                columnTemp.setText(columnTemp.getText() + kelCel);
+                columnTemp.setCellValueFactory(new PropertyValueFactory<DataBean, String>("temperature"));
+                columnTemp.setText("Température" + kelCel);
                 columnDate.setCellValueFactory(new PropertyValueFactory<DataBean, String>("date"));
 
                 model.Affichage(Station.getValue().toString(),

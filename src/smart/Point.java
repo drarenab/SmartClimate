@@ -12,13 +12,6 @@ package smart;
  */
 
 public class Point {
-/**
- * 
- * @param x
- * @param y 
- * Cette Classe Crée un point de coordonnée X et Y 
- * qui represente un point sur la carte de france de l'interface principal
- */
     
     private int x;
     private int y;

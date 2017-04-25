@@ -8,6 +8,7 @@ package smart;
 /**
  *
  * @author SEIF
+ * @author karim
  */
 public class DataBean {
 

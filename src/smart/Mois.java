@@ -13,7 +13,8 @@ import java.util.Map;
 import utilitaire.Utilitaire;
 
 /**
- * @author SEIF
+ * 
+ * @author karim
  */
 public class Mois {
 
@@ -32,8 +33,10 @@ public class Mois {
     public int getId() {
         return id;
     }
-
-    //needed for tests
+    /**
+     * copie la map de jour passée en paramétre dans la map courante
+     * @param list 
+     */
     public void copyAll(Map<Integer, Jour> list) {
         this.joursList = list;
     }
@@ -71,7 +74,11 @@ public class Mois {
 
         return true;
     }
-
+    /**
+     * donne une map de jour manquant dans le mois courant
+     * @param year
+     * @return map of jour
+     */
     public Map<Integer, Jour> getMissingData(int year) {
         int lastDay, latestReleve;
         boolean isCurrentDate = Utilitaire.isCurrentDate(year, id, -1, 1);
@@ -109,7 +116,10 @@ public class Mois {
 
         return missingJours;
     }
-
+    /**
+     * construit les jours manquants du mois courant 
+     * @param year 
+     */
     public void buildMissingDays(int year) {
         boolean isCurrentMonth = Utilitaire.isCurrentDate(year,id,-1, 1);
         int[] currentDate = Utilitaire.getCurrentDate();
@@ -125,7 +135,16 @@ public class Mois {
             joursList.put(j,jour);
         }
     }
-
+    /**
+     * donne tous les relevés du mois courant
+     * @param kelvin_celcius
+     * @param stationName
+     * @param idStation
+     * @param annee
+     * @param x
+     * @param y
+     * @return list of DataBean2 
+     */
     public List<DataBean2> getAllReleves(String kelvin_celcius,String stationName,int idStation, int annee,int x,int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
@@ -134,7 +153,12 @@ public class Mois {
         }
         return tempList;
     }
-
+    /**
+     * donne le jour demandé en paramétre si il existe sinon elle le crée a partir du fichier adéquant 
+     * se trouvant en local
+     * @param jour
+     * @return un objet de type jour
+     */
     public Jour getAndCreateJour(int jour) {
         Boolean bool = joursList.containsKey(jour);
         if (!bool) {
@@ -147,21 +171,13 @@ public class Mois {
     public Jour getJour(int jour) {
         return joursList.get(jour);
     }
-
+    /**
+     * permet de savoir si un jour en particulier existe dans la map ou pas
+     * @param jour
+     * @return  true si le jour existe false sinon
+     */
     public boolean jourExists(int jour) {
         return joursList.containsKey(jour);
-    }
-
-    public List<Releve> getReleves(int jour) {
-        return null;
-    }
-
-    public List<Releve> getMoyennesParJour(int jour) {
-        return null;
-    }
-
-    public Releve calculMoyenneMois(int jour) {
-        return null;
     }
 
     public void showAll()
@@ -172,10 +188,15 @@ public class Mois {
     }
    
      /**
-     *
-     * @return Hashmap comme clé l'id du jour et comme valeur le relevé
-     * representant la moyenne du jour
-     */
+      * donne les differentes moyenne de tous les jours du mois courant
+      * @param kelvin_celcius
+      * @param nomStation
+      * @param idStation
+      * @param idAnnee
+      * @param x
+      * @param y
+      * @return  une list d'objet DataBean2 contenant les moyenne des jours du mois
+      */
     public ArrayList<DataBean2> getMoyennesParJour(String kelvin_celcius,String nomStation,int idStation,String idAnnee,int x,int y) {
         ArrayList<DataBean2> moyenneParMois = new ArrayList<>();
         for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
@@ -186,7 +207,16 @@ public class Mois {
         }
         return moyenneParMois;
     }
-
+    /**
+     * donne les differentes valeur minimales de chaque jours du mois courant
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param idAnnee
+     * @param x
+     * @param y
+     * @return liste d'objet DataBean2 
+     */
     public ArrayList<DataBean2> getMinParMois(String kelvin_celcius,String nomStation,int idStation,String idAnnee,int x,int y) {
         ArrayList<DataBean2> minParMois = new ArrayList<>();
         for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {
@@ -197,8 +227,16 @@ public class Mois {
         }
         return minParMois;
     }
- 
-
+    /**
+     * donne les differentes valeur maximales de chaque jours du mois courant
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param idAnnee
+     * @param x
+     * @param y
+     * @return liste de DataBean2
+     */
     public ArrayList<DataBean2> getMaxParMois(String kelvin_celcius,String nomStation,int idStation,String idAnnee,int x,int y) {
         ArrayList<DataBean2> maxParMois = new ArrayList<>();
         for (Map.Entry<Integer, Jour> entry : joursList.entrySet()) {

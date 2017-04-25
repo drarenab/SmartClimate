@@ -27,6 +27,13 @@ public class Annee {
         moisList = new HashMap<Integer, Mois>();
     }
 
+    /**
+     * permet de récuperer un mois a partir de la HashMap si il existe, sinon
+     * elle le récupére du fichier adéquat et le retourne
+     *
+     * @param mois
+     * @return l'objet mois demandé
+     */
     public Mois getAndCreateMois(int mois) {
         Boolean bool = moisList.containsKey(mois);
         if (!bool) {
@@ -37,10 +44,10 @@ public class Annee {
     }
 
     /**
-     * Checks if this Year is fully updated (contains the entire data) , in terms of months, days in a month , releve in days
+     * Checks if this Year is fully updated (contains the entire data) , in
+     * terms of months, days in a month , releve in days
      *
-     * @return true if this year is updated
-     * false if this year is not updated
+     * @return true if this year is updated false if this year is not updated
      */
     public boolean isUpdated() {
         int lastMonth;
@@ -67,10 +74,9 @@ public class Annee {
     }
 
     /**
-     * Checks if this Year is fully updated (contains the entire data) , in terms of months, days in a month , releve in days
+     * donne les dates manquantes dans la hashmap
      *
-     * @return true if this year is updated
-     * false if this year is not updated
+     * @return une map des mois manquants
      */
     public Map<Integer, Mois> getMissingData() {
         int lastMonth, latestDay;
@@ -106,10 +112,9 @@ public class Annee {
         return missingMois;
     }
 
-    public void showAll()
-    {
-        for(Mois mois : moisList.values()) {
-            System.out.println("id:"+mois.getId());
+    public void showAll() {
+        for (Mois mois : moisList.values()) {
+            System.out.println("id:" + mois.getId());
         }
     }
 
@@ -117,10 +122,11 @@ public class Annee {
         boolean isCurrentYear = Utilitaire.isCurrentDate(id, -1, -1, 2);
         int[] currentDate = Utilitaire.getCurrentDate();
         int latestMonth;
-        if (isCurrentYear)
+        if (isCurrentYear) {
             latestMonth = currentDate[2];
-        else
+        } else {
             latestMonth = 12;
+        }
 
         for (int j = 1; j <= latestMonth; j++) {
             Mois mois = new Mois(j);
@@ -129,15 +135,29 @@ public class Annee {
         }
     }
 
-    public List<DataBean2> getAllReleves(String kelvin_celcius,String stationName,int idStation,int x,int y) {
+    /**
+     * donne la liste de tous les relevé au format DataBean2
+     *
+     * @param kelvin_celcius
+     * @param stationName
+     * @param idStation
+     * @param x
+     * @param y
+     * @return une liste de DataBean2 chaque element represente un relevé
+     */
+    public List<DataBean2> getAllReleves(String kelvin_celcius, String stationName, int idStation, int x, int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
 
         for (Mois mois : moisList.values()) {
-            tempList.addAll(mois.getAllReleves(kelvin_celcius,stationName,idStation,id,x,y));
+            tempList.addAll(mois.getAllReleves(kelvin_celcius, stationName, idStation, id, x, y));
         }
         return tempList;
     }
 
+    /**
+     *
+     * @return un booleen indiquant si une année contient tous les mois ou pas
+     */
     public boolean containsFullMonths() {
         int currentDay, currentMonth, currentYear;
         ArrayList<String> missedMonths = new ArrayList<String>();
@@ -158,7 +178,9 @@ public class Annee {
         for (int i = 1; i <= 12; i++) {
             month = ("00" + i).substring(String.valueOf(i).length());
             if (stopSearch && Integer.parseInt(month) > currentMonth) //si le mois generer est supperieure au mois courant
+            {
                 break;
+            }
 
             for (Mois m : moisList.values()) {
                 if (m.getId() == Integer.parseInt(month)) {
@@ -188,38 +210,76 @@ public class Annee {
         return null;
     }
 
-    public List<DataBean2> getMoyenneParMois(String kelvin_celcius,String nomStation,int idStation,int x,int y) {
+    /**
+     * donne une liste des relevés au format DataBean 2 contenant la moyenne de
+     * chaque jours de chaque mois de l'année
+     *
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param x
+     * @param y
+     * @return liste de DataBean2 des moyennes de chaque jours de l'année
+     */
+    public List<DataBean2> getMoyenneParMois(String kelvin_celcius, String nomStation, int idStation, int x, int y) {
         ArrayList<DataBean2> moyenneParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            moyenneParAnnee.addAll(value.getMoyennesParJour(kelvin_celcius,nomStation,idStation, Integer.toString(id),x,y));
+            moyenneParAnnee.addAll(value.getMoyennesParJour(kelvin_celcius, nomStation, idStation, Integer.toString(id), x, y));
 
         }
         return moyenneParAnnee;
     }
-     public List<DataBean2> getMinParMois(String kelvin_celcius,String nomStation,int idStation,int x,int y) {
+
+    /**
+     * donne une liste des relevés au format DataBean 2 contenant le minimum de
+     * chaque jours de chaque mois de l'année
+     *
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param x
+     * @param y
+     * @return liste de DataBean2 des minimums de chaque jours de l'année
+     */
+    public List<DataBean2> getMinParMois(String kelvin_celcius, String nomStation, int idStation, int x, int y) {
         ArrayList<DataBean2> minParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            minParAnnee.addAll(value.getMinParMois(kelvin_celcius,nomStation,idStation, Integer.toString(id),x,y));
+            minParAnnee.addAll(value.getMinParMois(kelvin_celcius, nomStation, idStation, Integer.toString(id), x, y));
 
         }
         return minParAnnee;
     }
-      public List<DataBean2> getMaxParMois(String kelvin_celcius,String nomStation,int idStation,int x,int y) {
+
+    /**
+     * donne une liste des relevés au format DataBean 2 contenant le maximum de
+     * chaque jours de chaque mois de l'année
+     *
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param x
+     * @param y
+     * @return liste de DataBean2 des maximum de chaque jours de l'année
+     */
+    public List<DataBean2> getMaxParMois(String kelvin_celcius, String nomStation, int idStation, int x, int y) {
         ArrayList<DataBean2> maxParAnnee = new ArrayList<>();
         for (Map.Entry<Integer, Mois> entry : moisList.entrySet()) {
             Integer key = entry.getKey();
             Mois value = entry.getValue();
-            maxParAnnee.addAll(value.getMaxParMois(kelvin_celcius,nomStation,idStation, Integer.toString(id),x,y));
+            maxParAnnee.addAll(value.getMaxParMois(kelvin_celcius, nomStation, idStation, Integer.toString(id), x, y));
 
         }
         return maxParAnnee;
     }
 
-    /*needed for tests : dangerous */
+    /**
+     * fait une copie d'une map passé en paramétre vers la map des mois 
+     * @param l la map a copier
+     */
     public void copyMap(Map<Integer, Mois> l) {
         moisList = l;
     }

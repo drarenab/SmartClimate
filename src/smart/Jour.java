@@ -14,6 +14,7 @@ import utilitaire.Utilitaire;
 
 /**
  * @author SEIF
+ * @author karim
  */
 public class Jour {
 
@@ -24,15 +25,20 @@ public class Jour {
         this.id = id;
         relevesList = new HashMap<Integer, Releve>();
     }
-
-    /*Needed for tests only*/
- /*public boolean createReleve(int ordre,Releve releve) {
-        
-    }*/
+    /**
+     * copie tous les relevés d'une map passé en paramétre dans la map courante 
+     * @param list 
+     */
     public void copyAll(Map<Integer, Releve> list) {
         this.relevesList = list;
     }
-
+    /**
+     * donne un relevé en particulier s'il existe sinon elle le crée a partir du fichier adéquant se trouvant en 
+     * local
+     * @param ordre
+     * @param releve
+     * @return le relevé demandé
+     */
     public Releve getAndCreateReleve(int ordre, Releve releve) {
         Boolean bool = relevesList.containsKey(ordre);
         if (!bool) {
@@ -177,15 +183,36 @@ public class Jour {
         return relevesList.get(ordre);
 
     }
-
+    /**
+     * verifie si un relevé existe ou pas
+     * @param ordre
+     * @return true si le relevé existe dans la structure false sinon
+     */
     public boolean releveExists(int ordre) {
         return relevesList.containsKey(ordre);
     }
-
+    /**
+     * ajoute un relevé a la map des relevé du jour
+     * @param ordre
+     * @param temperature
+     * @param humidite
+     * @param nebulosite
+     * @return true si le relevé a était ajouter false sinon
+     */
     public boolean addReleve(int ordre, float temperature, float humidite, float nebulosite) {
         return relevesList.put(ordre, new Releve(ordre, temperature, humidite, nebulosite)) != null;
     }
-
+    /**
+     * donne le dernier relevé existant pour une date et une station précise
+     * @param nomStation
+     * @param idStation
+     * @param annnee
+     * @param mois
+     * @param x
+     * @param y
+     * @return un objet de type DataBean contenant le dernier relevé existant dans la structure pour la station 
+     * et le jour passés en paramétres
+     */
     public DataBean2 getLatestReleve(String nomStation, int idStation, int annnee, int mois, int x, int y) {
         Releve releveTemp = relevesList.get(0);
         for(Releve releve : relevesList.values()) {
@@ -225,7 +252,11 @@ public class Jour {
         return dataBean2;
     }
 
-
+    /**
+     * construit le relevé inéxistant par défaut
+     * @param year
+     * @param month 
+     */
     public void buildMissingReleves(int year, int month) {
         boolean isCurrentDay = Utilitaire.isCurrentDate(year, month, id, 0);
         int latestReleve;
@@ -283,9 +314,15 @@ public class Jour {
     }
 
     /**
-     *
-     * @return Les valeurs min de l'humidité la température et la nébulosité
-     * d'un jour Si aucune valeur dispo retourne un relevé avec 101 partout
+     * donne le relevé de le minimum du jour
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param idAnnee
+     * @param idMois
+     * @param x
+     * @param y
+     * @return un objet de type DataBean contenant le minimum des données du jour
      */
     public DataBean2 getMinJour(String kelvin_celcius,String nomStation,int idStation, String idAnnee, String idMois,int x,int y) {//gerer le cas de note manquante
         float temperature = 101;
@@ -316,10 +353,15 @@ public class Jour {
     }
 
     /**
-     *
-     * @return Les valeurs max de l'humidité la température et la nébulosité
-     * d'un jour Si aucune valeur dispo retourne un relevé avec 101 la ou il
-     * n'ya pas de données
+     * donne le relevé du maximum du jour
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param idAnnee
+     * @param idMois
+     * @param x
+     * @param y
+     * @return un objet de type DataBean2 contenant les moyenne du jour 
      */
     public DataBean2 getMaxJour(String kelvin_celcius,String nomStation,int idStation, String idAnnee, String idMois,int x,int y) {//gerer le cas de note manquante
         float temperature = -1;
@@ -362,7 +404,17 @@ public class Jour {
     public Map<Integer, Releve> getReleves() {
         return relevesList;
     }
-
+    /**
+     * donne la liste de tous les relevés du jour
+     * @param kelvin_celcius
+     * @param nomStation
+     * @param idStation
+     * @param annee
+     * @param mois
+     * @param x
+     * @param y
+     * @return une liste de dataBean2 contenant les relevé du jour
+     */
     public List<DataBean2> getAllReleves(String kelvin_celcius,String nomStation, int idStation, int annee, int mois, int x, int y) {
         List<DataBean2> tempList = new ArrayList<DataBean2>();
         float temperature=0;
