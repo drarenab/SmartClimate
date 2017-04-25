@@ -146,36 +146,51 @@
         return null;
     }
 
-
+    --------------------------
     /**
-     * @return ArrayList contenant les dates existantes en local
-     */
-    public ArrayList<String> getYearExists() {
-        ArrayList<String> list = new ArrayList<>();
-        File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
-        for (File file : file1.listFiles()) {
-            list.add(file.toString().substring(8));
+         * @return ArrayList contenant les dates existantes en local
+         */
+        private ArrayList<String> getYearExists() {
+            ArrayList<String> list = new ArrayList<>();
+            File file1 = new File(Configuration.DATA_DIRECTORY_NAME);
+            for (File file : file1.listFiles()) {
+                list.add(file.toString().substring(8));
+            }
+
+            return list;
         }
 
-        return list;
-    }
+        /**
+         * @param year
+         * @return arrayList contenant les mois existants en local pour une année
+         * mise en paramétre
+         */
+        private ArrayList<String> getMonthsExistsForYear(String year) {
+            ArrayList<String> list = new ArrayList<>();
+            File file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + year);
+            for (File file : file1.listFiles()) {
+                list.add(file.toString().substring(8));
+            }
+
+            return list;
+        }
+
+        ------------------------
+         /**
+             *
+             * @param stationId
+             * @return le nom d'une station a partir de son Id
+             */
+            private String getStationNameFromId(int stationId) {
+                return stationList.get(stationId).getNom();
+            }
+
+
+
+
 
     ----------------------------------------------------
 
-    /**
-     * @param year
-     * @return arrayList contenant les mois existants en local pour une année
-     * mise en paramétre
-     */
-    public ArrayList<String> getMonthsExistsForYear(String year) {
-        ArrayList<String> list = new ArrayList<>();
-        File file1 = new File(Configuration.DATA_DIRECTORY_NAME + "/" + year);
-        for (File file : file1.listFiles()) {
-            list.add(file.toString().substring(8));
-        }
-
-        return list;
-    }
 
 
 

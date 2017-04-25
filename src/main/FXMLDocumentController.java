@@ -4,7 +4,6 @@ package main;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import abstraction.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,6 +13,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import abstraction.Controller;
+import abstraction.Model;
 import coordonnee.DataCity;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -57,7 +59,7 @@ import utilitaire.*;
 public class FXMLDocumentController implements Controller {
 
     private List<DataCity> dataList;
-    private MyModel model;
+    private Model model;
     private String showMode;
     private ArrayList<XYChart.Series> chartList;
     static int Interface = 0;
@@ -114,9 +116,9 @@ public class FXMLDocumentController implements Controller {
     @FXML
     RadioButton MoyRadio, MaxRadio, MinRadio;
 
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
         model = MyModel.getInstance();
-        model.showEveryThing();
         CreateMenu();
         switch (Interface) {
             case 0: {
@@ -180,6 +182,7 @@ public class FXMLDocumentController implements Controller {
     /**
      * permet d'initialiser l'interface setting
      */
+    @Override
     public void initInterfaceSetting() {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.setStyle("-fx-background-color:linear-gradient(to bottom, #A2B5BF 5%, #375D81 90%);");
@@ -266,6 +269,7 @@ public class FXMLDocumentController implements Controller {
      * permet d'initialiser l'interface d'affichage et de comparaison des
      * données
      */
+    @Override
     public void InitInterfaceComparaison() {
         VboxPrincipal.getChildren().add(0, menuBar);
         menuBar.getStylesheets().add("/CSS/CSSComparaison.css");
@@ -391,6 +395,7 @@ public class FXMLDocumentController implements Controller {
      * permet d'initialiser l'interface permettant de savoir quelles données
      * l'utilisateur a sur sa machine
      */
+    @Override
     public void initInterfaceInformation() {
 
         ArrayList<String> listYear = model.getYearExists();
@@ -476,6 +481,7 @@ public class FXMLDocumentController implements Controller {
      * main france contenant les données nécessaires est bien en marche est
      * combien de temps a fallut pour faire un ping
      */
+    @Override
     public void initInterfaceEtatServeur() {
         double time = Utilitaire.netIsAvailable();
         if (time != -1) {
@@ -870,6 +876,7 @@ public class FXMLDocumentController implements Controller {
 
         }
         );
+
         file.getItems()
                 .addAll(ImportData, VisiteWebSite, Information, EtatServeur, Close);
 

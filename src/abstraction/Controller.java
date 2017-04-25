@@ -1,54 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package abstraction;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
- *
- * @author SEIF
+ * Created by AZ PC on 24/04/2017.
  */
 public interface Controller extends Initializable{
+    void initialize(URL url, ResourceBundle rb);
 
-    /**
-     * permet d'initialiser l'interface d'affichage et de comparaison des
-     * données
-     */
-    void InitInterfaceComparaison();
+    void InitInterfacePrincipal() throws IOException;
 
-    /**
-     * *****************Private Methode***************************************************************
-     */
-    /**
-     * permet d'initialiser l'interface principale
-     */
-    
-    void InitInterfacePrincipal() throws Exception;
-
-    /**
-     * permet d'initialiser l'interface permettant de savoir si le serveur de
-     * main france contenant les données nécessaires est bien en marche est
-     * combien de temps a fallut pour faire un ping
-     */
-    void initInterfaceEtatServeur();
-
-    /**
-     * permet d'initialiser l'interface permettant de savoir quelles données
-     * l'utilisateur a sur sa machine
-     */
-    void initInterfaceInformation();
-
-    /**
-     * permet d'initialiser l'interface setting
-     */
     void initInterfaceSetting();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources);
-    
+    void InitInterfaceComparaison();
+
+    void initInterfaceInformation();
+
+    void initInterfaceEtatServeur();
 }
